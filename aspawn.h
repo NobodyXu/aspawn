@@ -12,7 +12,9 @@ struct stack_t {
 void init_cached_stack(struct stack_t *cached_stack);
 
 /**
+ * @param pid the pid of the child will be stored into it on success.
  * @param cached_stack on the first call to aspawn, cached_stack need to be created with init_cached_stack.
+ *                     Only modified on success.
  * @param additional_stack_requirement should be the maximum size of variables that will be defined in
  *                                     the child.
  * 
@@ -23,6 +25,10 @@ void init_cached_stack(struct stack_t *cached_stack);
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
            void (*fn)(void *arg), void *arg);
 
+/**
+ * @param cached_stack must be 
+ * @return 0 on success, (-errno) on failure.
+ */
 int cleanup_stacks(const struct stack_t *cached_stack);
 
 #endif
