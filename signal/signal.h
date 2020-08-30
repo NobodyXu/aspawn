@@ -1,5 +1,5 @@
-#ifndef  __aspawn_signal_H__
-# define __aspawn_signal_H__
+#ifndef  __aspawn_signal_signal_H__
+# define __aspawn_signal_signal_H__
 
 # define _POSIX_C_SOURCE 201107L
 # include <signal.h>
