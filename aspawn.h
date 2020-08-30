@@ -17,13 +17,13 @@ void init_cached_stack(struct stack_t *cached_stack);
  *                     Only modified on success.
  * @param additional_stack_requirement should be the maximum size of variables that will be defined in
  *                                     the child.
- * 
  * @param fn If fn returns, then the child will call exit_group.
- *
  * @return fd of read end of pipe if success, eitherwise (-errno).
+ *
+ * aspawn would disable thread cancellation, but would not reenable it after aspawn.
  */
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-           void (*fn)(void *arg), void *arg);
+           int (*fn)(void *arg), void *arg);
 
 /**
  * @param cached_stack must be 
