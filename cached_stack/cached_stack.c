@@ -1,5 +1,6 @@
 #define _GNU_SOURCE
 
+#include "../aspawn.h"
 #include "cached_stack.h"
 
 #include <sys/mman.h>

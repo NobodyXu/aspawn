@@ -1,7 +1,7 @@
 #ifndef  __aspawn_cached_stack_cached_stack_H__
 # define __aspawn_cached_stack_cached_stack_H__
 
-# include "../aspawn.h"
+# include <stddef.h>
 
 void init_cached_stack_internal(struct stack_t *cached_stack);
 
