@@ -21,6 +21,7 @@ void init_cached_stack(struct stack_t *cached_stack);
  * @return fd of read end of pipe if success, eitherwise (-errno).
  *
  * aspawn would disable thread cancellation, but would not reenable it after aspawn.
+ * aspawn would also mask all signals and revert signal masks to the oldset before return.
  */
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
            int (*fn)(void *arg), void *arg);
