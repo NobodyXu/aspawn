@@ -32,7 +32,7 @@ size_t align_stack_sz(size_t sz)
 {
     sz = align(sz, sysconf(_SC_PAGESIZE));
 #ifdef __aarch64__
-    sz = align(align(sz, 126), 16);
+    sz = align(align(sz, 15), 16);
 #endif
     return sz;
 }
