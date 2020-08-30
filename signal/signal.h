@@ -9,4 +9,9 @@
  */
 int sig_blockall(sigset_t *oldset);
 
+/**
+ * @return 0 on success, (-errno) on failure.
+ */
+int sig_setmask(const sigset_t *set);
+
 #endif
