@@ -23,6 +23,13 @@
  */
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
 
+# define GET_syscall_args(_syscall_num, _1, _2, _3, _4, _5, _6, ...) _syscall_num, _1, _2, _3, _4, _5, _6
+/**
+ * pure_syscall2 takes at most 6 arguments.
+ */
+# define pure_syscall2(syscall_number, ...) \
+    pure_syscall(GET_syscall_args(syscall_number, ## __VA_ARGS__, 0, 0, 0, 0, 0, 0))
+
 int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode);
 /**
  * @return in addition to errors specified in manpage for openat, 
