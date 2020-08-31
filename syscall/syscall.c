@@ -36,6 +36,11 @@ int psys_dup3(int oldfd, int newfd, int flags)
     return pure_syscall(SYS_dup3, oldfd, newfd, flags, 0, 0, 0);
 }
 
+int psys_chdir(const char *path)
+{
+    return pure_syscall(SYS_chdir, (long) path, 0, 0, 0, 0, 0);
+}
+
 ssize_t psys_write(int fd, const void *buf, size_t count)
 {
     return pure_syscall(SYS_write, fd, (long) buf, count, 0, 0, 0);
