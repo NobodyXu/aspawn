@@ -31,6 +31,10 @@ int psys_close(int fd)
 {
     return pure_syscall(SYS_close, fd, 0, 0, 0, 0, 0);
 }
+int psys_dup3(int oldfd, int newfd, int flags)
+{
+    return pure_syscall(SYS_dup3, oldfd, newfd, flags, 0, 0, 0);
+}
 
 ssize_t psys_write(int fd, const void *buf, size_t count)
 {

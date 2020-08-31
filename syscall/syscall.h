@@ -48,6 +48,8 @@ int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode);
 
 int psys_close(int fd);
 
+int psys_dup3(int oldfd, int newfd, int flags);
+
 ssize_t psys_write(int fd, const void *buf, size_t count);
 ssize_t psys_read(int fd, void *buf, size_t count);
 
