@@ -20,7 +20,7 @@ void init_cached_stack(struct stack_t *cached_stack);
  * @param fn If fn returns, then the child will call exit_group.
  * @return fd of read end of pipe if success, eitherwise (-errno).
  *
- * aspawn would disable thread cancellation and mask all signals, then it would revert them before return.
+ * aspawn would disable thread cancellation, then it would revert it before return.
  */
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
            int (*fn)(void *arg), void *arg);
