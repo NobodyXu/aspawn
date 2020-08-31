@@ -1,6 +1,6 @@
 #include "syscall.h"
 
-long syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
+long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
 {
 #ifdef __x86_64__
     __asm__  __volatile__ (
