@@ -25,32 +25,32 @@ long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg
 
 int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode)
 {
-    return pure_syscall(SYS_openat, dirfd, (long) pathname, flags, mode, 0, 0);
+    return pure_syscall2(SYS_openat, dirfd, (long) pathname, flags, mode);
 }
 int psys_close(int fd)
 {
-    return pure_syscall(SYS_close, fd, 0, 0, 0, 0, 0);
+    return pure_syscall2(SYS_close, fd);
 }
 int psys_dup3(int oldfd, int newfd, int flags)
 {
-    return pure_syscall(SYS_dup3, oldfd, newfd, flags, 0, 0, 0);
+    return pure_syscall2(SYS_dup3, oldfd, newfd, flags);
 }
 
 int psys_chdir(const char *path)
 {
-    return pure_syscall(SYS_chdir, (long) path, 0, 0, 0, 0, 0);
+    return pure_syscall2(SYS_chdir, (long) path);
 }
 int psys_fchdir(int fd)
 {
-    return pure_syscall(SYS_fchdir, fd, 0, 0, 0, 0, 0);
+    return pure_syscall2(SYS_fchdir, fd);
 }
 
 ssize_t psys_write(int fd, const void *buf, size_t count)
 {
-    return pure_syscall(SYS_write, fd, (long) buf, count, 0, 0, 0);
+    return pure_syscall2(SYS_write, fd, (long) buf, count);
 }
 
 ssize_t psys_read(int fd, void *buf, size_t count)
 {
-    return pure_syscall(SYS_read, fd, (long) buf, count, 0, 0, 0);
+    return pure_syscall2(SYS_read, fd, (long) buf, count);
 }
