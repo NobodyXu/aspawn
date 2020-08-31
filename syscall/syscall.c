@@ -1,6 +1,6 @@
 #include "syscall.h"
 
-# include <sys/syscall.h>
+#include <sys/syscall.h>
 
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
 {
@@ -23,6 +23,10 @@ long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg
     __builtin_unreachable();
 }
 
+int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode)
+{
+    return pure_syscall(SYS_openat, dirfd, (long) pathname, flags, mode, 0, 0);
+}
 int psys_close(int fd)
 {
     return pure_syscall(SYS_close, fd, 0, 0, 0, 0, 0);
