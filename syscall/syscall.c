@@ -20,3 +20,8 @@ long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg
 
     __builtin_unreachable();
 }
+
+int psys_close(int fd)
+{
+    return pure_syscall(SYS_close, fd, 0, 0, 0, 0, 0);
+}
