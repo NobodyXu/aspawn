@@ -1,6 +1,8 @@
 #ifndef  __aspawn_syscall_syscall_H__
 # define __aspawn_syscall_syscall_H__
 
+# include <sys/types.h>
+
 /**
  * All psys_* here returns negative error code on failure and does not modify errno.
  *
@@ -14,5 +16,7 @@
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6);
 
 int psys_close(int fd);
+
+ssize_t psys_write(int fd, const void *buf, size_t count);
 
 #endif
