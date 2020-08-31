@@ -2,6 +2,12 @@
 # define __aspawn_syscall_syscall_H__
 
 /**
+ * All psys_* here returns negative error code on failure and does not modify errno.
+ *
+ * The negative error code is equaivlent to (-errno).
+ */
+
+/**
  * Rationale on why syscall takes long:
  *  - https://stackoverflow.com/questions/35628927/what-is-the-type-of-system-call-arguments-on-linux
  */
