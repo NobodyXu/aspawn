@@ -2,7 +2,6 @@
 # define __aspawn_syscall_syscall_H__
 
 # include <sys/syscall.h>
-# include <stdint.h>
 
 /**
  * Rationale on why syscall takes long:
