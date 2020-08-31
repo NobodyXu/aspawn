@@ -51,6 +51,7 @@ int psys_close(int fd);
 int psys_dup3(int oldfd, int newfd, int flags);
 
 int psys_chdir(const char *path);
+int psys_fchdir(int fd);
 
 ssize_t psys_write(int fd, const void *buf, size_t count);
 ssize_t psys_read(int fd, void *buf, size_t count);

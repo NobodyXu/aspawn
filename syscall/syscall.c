@@ -40,6 +40,10 @@ int psys_chdir(const char *path)
 {
     return pure_syscall(SYS_chdir, (long) path, 0, 0, 0, 0, 0);
 }
+int psys_fchdir(int fd)
+{
+    return pure_syscall(SYS_fchdir, fd, 0, 0, 0, 0, 0);
+}
 
 ssize_t psys_write(int fd, const void *buf, size_t count)
 {
