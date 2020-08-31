@@ -32,3 +32,8 @@ ssize_t psys_write(int fd, const void *buf, size_t count)
 {
     return pure_syscall(SYS_write, fd, (long) buf, count, 0, 0, 0);
 }
+
+ssize_t psys_read(int fd, void *buf, size_t count)
+{
+    return pure_syscall(SYS_read, fd, (long) buf, count, 0, 0, 0);
+}

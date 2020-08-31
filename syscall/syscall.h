@@ -18,5 +18,6 @@ long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg
 int psys_close(int fd);
 
 ssize_t psys_write(int fd, const void *buf, size_t count);
+ssize_t psys_read(int fd, void *buf, size_t count);
 
 #endif
