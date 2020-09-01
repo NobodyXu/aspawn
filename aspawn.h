@@ -11,6 +11,8 @@ struct stack_t {
 
 void init_cached_stack(struct stack_t *cached_stack);
 
+typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t len);
+
 /**
  * @param pid the pid of the child will be stored into it on success.
  * @param cached_stack on the first call to aspawn, cached_stack need to be created with init_cached_stack.
@@ -28,8 +30,7 @@ void init_cached_stack(struct stack_t *cached_stack);
  * Users of this call has to deal with signal handler accidently called in vm-shared child itself.
  */
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-           int (*fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t len), void *arg,
-           void *obj_to_place_on_stack, size_t len);
+           aspawn_fn fn, void *arg, void *obj_to_place_on_stack, size_t len);
 
 /**
  * @param cached_stack must be 

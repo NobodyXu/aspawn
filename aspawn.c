@@ -42,8 +42,7 @@ int aspawn_child(void *arg)
     return args->fn(args->arg, args->pipefd[1], args->user_data, args->user_data_len);
 }
 int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-                int (*fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t len), void *arg,
-                void *obj_to_place_on_stack, size_t len)
+                aspawn_fn fn, void *arg, void *obj_to_place_on_stack, size_t len)
 {
     int pipefd[2];
     int result = create_cloexec_pipe(pipefd);
@@ -78,8 +77,7 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t additional_stac
     return pipefd[0];
 }
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-           int (*fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t len), void *arg,
-           void *obj_to_place_on_stack, size_t len)
+           aspawn_fn fn, void *arg, void *obj_to_place_on_stack, size_t len)
 {
     int oldstate;
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
