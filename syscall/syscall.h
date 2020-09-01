@@ -63,4 +63,9 @@ int psys_fchdir(int fd);
 ssize_t psys_write(int fd, const void *buf, size_t count);
 ssize_t psys_read(int fd, void *buf, size_t count);
 
+/**
+ * @param ignore If ignore == 1, ignore the signal. Otherwise set it to default handler.
+ */
+int psys_sig_set_handler(int signum, int ignore);
+
 #endif
