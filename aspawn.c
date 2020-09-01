@@ -60,7 +60,7 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
     size_t objs_on_stack_len = sizeof(struct aspawn_child_args) + user_data_len;
     result = allocate_stack(cached_stack, (32 * 1024) + reserved_stack_sz, objs_on_stack_len);
     if (result < 0)
-        return result;
+        goto fail;
 
     struct stack_t stack = *cached_stack;
     struct aspawn_child_args *args = allocate_obj_on_stack(&stack, objs_on_stack_len);
@@ -76,14 +76,18 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
     memcpy(args->user_data, user_data, user_data_len);
 
     int new_pid = clone_internal(aspawn_child, args, &stack);
-    if (new_pid < 0)
-        return new_pid;
-
-    *pid = new_pid;
+    if (new_pid >= 0) {
+        *pid = new_pid;
+        result = pipefd[0];
+    } else {
+        result = new_pid;
+fail:
+        close(pipefd[0]);
+    }
 
     close(pipefd[1]);
 
-    return pipefd[0];
+    return result;
 }
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
            aspawn_fn fn, void *arg, void *user_data, size_t user_data_len)
