@@ -43,3 +43,8 @@ int psys_sig_set_handler(int signum, int ignore)
 
     return pure_syscall2(SYS_rt_sigaction, signum, (long) &act, (long) NULL, NSIG_BYTES);
 }
+
+int psys_sigprocmask(int how, const void *set, void *oldset)
+{
+    return pure_syscall2(SYS_rt_sigprocmask, how, (long) set, (long) oldset, NSIG_BYTES);
+}

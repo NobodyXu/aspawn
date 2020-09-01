@@ -68,4 +68,9 @@ ssize_t psys_read(int fd, void *buf, size_t count);
  */
 int psys_sig_set_handler(int signum, int ignore);
 
+/**
+ * Check man sigprocmask for its API doc.
+ */
+int psys_sigprocmask(int how, const void *set, void *oldset);
+
 #endif
