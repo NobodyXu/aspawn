@@ -38,7 +38,11 @@ int aspawn_child(void *arg)
 {
     struct aspawn_child_args *args = arg;
 
+    for (int sig = 1; sig < _NSIG; ++sig)
+        psys_sig_set_handler(sig, 0);
+
     psys_close(args->pipefd[0]);
+
     return args->fn(args->arg, args->pipefd[1], args->user_data, args->user_data_len);
 }
 int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 

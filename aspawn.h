@@ -27,7 +27,8 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t
  *
  * aspawn would disable thread cancellation, then it would revert it before return.
  *
- * Users of this call has to deal with signal handler accidently called in vm-shared child itself.
+ * aspawn would also mask all signals in parent and reset the signal handler in the child process.
+ * Before aspawn returns in parent, it would revert the signal mask.
  */
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
            aspawn_fn fn, void *arg, void *obj_to_place_on_stack, size_t len);
