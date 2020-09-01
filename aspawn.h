@@ -18,6 +18,9 @@ void init_cached_stack(struct stack_t *cached_stack);
  * @param additional_stack_requirement should be the maximum size of variables that will be defined in
  *                                     the child.
  * @param fn If fn returns, then the child will call exit_group.
+ * @param obj_to_place_on_stack it will be copied onto stack.
+ * @param len size of obj_to_place_on_stack
+ *
  * @return fd of read end of pipe if success, eitherwise (-errno).
  *
  * aspawn would disable thread cancellation, then it would revert it before return.
@@ -25,7 +28,8 @@ void init_cached_stack(struct stack_t *cached_stack);
  * Users of this call has to deal with signal handler accidently called in vm-shared child itself.
  */
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-           int (*fn)(void *arg), void *arg);
+           int (*fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t len), void *arg,
+           void *obj_to_place_on_stack, size_t len);
 
 /**
  * @param cached_stack must be 
