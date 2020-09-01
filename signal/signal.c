@@ -16,8 +16,7 @@ void pure_sigfillset(sigset_t *set)
 int sig_blockall(sigset_t *oldset)
 {
     sigset_t set;
-    if (sigfillset(&set) < 0)
-        return -errno;
+    pure_sigfillset(&set);
     if (sigprocmask(SIG_BLOCK, &set, oldset) < 0)
         return -errno;
     return 0;
