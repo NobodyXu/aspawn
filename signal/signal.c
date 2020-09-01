@@ -1,4 +1,5 @@
 #include "signal.h"
+#include "../syscall/syscall.h"
 
 #include <stddef.h>
 #include <string.h>
@@ -17,9 +18,7 @@ int sig_blockall(sigset_t *oldset)
 {
     sigset_t set;
     pure_sigfillset(&set);
-    if (sigprocmask(SIG_BLOCK, &set, oldset) < 0)
-        return -errno;
-    return 0;
+    return psys_sigprocmask(SIG_BLOCK, &set, oldset);
 }
 
 int sig_setmask(const sigset_t *set)
