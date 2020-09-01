@@ -16,6 +16,6 @@ int cleanup_cached_stack_internal(const struct stack_t *cached_stack);
  *
  * @return 0 on success, (-errno) on failure.
  */
-int allocate_stack(struct stack_t *cached_stack, size_t size);
+int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_place_on_stack_len);
 
 #endif

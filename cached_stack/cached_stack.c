@@ -29,21 +29,25 @@ size_t align(size_t sz, size_t alignment)
     size_t remnant = sz % alignment;
     return sz + remnant != 0 ? (alignment - remnant) : 0;
 }
+size_t align_to_page(size_t sz)
+{
+    return align(sz, sysconf(_SC_PAGESIZE));
+}
 size_t align_stack_sz(size_t sz)
 {
-    sz = align(sz, sysconf(_SC_PAGESIZE));
+    sz = align_to_page(sz);
 #ifdef __aarch64__
     sz = align(align(sz, 15), 16);
 #endif
     return sz;
 }
 
-int allocate_stack(struct stack_t *cached_stack, size_t size)
+int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_place_on_stack_len)
 {
     const int prot = PROT_READ | PROT_WRITE;
     const int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK;
 
-    size_t stack_size = align_stack_sz(size);
+    size_t stack_size = align_to_page(align_stack_sz(size) + obj_to_place_on_stack_len);
 
     void *stack;
 
