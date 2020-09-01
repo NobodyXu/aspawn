@@ -26,12 +26,16 @@ int cleanup_stacks(const struct stack_t *cached_stack)
 }
 
 struct aspawn_child_args {
+    /* Improve locality of data */
+
     int pipefd[2];
 
-    int (*fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t len);
+    aspawn_fn fn;
     void *arg;
-
     size_t user_data_len;
+
+    /* These fields aren't used in aspawn_child, only taken address of */
+    sigset_t old_sigset;
     char user_data[];
 };
 int aspawn_child(void *arg)
@@ -43,10 +47,10 @@ int aspawn_child(void *arg)
 
     psys_close(args->pipefd[0]);
 
-    return args->fn(args->arg, args->pipefd[1], args->user_data, args->user_data_len);
+    return args->fn(args->arg, args->pipefd[1], &args->old_sigset, args->user_data, args->user_data_len);
 }
 int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
-                aspawn_fn fn, void *arg, void *user_data, size_t user_data_len)
+                aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset)
 {
     int pipefd[2];
     int result = create_cloexec_pipe(pipefd);
@@ -59,15 +63,16 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
         return result;
 
     struct stack_t stack = *cached_stack;
-    void *obj_addr = allocate_obj_on_stack(&stack, objs_on_stack_len);
+    struct aspawn_child_args *args = allocate_obj_on_stack(&stack, objs_on_stack_len);
 
-    struct aspawn_child_args *args = obj_addr;
     args->pipefd[0] = pipefd[0];
     args->pipefd[1] = pipefd[1];
+
     args->fn = fn;
     args->arg = arg;
-
     args->user_data_len = user_data_len;
+
+    memcpy(&args->old_sigset, old_sigset, sizeof(sigset_t));
     memcpy(args->user_data, user_data, user_data_len);
 
     int new_pid = clone_internal(aspawn_child, args, &stack);
@@ -91,7 +96,7 @@ int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz,
     if (result < 0)
         goto fail_to_block_signal;
 
-    result = aspawn_impl(pid, cached_stack, reserved_stack_sz, fn, arg, user_data, user_data_len);
+    result = aspawn_impl(pid, cached_stack, reserved_stack_sz, fn, arg, user_data, user_data_len, &oldset);
 
     sig_setmask(&oldset);
 

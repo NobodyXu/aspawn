@@ -11,7 +11,13 @@ struct stack_t {
 
 void init_cached_stack(struct stack_t *cached_stack);
 
-typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *user_data, size_t user_data_len);
+/**
+ * @param old_sigset of type sigset_t*. The original value of sigmask.
+ *                   It can be modified to any value user desired.
+ *
+ * The value of sigmask in aspawn_fn is unspecified.
+ */
+typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *old_sigset, void *user_data, size_t user_data_len);
 
 /**
  * @param pid the pid of the child will be stored into it on success.
