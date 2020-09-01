@@ -19,7 +19,7 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t
  *                     Only modified on success.
  * @param additional_stack_requirement should be the maximum size of variables that will be defined in
  *                                     the child.
- * @param fn If fn returns, then the child will call exit_group.
+ * @param fn If fn returns, then the child will exit with the return value of fn as the exit code.
  * @param obj_to_place_on_stack it will be copied onto stack.
  * @param len size of obj_to_place_on_stack
  *
