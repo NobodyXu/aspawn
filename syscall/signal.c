@@ -1,5 +1,4 @@
-#define _POSIX_C_SOURCE 199309L // For sigset_t
-
+#include "../signal/signal.h"
 #include "syscall.h"
 #include <sys/syscall.h>
 
@@ -15,11 +14,6 @@ struct psys_kernel_sigaction {
        passes the kernel expected size on rt_sigaction syscall.  */
     sigset_t sa_mask;
 };
-
-void pure_sigemptyset(sigset_t *set)
-{
-    memset(set, 0, sizeof(sigset_t));
-}
 
 #define NSIG (SIGRTMAX + 1)
 
