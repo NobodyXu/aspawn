@@ -45,16 +45,16 @@ int aspawn_child(void *arg)
 
     return args->fn(args->arg, args->pipefd[1], args->user_data, args->user_data_len);
 }
-int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-                aspawn_fn fn, void *arg, void *obj_to_place_on_stack, size_t len)
+int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
+                aspawn_fn fn, void *arg, void *user_data, size_t user_data_len)
 {
     int pipefd[2];
     int result = create_cloexec_pipe(pipefd);
     if (result < 0)
         return result;
 
-    size_t objs_on_stack_len = sizeof(struct aspawn_child_args) + len;
-    result = allocate_stack(cached_stack, (32 * 1024) + additional_stack_requirement, objs_on_stack_len);
+    size_t objs_on_stack_len = sizeof(struct aspawn_child_args) + user_data_len;
+    result = allocate_stack(cached_stack, (32 * 1024) + reserved_stack_sz, objs_on_stack_len);
     if (result < 0)
         return result;
 
@@ -67,8 +67,8 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t additional_stac
     args->fn = fn;
     args->arg = arg;
 
-    args->user_data_len = len;
-    memcpy(args->user_data, obj_to_place_on_stack, len);
+    args->user_data_len = user_data_len;
+    memcpy(args->user_data, user_data, user_data_len);
 
     int new_pid = clone_internal(aspawn_child, args, &stack);
     if (new_pid < 0)
@@ -80,8 +80,8 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t additional_stac
 
     return pipefd[0];
 }
-int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-           aspawn_fn fn, void *arg, void *obj_to_place_on_stack, size_t len)
+int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
+           aspawn_fn fn, void *arg, void *user_data, size_t user_data_len)
 {
     int oldstate;
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
@@ -91,7 +91,7 @@ int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_req
     if (result < 0)
         goto fail_to_block_signal;
 
-    result = aspawn_impl(pid, cached_stack, additional_stack_requirement, fn, arg, obj_to_place_on_stack, len);
+    result = aspawn_impl(pid, cached_stack, reserved_stack_sz, fn, arg, user_data, user_data_len);
 
     sig_setmask(&oldset);
 

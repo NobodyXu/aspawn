@@ -11,17 +11,17 @@ struct stack_t {
 
 void init_cached_stack(struct stack_t *cached_stack);
 
-typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t len);
+typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *user_data, size_t user_data_len);
 
 /**
  * @param pid the pid of the child will be stored into it on success.
  * @param cached_stack on the first call to aspawn, cached_stack need to be created with init_cached_stack.
  *                     Only modified on success.
- * @param additional_stack_requirement should be the maximum size of variables that will be defined in
- *                                     the child.
+ * @param reserved_stack_sz should be the maximum size of variables that will be defined in
+ *                          the stack of the child.
  * @param fn If fn returns, then the child will exit with the return value of fn as the exit code.
- * @param obj_to_place_on_stack it will be copied onto stack.
- * @param len size of obj_to_place_on_stack
+ * @param user_data user data to be copied into stack.
+ * @param user_data_len length of user_data
  *
  * @return fd of read end of pipe if success, eitherwise (-errno).
  *
@@ -30,8 +30,8 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *on_stack_obj, size_t
  * aspawn would also mask all signals in parent and reset the signal handler in the child process.
  * Before aspawn returns in parent, it would revert the signal mask.
  */
-int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t additional_stack_requirement, 
-           aspawn_fn fn, void *arg, void *obj_to_place_on_stack, size_t len);
+int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
+           aspawn_fn fn, void *arg, void *user_data, size_t user_data_len);
 
 /**
  * @param cached_stack must be 
