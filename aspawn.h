@@ -29,7 +29,7 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *old_sigset, void *us
  * @param user_data user data to be copied into stack.
  * @param user_data_len length of user_data
  *
- * @return fd of read end of pipe if success, eitherwise (-errno).
+ * @return fd of read end of CLOEXEC pipe if success, eitherwise (-errno).
  *
  * aspawn would disable thread cancellation, then it would revert it before return.
  *
