@@ -18,4 +18,9 @@ int cleanup_cached_stack_internal(const struct stack_t *cached_stack);
  */
 int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_place_on_stack_len);
 
+/**
+ * @pre len <= stack->size
+ */
+void* allocate_obj_on_stack(struct stack_t *stack, size_t len);
+
 #endif

@@ -2,17 +2,12 @@
 
 #include "../aspawn.h"
 #include "clone_internal.h"
+#include "stack_growth.h"
 
 #include <sched.h>
 #include <signal.h>
 
 #include <errno.h>
-
-#if defined(__hppa__) || defined(__ia64__)
-# define STACK_GROWS_DOWN 0
-#else
-# define STACK_GROWS_DOWN 1
-#endif
 
 #define STACK(addr, len) ((addr) + (len) * STACK_GROWS_DOWN)
 

@@ -2,6 +2,7 @@
 
 #include "../aspawn.h"
 #include "cached_stack.h"
+#include "../clone_internal/stack_growth.h"
 
 #include <sys/mman.h>
 #include <unistd.h>
@@ -65,4 +66,19 @@ int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_plac
     cached_stack->size = stack_size;
 
     return 0;
+}
+
+void* allocate_obj_on_stack(struct stack_t *stack, size_t len)
+{
+    void *ret;
+
+    stack->size -= len;
+    if (STACK_GROWS_DOWN) {
+        ret = stack->addr + stack->size;
+    } else {
+        ret = stack->addr;
+        stack->addr += len;
+    }
+    
+    return ret;
 }
