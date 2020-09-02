@@ -57,6 +57,11 @@ ssize_t psys_read(int fd, void *buf, size_t count)
     return pure_syscall2(SYS_read, fd, (long) buf, count);
 }
 
+int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
+{
+    return pure_syscall2(SYS_setresuid, ruid, euid, suid);
+}
+
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
     return pure_syscall2(SYS_execve, (long) pathname, (long) argv, (long) envp);
