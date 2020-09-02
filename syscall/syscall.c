@@ -1,6 +1,8 @@
 #include "syscall.h"
-
 #include <sys/syscall.h>
+#include <errno.h>
+
+#include <stddef.h>
 
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
 {
@@ -62,4 +64,63 @@ int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * const envp[], int flags)
 {
     return pure_syscall2(SYS_execveat, dirfd, (long) pathname, (long) argv, (long) envp, flags);
+}
+
+int psys_find_exe(const char *file, size_t file_len, char *resolved_path, const char **PATH, size_t path_max_len)
+{
+    // Ignore empty path in *PATH
+    for (; (*PATH)[0] == ':'; ++(*PATH));
+
+    if ((*PATH)[0] == '\0')
+        return 0;
+
+    size_t i = 0;
+    for (; (*PATH)[i] != '\0' && (*PATH)[i] != ':'; ++i) {
+        if (i + 1 > path_max_len)
+            return 0;
+        resolved_path[i] = (*PATH)[i];
+    }
+
+    size_t path_prefix_len = i;
+
+    if (resolved_path[i - 1] != '/')
+        resolved_path[i++] = '/';
+
+    if (i + file_len > path_max_len)
+        return 0;
+
+    for (; file[i] != '\0'; ++i)
+        resolved_path[i] = file[i];
+
+    *PATH += path_prefix_len + ((*PATH)[path_prefix_len] == ':');
+
+    return 1;
+}
+
+int handle_find_exe_err(int result, int *got_eaccess)
+{
+    switch (-result) {
+        case EACCES:
+            // Record that we got a 'Permission denied' error.  If we end
+            // up finding no executable we can use, we want to diagnose
+            // that we did find one but were denied access.
+            *got_eaccess = 1;
+        case ENOENT:
+        case ESTALE:
+        case ENOTDIR:
+            // Those errors indicate the file is missing or not executable
+            // by us, in which case we want to just try the next path
+            // directory.
+        case ENODEV:
+        case ETIMEDOUT:
+            // Some strange filesystems like AFS return even
+            // stranger error numbers.  They cannot reasonably mean
+            // anything else so ignore those, too.
+            return 0;
+    
+        default:
+            // Some other error means we found an executable file, but
+            // something went wrong executing it.
+            return result;
+    }
 }

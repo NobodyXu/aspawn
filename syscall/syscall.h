@@ -79,4 +79,57 @@ int psys_execve(const char *pathname, char * const argv[], char * const envp[]);
  */
 int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * const envp[], int flags);
 
+/**
+ * @param file must not be NULL.
+ * @param resolved_path resolved_path will only be changed on success.
+ *                      Must be of path_max_len + 1.
+ * @param PATH a pointer to the ':' separated string, containing directories to be looked up for the binary.
+ *             Will be modified during call.
+ *             On the first call, *PATH must point to the environment variable PATH.
+ * @param path_max_len the max len of path (including the filename) on the system, 
+ *                     excluding the trailing null byte.
+ *
+ * @return Returns 1 where next candidate path to exe is ready.
+ *         Returns 0 where all possible path is tried.
+ *
+ * This is a copy of glibc's execvep's implementation, except that it doesn't use
+ * optimized strchrnull or memcpy from glibc (due to ).
+ * It simply concat each path with file and let the user tries it with execve :D
+ * A smarter application can utilize a cache to speed this up for repeated execves of binaries.
+ *
+ * Usage:
+ *     char resolved_path[PATH_MAX + 1];
+ *     const char *path = // Get envir var path from parent;
+ *     if (path == NULL || path[0] == '\0') {
+ *         // *Handle that situation yourself*
+ *     }
+ *     if (argv[0] contains slash and is a path) {
+ *         // In case where argv[0] is already a path, there is no need to call psys_find_exe.
+ *     }
+ *     for (int got_eaccess = 0; psys_find_exe(file, file_len, resolved_path, &path, PATH_MAX); ) {
+ *         int result = handle_find_exe_err(psys_execve(resolved_path, argv, envp));
+ *         if (result < 0) {
+ *             int errno = -result;
+ *             // executable is found, but it failed to execute
+ *             // *Handle the errors here*
+ *         }
+ *     }
+ *     // If got_eaccess, the the executable is probably found but not executable.
+ *     // I.E., not a regular file, exe permission is denied, the filesystem is found is mounted noexec.
+ *     //
+ *     // But it could also be that the user do not have search permission on the prefix of resolved_path.
+ */
+int psys_find_exe(const char *file, size_t file_len, char *resolved_path, 
+                  const char **PATH, size_t path_max_len);
+
+/**
+ * @param result return value of psys_find_exe
+ * @return 0 to try next path in PATH, negative number for failure.
+ *         In case negative number is returned, it is like psys_*: the negative number is equaivlent to
+ *         (-errno).
+ *
+ * Check psys_find_exe for error.
+ */
+int handle_find_exe_err(int result, int *got_eaccess);
+
 #endif
