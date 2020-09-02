@@ -95,6 +95,11 @@ int psys_setpriority(int which, long who, int unice)
     return pure_syscall2(SYS_setpriority, which, who, unice);
 }
 
+int psys_prlimit(int resource, const void *new_limit, void *old_limit)
+{
+    return pure_syscall2(SYS_prlimit64, 0, resource, (long) new_limit, (long) old_limit);
+}
+
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
     return pure_syscall2(SYS_execve, (long) pathname, (long) argv, (long) envp);

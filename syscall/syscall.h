@@ -71,6 +71,12 @@ int psys_sched_setparam(pid_t pid, const void *param);
 int psys_sched_getparam(pid_t pid, void *param);
 int psys_sched_setscheduler(pid_t pid, int policy, const void *param);
 int psys_sched_getscheduler(pid_t pid);
+
+/**
+ * param pid is removed from this function to improve portability to os other than linux.
+ */
+int psys_prlimit(int resource, const void *new_limit, void *old_limit);
+
 /**
  * @return nice value in the range [40, 1], corresponding to commonly used [-20, 19].
  *         Translate between them using unice = 20 - knice.
