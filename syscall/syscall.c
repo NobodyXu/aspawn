@@ -82,6 +82,10 @@ int psys_sched_setscheduler(pid_t pid, int policy, const void *param)
 {
     return pure_syscall2(SYS_sched_setscheduler, pid, policy, (long) param);
 }
+int psys_sched_getscheduler(pid_t pid)
+{
+    return pure_syscall2(SYS_sched_getscheduler, pid);
+}
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
