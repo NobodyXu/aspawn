@@ -64,6 +64,7 @@ ssize_t psys_write(int fd, const void *buf, size_t count);
 ssize_t psys_read(int fd, void *buf, size_t count);
 
 int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid);
+int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid);
 
 /**
  * @param ignore If ignore == 1, ignore the signal. Otherwise set it to default handler.

@@ -61,6 +61,10 @@ int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 {
     return pure_syscall2(SYS_setresuid, ruid, euid, suid);
 }
+int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid)
+{
+    return pure_syscall2(SYS_setresgid, rgid, egid, sgid);
+}
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
