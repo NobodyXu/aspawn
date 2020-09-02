@@ -74,6 +74,10 @@ int psys_sched_setparam(pid_t pid, const void *param)
 {
     return pure_syscall2(SYS_sched_setparam, pid, (long) param);
 }
+int psys_sched_getparam(pid_t pid, void *param)
+{
+    return pure_syscall2(SYS_sched_getparam, pid, (long) param);
+}
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
