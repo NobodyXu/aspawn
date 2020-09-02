@@ -70,6 +70,11 @@ int psys_setgroups(size_t size, const gid_t *list)
     return pure_syscall2(SYS_setgroups, size, (long) list);
 }
 
+int psys_sched_setparam(pid_t pid, const void *param)
+{
+    return pure_syscall2(SYS_sched_setparam, pid, (long) param);
+}
+
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
     return pure_syscall2(SYS_execve, (long) pathname, (long) argv, (long) envp);
