@@ -90,6 +90,10 @@ int psys_getpriority(int which, long who)
 {
     return pure_syscall2(SYS_getpriority, which, who);
 }
+int psys_setpriority(int which, long who, int unice)
+{
+    return pure_syscall2(SYS_setpriority, which, who, unice);
+}
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {

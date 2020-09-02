@@ -73,9 +73,14 @@ int psys_sched_setscheduler(pid_t pid, int policy, const void *param);
 int psys_sched_getscheduler(pid_t pid);
 /**
  * @return nice value in the range [40, 1], corresponding to commonly used [-20, 19].
- *         Translate between them using unice = 20 - knice. 
+ *         Translate between them using unice = 20 - knice.
  */
 int psys_getpriority(int which, long who);
+/**
+ * @param knice in the range [40, 1], corresponding to commonly used [-20, 19].
+ *              Translate between them using unice = 20 - knice.
+ */
+int psys_setpriority(int which, long who, int knice);
 
 /**
  * @param ignore If ignore == 1, ignore the signal. Otherwise set it to default handler.
