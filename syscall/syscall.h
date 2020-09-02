@@ -69,6 +69,7 @@ int psys_setgroups(size_t size, const gid_t *list);
 
 int psys_sched_setparam(pid_t pid, const void *param);
 int psys_sched_getparam(pid_t pid, void *param);
+int psys_sched_setscheduler(pid_t pid, int policy, const void *param);
 
 /**
  * @param ignore If ignore == 1, ignore the signal. Otherwise set it to default handler.
