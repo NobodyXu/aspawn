@@ -65,6 +65,10 @@ int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid)
 {
     return pure_syscall2(SYS_setresgid, rgid, egid, sgid);
 }
+int psys_setgroups(size_t size, const gid_t *list)
+{
+    return pure_syscall2(SYS_setgroups, size, (long) list);
+}
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
