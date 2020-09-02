@@ -86,6 +86,10 @@ int psys_sched_getscheduler(pid_t pid)
 {
     return pure_syscall2(SYS_sched_getscheduler, pid);
 }
+int psys_getpriority(int which, long who)
+{
+    return pure_syscall2(SYS_getpriority, which, who);
+}
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
