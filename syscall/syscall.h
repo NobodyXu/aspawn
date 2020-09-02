@@ -74,5 +74,9 @@ int psys_sig_set_handler(int signum, int ignore);
 int psys_sigprocmask(int how, const void *set, void *oldset);
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[]);
+/**
+ * linux-specific call, checks `man 2 execveat` for more info.
+ */
+int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * const envp[], int flags);
 
 #endif

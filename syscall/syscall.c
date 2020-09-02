@@ -59,3 +59,7 @@ int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
     return pure_syscall2(SYS_execve, (long) pathname, (long) argv, (long) envp);
 }
+int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * const envp[], int flags)
+{
+    return pure_syscall2(SYS_execveat, dirfd, (long) pathname, (long) argv, (long) envp, flags);
+}
