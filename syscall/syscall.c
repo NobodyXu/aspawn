@@ -109,7 +109,7 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
     return pure_syscall2(SYS_execveat, dirfd, (long) pathname, (long) argv, (long) envp, flags);
 }
 
-int find_exe(const char *file, size_t file_len, char *resolved_path, const char **PATH, size_t path_max_len)
+int find_exe(const char *file, size_t file_len, char *constructed_path, const char **PATH, size_t path_max_len)
 {
     // Ignore empty path in *PATH
     for (; (*PATH)[0] == ':'; ++(*PATH));
@@ -121,19 +121,19 @@ int find_exe(const char *file, size_t file_len, char *resolved_path, const char 
     for (; (*PATH)[i] != '\0' && (*PATH)[i] != ':'; ++i) {
         if (i + 1 > path_max_len)
             return -1;
-        resolved_path[i] = (*PATH)[i];
+        constructed_path[i] = (*PATH)[i];
     }
 
     size_t path_prefix_len = i;
 
-    if (resolved_path[i - 1] != '/')
-        resolved_path[i++] = '/';
+    if (constructed_path[i - 1] != '/')
+        constructed_path[i++] = '/';
 
     if (i + file_len > path_max_len)
         return -1;
 
     for (; file[i] != '\0'; ++i)
-        resolved_path[i] = file[i];
+        constructed_path[i] = file[i];
 
     *PATH += path_prefix_len + ((*PATH)[path_prefix_len] == ':');
 

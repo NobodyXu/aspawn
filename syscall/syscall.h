@@ -124,7 +124,7 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  * A smarter application can utilize a cache to speed this up for repeated execves of binaries.
  *
  * Usage:
- *     char resolved_path[PATH_MAX + 1];
+ *     char constructed_path[PATH_MAX + 1];
  *     const char *path = // Get envir var path from parent;
  *     if (path == NULL || path[0] == '\0') {
  *         // *Handle that situation yourself*
@@ -134,9 +134,9 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  *     }
  *     for (int got_eaccess = 0; ; ) {
  *         int result;
- *         switch (find_exe(file, file_len, resolved_path, &path, PATH_MAX)) {
+ *         switch (find_exe(file, file_len, constructed_path, &path, PATH_MAX)) {
  *             case 1:
- *                 result = handle_find_exe_err(psys_execve(resolved_path, argv, envp));
+ *                 result = handle_find_exe_err(psys_execve(constructed_path, argv, envp));
  *                 if (result < 0) {
  *                     int errno = -result;
  *                     // executable is found, but it failed to execute
@@ -156,9 +156,9 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  *     // If got_eaccess, the the executable is probably found but not executable.
  *     // I.E., not a regular file, exe permission is denied, the filesystem is found is mounted noexec.
  *     //
- *     // But it could also be that the user do not have search permission on the prefix of resolved_path.
+ *     // But it could also be that the user do not have search permission on the prefix of constructed_path.
  */
-int find_exe(const char *file, size_t file_len, char *resolved_path, const char **PATH, size_t path_max_len);
+int find_exe(const char *file, size_t file_len, char *constructed_path, const char **PATH, size_t path_max_len);
 
 /**
  * @param result return value of execve or fexecve.
