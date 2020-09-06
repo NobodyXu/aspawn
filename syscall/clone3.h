@@ -19,6 +19,6 @@ struct clone_args {
 
 # define CLONE_CLEAR_SIGHAND 0x100000000ULL /* Clear any signal handler and reset to SIG_DFL. */
 
-__attribute__((always_inline)) long psys_clone3(struct clone_args *cl_args, size_t size);
+long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg);
 
 #endif
