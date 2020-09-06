@@ -114,8 +114,9 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  * @param path_max_len the max len of path (including the filename) on the system, 
  *                     excluding the trailing null byte.
  *
- * @return Returns 1 where next candidate path to exe is ready.
- *         Returns 0 where all possible path is tried.
+ * @return  1 when next candidate path to exe is ready;
+ *         -1 when the constructed path will be longer than path_max_len;
+ *          0 when all possible path is tried.
  *
  * This is a copy of glibc's execvep's implementation, except that it doesn't use
  * optimized strchrnull or memcpy from glibc (due to ).
@@ -131,13 +132,26 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  *     if (argv[0] contains slash and is a path) {
  *         // In case where argv[0] is already a path, there is no need to call find_exe.
  *     }
- *     for (int got_eaccess = 0; find_exe(file, file_len, resolved_path, &path, PATH_MAX); ) {
- *         int result = handle_find_exe_err(psys_execve(resolved_path, argv, envp));
- *         if (result < 0) {
- *             int errno = -result;
- *             // executable is found, but it failed to execute
- *             // *Handle the errors here*
+ *     for (int got_eaccess = 0; ; ) {
+ *         int result;
+ *         switch (find_exe(file, file_len, resolved_path, &path, PATH_MAX)) {
+ *             case 1:
+ *                 result = handle_find_exe_err(psys_execve(resolved_path, argv, envp));
+ *                 if (result < 0) {
+ *                     int errno = -result;
+ *                     // executable is found, but it failed to execute
+ *                     // *Handle the errors here*
+ *                 }
+ *                 continue;
+ *
+ *             case -1:
+ *                 // Handle the error here.
+ *                 // Can chose the continue or break.
+ *
+ *             case 0:
+ *                 break;
  *         }
+ *         break;
  *     }
  *     // If got_eaccess, the the executable is probably found but not executable.
  *     // I.E., not a regular file, exe permission is denied, the filesystem is found is mounted noexec.

@@ -120,7 +120,7 @@ int find_exe(const char *file, size_t file_len, char *resolved_path, const char 
     size_t i = 0;
     for (; (*PATH)[i] != '\0' && (*PATH)[i] != ':'; ++i) {
         if (i + 1 > path_max_len)
-            return 0;
+            return -1;
         resolved_path[i] = (*PATH)[i];
     }
 
@@ -130,7 +130,7 @@ int find_exe(const char *file, size_t file_len, char *resolved_path, const char 
         resolved_path[i++] = '/';
 
     if (i + file_len > path_max_len)
-        return 0;
+        return -1;
 
     for (; file[i] != '\0'; ++i)
         resolved_path[i] = file[i];
