@@ -106,7 +106,7 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
 
 /**
  * @param file must not be NULL.
- * @param resolved_path resolved_path will only be changed on success.
+ * @param constructed_path constructed_path will only be changed on success.
  *                      Must be of path_max_len + 1.
  * @param PATH a pointer to the ':' separated string, containing directories to be looked up for the binary.
  *             Will be modified during call.
