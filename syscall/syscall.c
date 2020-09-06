@@ -129,7 +129,7 @@ int find_exe(const char *file, size_t file_len, char *constructed_path, const ch
     if (constructed_path[i - 1] != '/')
         constructed_path[i++] = '/';
 
-    if (i + file_len > path_max_len)
+    if (i + file_len > path_max_len || /* Check for overflow */ i == 0 || i + file_len < i)
         return -1;
 
     for (; file[i] != '\0'; ++i)
