@@ -88,6 +88,11 @@ int psys_prlimit(int resource, const void *new_limit, void *old_limit)
     return pure_syscall2(SYS_prlimit64, 0, resource, (long) new_limit, (long) old_limit);
 }
 
+void psys_exit(int status)
+{
+    pure_syscall2(SYS_exit, status);
+}
+
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
     return pure_syscall2(SYS_execve, (long) pathname, (long) argv, (long) envp);

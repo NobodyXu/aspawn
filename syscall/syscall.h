@@ -98,6 +98,8 @@ int psys_sig_set_handler(int signum, int ignore);
  */
 int psys_sigprocmask(int how, const void *set, void *oldset);
 
+void psys_exit(int status);
+
 int psys_execve(const char *pathname, char * const argv[], char * const envp[]);
 /**
  * linux-specific call, checks `man 2 execveat` for more info.
