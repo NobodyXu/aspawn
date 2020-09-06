@@ -109,7 +109,7 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
     return pure_syscall2(SYS_execveat, dirfd, (long) pathname, (long) argv, (long) envp, flags);
 }
 
-int psys_find_exe(const char *file, size_t file_len, char *resolved_path, const char **PATH, size_t path_max_len)
+int find_exe(const char *file, size_t file_len, char *resolved_path, const char **PATH, size_t path_max_len)
 {
     // Ignore empty path in *PATH
     for (; (*PATH)[0] == ':'; ++(*PATH));

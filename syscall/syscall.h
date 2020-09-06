@@ -129,9 +129,9 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  *         // *Handle that situation yourself*
  *     }
  *     if (argv[0] contains slash and is a path) {
- *         // In case where argv[0] is already a path, there is no need to call psys_find_exe.
+ *         // In case where argv[0] is already a path, there is no need to call find_exe.
  *     }
- *     for (int got_eaccess = 0; psys_find_exe(file, file_len, resolved_path, &path, PATH_MAX); ) {
+ *     for (int got_eaccess = 0; find_exe(file, file_len, resolved_path, &path, PATH_MAX); ) {
  *         int result = handle_find_exe_err(psys_execve(resolved_path, argv, envp));
  *         if (result < 0) {
  *             int errno = -result;
@@ -144,11 +144,11 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  *     //
  *     // But it could also be that the user do not have search permission on the prefix of resolved_path.
  */
-int psys_find_exe(const char *file, size_t file_len, char *resolved_path, 
+int find_exe(const char *file, size_t file_len, char *resolved_path, 
                   const char **PATH, size_t path_max_len);
 
 /**
- * @param result return value of psys_find_exe
+ * @param result return value of find_exe
  * @return 0 to try next path in PATH, negative number for failure.
  *         In case negative number is returned, it is like psys_*: the negative number is equaivlent to
  *         (-errno).
