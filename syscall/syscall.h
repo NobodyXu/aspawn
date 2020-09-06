@@ -148,13 +148,13 @@ int find_exe(const char *file, size_t file_len, char *resolved_path,
                   const char **PATH, size_t path_max_len);
 
 /**
- * @param result return value of find_exe
+ * @param result return value of execve or fexecve.
  * @return 0 to try next path in PATH, negative number for failure.
  *         In case negative number is returned, it is like psys_*: the negative number is equaivlent to
  *         (-errno).
  *
- * Check psys_find_exe for error.
+ * Check find_exe for doc.
  */
-int handle_find_exe_err(int result, int *got_eaccess);
+int handle_execve_err(int result, int *got_eaccess);
 
 #endif

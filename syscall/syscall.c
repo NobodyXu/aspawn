@@ -140,7 +140,7 @@ int find_exe(const char *file, size_t file_len, char *resolved_path, const char 
     return 1;
 }
 
-int handle_find_exe_err(int result, int *got_eaccess)
+int handle_execve_err(int result, int *got_eaccess)
 {
     switch (-result) {
         case EACCES:
