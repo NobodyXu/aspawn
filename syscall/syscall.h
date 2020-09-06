@@ -144,8 +144,7 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  *     //
  *     // But it could also be that the user do not have search permission on the prefix of resolved_path.
  */
-int find_exe(const char *file, size_t file_len, char *resolved_path, 
-                  const char **PATH, size_t path_max_len);
+int find_exe(const char *file, size_t file_len, char *resolved_path, const char **PATH, size_t path_max_len);
 
 /**
  * @param result return value of execve or fexecve.
