@@ -145,7 +145,7 @@ int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * c
  *                 continue;
  *
  *             case -1:
- *                 // Handle the error here.
+ *                 // One of the path is longer than path_max_len.
  *                 // Can chose the continue or break.
  *
  *             case 0:
