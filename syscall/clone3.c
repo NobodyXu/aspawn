@@ -40,7 +40,7 @@ long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), 
         );
 
         int exit_status = fn_reg(arg_reg);
-        pure_syscall2(SYS_exit, exit_status);
+        psys_exit(exit_status);
     }
 
     return result;
