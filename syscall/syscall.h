@@ -96,8 +96,6 @@ PUBLIC int psys_getpriority(int which, long who);
  */
 PUBLIC int psys_setpriority(int which, long who, int knice);
 
-PUBLIC int psys_sig_clear_handler(int signum);
-
 void pure_sigemptyset(void *set);
 void pure_sigfillset(void *set);
 
