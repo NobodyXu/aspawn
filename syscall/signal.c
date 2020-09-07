@@ -1,10 +1,20 @@
-#include "../signal/signal.h"
+#define _POSIX_C_SOURCE 201107L
+
 #include "syscall.h"
 #include "make_syscall.h"
 #include <sys/syscall.h>
 
 #include <string.h>
 #include <signal.h>
+
+void pure_sigemptyset(void *set)
+{
+    pmemset(set, 0, sizeof(sigset_t));
+}
+void pure_sigfillset(void *set)
+{
+    pmemset(set, -1, sizeof(sigset_t));
+}
 
 /* This is the sigaction structure from the Linux 3.2 kernel.  */
 struct psys_kernel_sigaction {

@@ -31,7 +31,6 @@ aspawn.o: aspawn.h
 
 syscall/%.o: syscall/make_syscall.h
 syscall/clone3.o: syscall/syscall.h
-syscall/signal.o: signal/signal.h
 syscall/syscall.h: common.h
 
 signal/signal.o: syscall/syscall.h

@@ -101,6 +101,9 @@ PUBLIC int psys_setpriority(int which, long who, int knice);
  */
 PUBLIC int psys_sig_set_handler(int signum, int ignore);
 
+void pure_sigemptyset(void *set);
+void pure_sigfillset(void *set);
+
 /**
  * Check man sigprocmask for its API doc.
  */

@@ -4,9 +4,6 @@
 # define _POSIX_C_SOURCE 201107L
 # include <signal.h>
 
-void pure_sigemptyset(sigset_t *set);
-void pure_sigfillset(sigset_t *set);
-
 /**
  * @return 0 on success, (-errno) on failure.
  */
