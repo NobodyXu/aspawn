@@ -1,3 +1,6 @@
+# define _POSIX_C_SOURCE 201107L
+# include <signal.h>
+
 #include "signal.h"
 #include "../syscall/syscall.h"
 
@@ -5,14 +8,14 @@
 #include <string.h>
 #include <errno.h>
 
-int sig_blockall(sigset_t *oldset)
+int sig_blockall(void *oldset)
 {
     sigset_t set;
     pure_sigfillset(&set);
     return psys_sigprocmask(SIG_BLOCK, &set, oldset);
 }
 
-int sig_setmask(const sigset_t *set)
+int sig_setmask(const void *set)
 {
     if (sigprocmask(SIG_SETMASK, set, NULL) < 0)
         return -errno;

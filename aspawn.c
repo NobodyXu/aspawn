@@ -1,3 +1,5 @@
+# define _POSIX_C_SOURCE 201107L
+
 #include "signal/signal.h"
 
 #include "aspawn.h"
