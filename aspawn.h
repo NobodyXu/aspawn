@@ -1,6 +1,11 @@
 #ifndef  __aspawn_aspawn_H__
 # define __aspawn_aspawn_H__
 
+/**
+ * Make sure that function symbols in this project are immediately resolved if dynamically linked,
+ * or make sure this library is statically linked.
+ */
+
 # include <stddef.h>
 # include <sys/types.h>
 
