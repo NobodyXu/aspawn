@@ -4,6 +4,7 @@
 #include "clone_internal.h"
 #include "stack_growth.h"
 #include "../syscall/clone3.h"
+#include <sys/syscall.h>
 
 #include <stdint.h>
 
