@@ -41,6 +41,10 @@ int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct s
         .set_tid_size = 0,
     };
 
+    /**
+     * TODO: Detect absense of CLONE_CLEAR_SIGHAND support and returns -ENOSYS
+     */
+
     return psys_clone3(&cl_args, sizeof(cl_args), fn, arg);
 #else
     return -ENOSYS;
