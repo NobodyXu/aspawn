@@ -55,6 +55,8 @@ int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_plac
     /**
      * TODO: Allocate a 'null' page that is inaccessible at the end of the stack to help preventing
      * stack overflow error from overwriting other memory region.
+     *
+     * Use mmap + mprotect
      */
 
     if (cached_stack->addr != NULL) {
