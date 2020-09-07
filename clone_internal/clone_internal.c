@@ -14,15 +14,15 @@
 
 #define STACK(addr, len) ((addr) + (len) * STACK_GROWS_DOWN)
 
-int clone_internal(int (*fn)(void *arg), void *arg, const struct stack_t *cached_stack)
+int clone_internal(int (*fn)(void *arg), void *arg, const struct stack_t *stack)
 {
-    int new_pid = clone(fn, STACK((char*) cached_stack->addr, cached_stack->size), CLONE_VM | SIGCHLD, arg);
+    int new_pid = clone(fn, STACK((char*) stack->addr, stack->size), CLONE_VM | SIGCHLD, arg);
     if (new_pid == -1)
         return (-errno);
     return new_pid;
 }
 
-int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct stack_t *cached_stack)
+int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct stack_t *stack)
 {
 #ifdef SYS_clone3
     struct clone_args cl_args = {
@@ -35,11 +35,11 @@ int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct s
         .exit_signal = SIGCHLD,
 
 # ifdef __aarch64__
-        .stack = ((uint64_t) cached_stack->addr + 15) & 15,
-        .stack_size = cached_stack->size & 15
+        .stack = ((uint64_t) stack->addr + 15) & 15,
+        .stack_size = stack->size & 15
 # else
-        .stack = (uint64_t) cached_stack->addr,
-        .stack_size = cached_stack->size,
+        .stack = (uint64_t) stack->addr,
+        .stack_size = stack->size,
 # endif
 
         .tls = (uint64_t) NULL,
