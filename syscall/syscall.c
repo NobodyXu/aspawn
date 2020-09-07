@@ -8,9 +8,7 @@
 
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
 {
-    make_syscall();
-    __asm__ __volatile__ ("ret");
-    __builtin_unreachable();
+    return INTERNAL_SYSCALL(syscall_number, 6, arg1, arg2, arg3, arg4, arg5, arg6);
 }
 
 int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode)
