@@ -1,6 +1,10 @@
 #ifndef  __aspawn_syscall_syscall_H__
 # define __aspawn_syscall_syscall_H__
 
+/**
+ * This function contains almost all functions that will be used in the aspawn-ed child.
+ */
+
 # include "../common.h"
 # include <sys/types.h>
 # include <fcntl.h>
@@ -11,6 +15,9 @@
  * GET_NARGS can at most detect nargs up util 7.
  */
 # define GET_NARGS(...) GET_NARGS_(99, ## __VA_ARGS__, 7, 6, 5, 4, 3, 2, 1, 0)
+
+PUBLIC void pmemset(void *s, int c, size_t n);
+PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
 
 /**
  * All psys_* here returns negative error code on failure and does not modify errno.
