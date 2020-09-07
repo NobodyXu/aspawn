@@ -38,12 +38,18 @@ struct aspawn_child_args {
     sigset_t old_sigset;
     char user_data[];
 };
+
+int aspawn_child(void *arg);
+int aspawn_child_clear_sighand(void *arg)
+{
+    for (int sig = 1; sig < _NSIG; ++sig)
+        psys_sig_set_handler(sig, 0);
+
+    return aspawn_child(arg);
+}
 int aspawn_child(void *arg)
 {
     struct aspawn_child_args *args = arg;
-
-    for (int sig = 1; sig < _NSIG; ++sig)
-        psys_sig_set_handler(sig, 0);
 
     psys_close(args->pipefd[0]);
 
@@ -75,7 +81,18 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
     memcpy(&args->old_sigset, old_sigset, sizeof(sigset_t));
     memcpy(args->user_data, user_data, user_data_len);
 
-    int new_pid = clone_internal(aspawn_child, args, &stack);
+    int new_pid;
+
+    switch (HAS_CLONE_CLEAR_SIGHAND_INTERNAL) {
+        case 1:
+            new_pid = clone_clear_sighand_internal(aspawn_child, args, &stack);
+            if (new_pid != -ENOSYS)
+                break;
+
+        case 0:
+            new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
+    }
+
     if (new_pid >= 0) {
         *pid = new_pid;
         result = pipefd[0];
