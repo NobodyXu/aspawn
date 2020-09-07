@@ -13,6 +13,9 @@ OBJS := $(SRCS:.c=.o)
 libaspawn.so: $(OBJS)
 	$(CC) -fPIC $(LDFLAGS) -o $@ $^
 
+libaspawn.a: $(OBJS)
+	llvm-ar rcsuT $@ $^
+
 %.o: %.c
 	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
 
