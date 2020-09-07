@@ -13,91 +13,91 @@ long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg
 
 int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode)
 {
-    return pure_syscall2(SYS_openat, dirfd, (long) pathname, flags, mode);
+    return INTERNAL_SYSCALL(SYS_openat, 4, dirfd, pathname, flags, mode);
 }
 int psys_close(int fd)
 {
-    return pure_syscall2(SYS_close, fd);
+    return INTERNAL_SYSCALL(SYS_close, 1, fd);
 }
 int psys_dup3(int oldfd, int newfd, int flags)
 {
-    return pure_syscall2(SYS_dup3, oldfd, newfd, flags);
+    return INTERNAL_SYSCALL(SYS_dup3, 3, oldfd, newfd, flags);
 }
 
 int psys_chdir(const char *path)
 {
-    return pure_syscall2(SYS_chdir, (long) path);
+    return INTERNAL_SYSCALL(SYS_chdir, 1, path);
 }
 int psys_fchdir(int fd)
 {
-    return pure_syscall2(SYS_fchdir, fd);
+    return INTERNAL_SYSCALL(SYS_fchdir, 1, fd);
 }
 
 ssize_t psys_write(int fd, const void *buf, size_t count)
 {
-    return pure_syscall2(SYS_write, fd, (long) buf, count);
+    return INTERNAL_SYSCALL(SYS_write, 3, fd, buf, count);
 }
 
 ssize_t psys_read(int fd, void *buf, size_t count)
 {
-    return pure_syscall2(SYS_read, fd, (long) buf, count);
+    return INTERNAL_SYSCALL(SYS_read, 3, fd, buf, count);
 }
 
 int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 {
-    return pure_syscall2(SYS_setresuid, ruid, euid, suid);
+    return INTERNAL_SYSCALL(SYS_setresuid, 3, ruid, euid, suid);
 }
 int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid)
 {
-    return pure_syscall2(SYS_setresgid, rgid, egid, sgid);
+    return INTERNAL_SYSCALL(SYS_setresgid, 3, rgid, egid, sgid);
 }
 int psys_setgroups(size_t size, const gid_t *list)
 {
-    return pure_syscall2(SYS_setgroups, size, (long) list);
+    return INTERNAL_SYSCALL(SYS_setgroups, 2, size, list);
 }
 
 int psys_sched_setparam(pid_t pid, const void *param)
 {
-    return pure_syscall2(SYS_sched_setparam, pid, (long) param);
+    return INTERNAL_SYSCALL(SYS_sched_setparam, 2, pid, param);
 }
 int psys_sched_getparam(pid_t pid, void *param)
 {
-    return pure_syscall2(SYS_sched_getparam, pid, (long) param);
+    return INTERNAL_SYSCALL(SYS_sched_getparam, 2, pid, param);
 }
 int psys_sched_setscheduler(pid_t pid, int policy, const void *param)
 {
-    return pure_syscall2(SYS_sched_setscheduler, pid, policy, (long) param);
+    return INTERNAL_SYSCALL(SYS_sched_setscheduler, 3, pid, policy, param);
 }
 int psys_sched_getscheduler(pid_t pid)
 {
-    return pure_syscall2(SYS_sched_getscheduler, pid);
+    return INTERNAL_SYSCALL(SYS_sched_getscheduler, 1, pid);
 }
 int psys_getpriority(int which, long who)
 {
-    return pure_syscall2(SYS_getpriority, which, who);
+    return INTERNAL_SYSCALL(SYS_getpriority, 2, which, who);
 }
 int psys_setpriority(int which, long who, int unice)
 {
-    return pure_syscall2(SYS_setpriority, which, who, unice);
+    return INTERNAL_SYSCALL(SYS_setpriority, 3, which, who, unice);
 }
 
 int psys_prlimit(int resource, const void *new_limit, void *old_limit)
 {
-    return pure_syscall2(SYS_prlimit64, 0, resource, (long) new_limit, (long) old_limit);
+    return INTERNAL_SYSCALL(SYS_prlimit64, 4, 0, resource, new_limit, old_limit);
 }
 
 void psys_exit(int status)
 {
-    pure_syscall2(SYS_exit, status);
+    INTERNAL_SYSCALL(SYS_exit, 1, status);
 }
 
 int psys_execve(const char *pathname, char * const argv[], char * const envp[])
 {
-    return pure_syscall2(SYS_execve, (long) pathname, (long) argv, (long) envp);
+    return INTERNAL_SYSCALL(SYS_execve, 3, pathname, argv, envp);
 }
 int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * const envp[], int flags)
 {
-    return pure_syscall2(SYS_execveat, dirfd, (long) pathname, (long) argv, (long) envp, flags);
+    return INTERNAL_SYSCALL(SYS_execveat, 5, dirfd, pathname, argv, envp, flags);
 }
 
 int find_exe(const char *file, size_t file_len, char *constructed_path, const char **PATH, size_t path_max_len)
