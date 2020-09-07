@@ -20,7 +20,9 @@ int clone_internal(int (*fn)(void *arg), void *arg, const struct stack_t *cached
 # endif
 
 /**
- * @return -ENOSYS if not supported (either clone3 is not supported or CLONE_CLEAR_SIGHAND is not).
+ * @return -ENOSYS if syscall clone3 is not supported clone3.
+ *         -EINVAL might mean that CLONE_CLEAR_SIGHAND is not supported, or stack is not aligned,
+ *         according to https://elixir.bootlin.com/linux/latest/source/kernel/fork.c.
  */
 int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct stack_t *cached_stack);
 
