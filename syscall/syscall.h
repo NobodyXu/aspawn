@@ -60,14 +60,14 @@ PUBLIC int psys_dup3(int oldfd, int newfd, int flags);
 
 PUBLIC int psys_chdir(const char *path);
 PUBLIC int psys_fchdir(int fd);
-PUBLIC 
+
 PUBLIC ssize_t psys_write(int fd, const void *buf, size_t count);
 PUBLIC ssize_t psys_read(int fd, void *buf, size_t count);
-PUBLIC 
+
 PUBLIC int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid);
 PUBLIC int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid);
 PUBLIC int psys_setgroups(size_t size, const gid_t *list);
-PUBLIC 
+
 PUBLIC int psys_sched_setparam(pid_t pid, const void *param);
 PUBLIC int psys_sched_getparam(pid_t pid, void *param);
 PUBLIC int psys_sched_setscheduler(pid_t pid, int policy, const void *param);
