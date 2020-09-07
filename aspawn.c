@@ -45,7 +45,7 @@ int aspawn_child(void *arg);
 int aspawn_child_clear_sighand(void *arg)
 {
     for (int sig = 1; sig < _NSIG; ++sig)
-        psys_sig_set_handler(sig, 0);
+        psys_sig_clear_handler(sig);
 
     return aspawn_child(arg);
 }

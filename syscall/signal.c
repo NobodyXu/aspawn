@@ -4,7 +4,7 @@
 #include "make_syscall.h"
 #include <sys/syscall.h>
 
-#include <string.h>
+#include <stddef.h>
 #include <signal.h>
 
 void pure_sigemptyset(void *set)
@@ -59,14 +59,14 @@ struct psys_kernel_sigaction {
 #define NSIG_WORDS (ALIGN_UP((NSIG - 1), ULONG_WIDTH) / ULONG_WIDTH)
 #define NSIG_BYTES (NSIG_WORDS * (ULONG_WIDTH / UCHAR_WIDTH))
 
-int psys_sig_set_handler(int signum, int ignore)
+int psys_sig_clear_handler(int signum)
 {
     struct psys_kernel_sigaction act;
 
-    act.psys_sa_handler = ignore ? SIG_IGN : SIG_DFL;
-    act.psys_sa_flags = 0;
-    act.psys_sa_restorer = 0;
-    pure_sigemptyset(&act.sa_mask);
+    pmemset(&act, 0, sizeof(act));
+
+    if (SIG_DFL != 0)
+        act.psys_sa_handler = SIG_DFL;
 
     return INTERNAL_SYSCALL(SYS_rt_sigaction, 4, signum, &act, NULL, NSIG_BYTES);
 }

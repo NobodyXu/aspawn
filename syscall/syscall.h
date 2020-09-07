@@ -96,10 +96,7 @@ PUBLIC int psys_getpriority(int which, long who);
  */
 PUBLIC int psys_setpriority(int which, long who, int knice);
 
-/**
- * @param ignore If ignore == 1, ignore the signal. Otherwise set it to default handler.
- */
-PUBLIC int psys_sig_set_handler(int signum, int ignore);
+PUBLIC int psys_sig_clear_handler(int signum);
 
 void pure_sigemptyset(void *set);
 void pure_sigfillset(void *set);
