@@ -35,6 +35,9 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *old_sigset, void *us
  *
  * aspawn would also mask all signals in parent and reset the signal handler in the child process.
  * Before aspawn returns in parent, it would revert the signal mask.
+ *
+ * In the function fn, you can only use syscall declared in syscall/syscall.h
+ * Use of any glibc function or any function that modifies global/thread-local variable is undefined behavior.
  */
 int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
            aspawn_fn fn, void *arg, void *user_data, size_t user_data_len);
