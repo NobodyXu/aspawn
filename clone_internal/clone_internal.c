@@ -5,6 +5,8 @@
 #include "stack_growth.h"
 #include "../syscall/clone3.h"
 
+#include <stdint.h>
+
 #include <sched.h>
 #include <signal.h>
 
