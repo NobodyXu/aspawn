@@ -14,22 +14,24 @@ aspawn: $(OBJS)
 	$(CC) -fPIC $(LDFLAGS) -o $@ $^
 
 %.o: %.c
-	$(CC) -c $(CFLAGS) -o $@ $<
-
-%.o: %.c %.h
-	$(CC) -c $(CFLAGS) -o $@ $<
+	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
 
 clean:
 	rm -f $(OBJS)
 .PHONY: clean
 
 ## Dependencies
-syscall/%.c: syscall/make_syscall.h
-syscall/clone3.c: syscall/syscall.h
-syscall/signal.c: signal/signal.h
+aspawn.h: common.h
 
-signal/signal.c: syscall/syscall.h
+aspawn.o: aspawn.h
 
-clone_internal/clone_internal.c: clone_internal/stack_growth.h aspawn.h syscall/clone3.h
+syscall/%.o: syscall/make_syscall.h
+syscall/clone3.o: syscall/syscall.h
+syscall/signal.o: signal/signal.h
+syscall/syscall.h: common.h
 
-cached_stack/cached_stack.c: aspawn.h clone_internal/stack_growth.h
+signal/signal.o: syscall/syscall.h
+
+clone_internal/clone_internal.o: clone_internal/stack_growth.h aspawn.h syscall/clone3.h
+
+cached_stack/cached_stack.o: aspawn.h clone_internal/stack_growth.h
