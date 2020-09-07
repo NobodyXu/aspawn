@@ -1,5 +1,6 @@
 #include "../signal/signal.h"
 #include "syscall.h"
+#include "make_syscall.h"
 #include <sys/syscall.h>
 
 #include <string.h>
@@ -35,10 +36,10 @@ int psys_sig_set_handler(int signum, int ignore)
     act.psys_sa_restorer = 0;
     pure_sigemptyset(&act.sa_mask);
 
-    return pure_syscall2(SYS_rt_sigaction, signum, (long) &act, (long) NULL, NSIG_BYTES);
+    return INTERNAL_SYSCALL(SYS_rt_sigaction, 4, signum, &act, NULL, NSIG_BYTES);
 }
 
 int psys_sigprocmask(int how, const void *set, void *oldset)
 {
-    return pure_syscall2(SYS_rt_sigprocmask, how, (long) set, (long) oldset, NSIG_BYTES);
+    return INTERNAL_SYSCALL(SYS_rt_sigprocmask, 4, how, set, oldset, NSIG_BYTES);
 }
