@@ -26,7 +26,29 @@ struct psys_kernel_sigaction {
     sigset_t sa_mask;
 };
 
-#define NSIG (SIGRTMAX + 1)
+/**
+ * The code below on PSIGRTMAX is adapted from glibc.
+ */
+#ifdef __linux__
+# ifdef __mips__
+/**
+ * On mips, maximum rt signal is 127 in linux.
+ */
+#  define PSIGRTMAX 127
+# else
+/**
+ * On most platform, linux has maximum rt signal as 64.
+ */
+#  define PSIGRTMAX 64
+# endif
+#else
+/**
+ * On other platform, there seems to be no reat time signal support.
+ */
+# define PSIGRTMAX 32
+#endif
+
+#define NSIG (PSIGRTMAX + 1)
 
 #define UCHAR_WIDTH 8
 #define ULONG_WIDTH (sizeof(unsigned long) * UCHAR_WIDTH)
