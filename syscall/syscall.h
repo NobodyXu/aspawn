@@ -96,8 +96,8 @@ PUBLIC int psys_getpriority(int which, long who);
  */
 PUBLIC int psys_setpriority(int which, long who, int knice);
 
-void pure_sigemptyset(void *set);
-void pure_sigfillset(void *set);
+PUBLIC void pure_sigemptyset(void *set);
+PUBLIC void pure_sigfillset(void *set);
 
 /**
  * Check man sigprocmask for its API doc.
