@@ -19,6 +19,9 @@ int clone_internal(int (*fn)(void *arg), void *arg, const struct stack_t *cached
 #  define HAS_CLONE_CLEAR_SIGHAND_INTERNAL 0
 # endif
 
+/**
+ * @return -ENOSYS if not supported (either clone3 is not supported or CLONE_CLEAR_SIGHAND is not).
+ */
 int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct stack_t *cached_stack);
 
 #endif
