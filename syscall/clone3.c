@@ -4,19 +4,11 @@
 
 #include <sys/syscall.h>
 
-__attribute__((always_inline)) 
-long invoke_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
-{
-    make_syscall();
-    __asm__ __volatile__ ("ret");
-    __builtin_unreachable();
-}
-
 long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg)
 {
     typedef int (*fn_t)(void *arg);
 
-    register fn_t fn_reg __asm__ ("r11");
+    register fn_t fn_reg __asm__ ("r13");
     register void *arg_reg __asm__ ("r12");
 
     fn_reg = fn;
@@ -26,7 +18,7 @@ long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), 
     // since no function return (req + pop) will be performed, and the return value is in the register.
     //
     // The compiler probably won't spoil the return value from the register to the stack.
-    int result = invoke_syscall(SYS_clone3, (long) cl_args, size, 0, 0, 0, 0);
+    int result = INTERNAL_SYSCALL(SYS_clone3, 2, cl_args, size);
 
     // If this is the child
     if (result == 0) {
