@@ -69,6 +69,10 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
         goto fail;
 
     struct stack_t stack = *cached_stack;
+    // the way allocate_obj_on_stack allocates object is similar to how stack is used
+    // during normal function execution.
+    //
+    // This is done to improve locality and avoid allocating an empty page just for these objects.
     struct aspawn_child_args *args = allocate_obj_on_stack(&stack, objs_on_stack_len);
 
     args->pipefd[0] = pipefd[0];
