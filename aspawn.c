@@ -114,14 +114,12 @@ int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz,
 
     sigset_t oldset;
     int result = sig_blockall(&oldset);
-    if (result < 0)
-        goto fail_to_block_signal;
 
-    result = aspawn_impl(pid, cached_stack, reserved_stack_sz, fn, arg, user_data, user_data_len, &oldset);
+    if (result == 0) {
+        result = aspawn_impl(pid, cached_stack, reserved_stack_sz, fn, arg, user_data, user_data_len, &oldset);
+        sig_setmask(&oldset);
+    }
 
-    sig_setmask(&oldset);
-
-fail_to_block_signal:
     pthread_setcancelstate(oldstate, NULL);
 
     return result;
