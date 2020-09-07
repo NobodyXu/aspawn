@@ -33,8 +33,14 @@ int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct s
         .parent_tid = (uint64_t) NULL,
 
         .exit_signal = SIGCHLD,
+
+# ifdef __aarch64__
+        .stack = ((uint64_t) cached_stack->addr + 15) & 15,
+        .stack_size = cached_stack->size & 15
+# else
         .stack = (uint64_t) cached_stack->addr,
         .stack_size = cached_stack->size,
+# endif
 
         .tls = (uint64_t) NULL,
         .set_tid = (uint64_t) NULL,
