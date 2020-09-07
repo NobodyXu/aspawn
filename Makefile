@@ -10,7 +10,7 @@ SRCS := $(wildcard *.c) $(wildcard */*.c)
 OBJS := $(SRCS:.c=.o)
 
 ## Build rules
-aspawn: $(OBJS)
+libaspawn.so: $(OBJS)
 	$(CC) -fPIC $(LDFLAGS) -o $@ $^
 
 %.o: %.c
