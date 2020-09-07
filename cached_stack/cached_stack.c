@@ -52,6 +52,11 @@ int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_plac
 
     void *stack;
 
+    /**
+     * TODO: Allocate a 'null' page that is inaccessible at the end of the stack to help preventing
+     * stack overflow error from overwriting other memory region.
+     */
+
     if (cached_stack->addr != NULL) {
         if (cached_stack->size < stack_size)
             stack = mremap(cached_stack->addr, cached_stack->size, stack_size, MREMAP_MAYMOVE);
