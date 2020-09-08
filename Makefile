@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS := -std=c11 -Ofast -fvisibility=hidden -Wall
+CFLAGS := -std=c11 -Ofast -fvisibility=hidden -Wall -flto
 CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
 
 LDFLAGS = -s -shared -Wl,-soname,$@ -Wl,-icf=all,--gc-sections -flto -Wl,--plugin-opt=O3 -fuse-ld=lld
