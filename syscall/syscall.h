@@ -16,8 +16,8 @@
  */
 # define GET_NARGS(...) GET_NARGS_(99, ## __VA_ARGS__, 7, 6, 5, 4, 3, 2, 1, 0)
 
-PUBLIC void pmemset(void *s, int c, size_t n);
-PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
+ALWAYS_INLINE PUBLIC void pmemset(void *s, int c, size_t n);
+ALWAYS_INLINE PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
 
 /**
  * All psys_* here returns negative error code on failure and does not modify errno.
@@ -96,8 +96,8 @@ PUBLIC int psys_getpriority(int which, long who);
  */
 PUBLIC int psys_setpriority(int which, long who, int knice);
 
-PUBLIC void pure_sigemptyset(void *set);
-PUBLIC void pure_sigfillset(void *set);
+ALWAYS_INLINE PUBLIC void pure_sigemptyset(void *set);
+ALWAYS_INLINE PUBLIC void pure_sigfillset(void *set);
 
 /**
  * Check man sigprocmask for its API doc.

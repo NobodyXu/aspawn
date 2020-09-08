@@ -1,6 +1,7 @@
 #ifndef  __aspawn_syscall_clone3_H__
 # define __aspawn_syscall_clone3_H__
 
+# include "../common.h"
 # include <stddef.h>
 # include <linux/types.h>
 
@@ -19,6 +20,6 @@ struct clone_args {
 
 # define CLONE_CLEAR_SIGHAND 0x100000000ULL /* Clear any signal handler and reset to SIG_DFL. */
 
-long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg);
+ALWAYS_INLINE long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg);
 
 #endif
