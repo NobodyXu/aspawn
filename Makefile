@@ -16,7 +16,7 @@ libaspawn.so: $(OBJS)
 libaspawn.a: $(OBJS)
 	llvm-ar rcsuT $@ $^
 
-%.o: %.c
+%.o: %.c Makefile
 	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
 
 clean:
