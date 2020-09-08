@@ -19,6 +19,10 @@ libaspawn.a: $(OBJS)
 %.o: %.c Makefile
 	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
 
+### Specialize rule
+syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
+	$(CC) -fPIC -c $(CFLAGS) -Ofast -fno-builtin -o $@ $<
+
 clean:
 	rm -f $(OBJS)
 .PHONY: clean
