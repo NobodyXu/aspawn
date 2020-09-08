@@ -1,7 +1,7 @@
 CC = clang
 
-CFLAGS := -std=c11 -Oz -fvisibility=hidden -Wall
-CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables  -fmerge-all-constants
+CFLAGS := -std=c11 -Ofast -fvisibility=hidden -Wall
+CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
 
 LDFLAGS = -s -shared -Wl,-soname,$@ -Wl,-icf=all,--gc-sections -flto -Wl,--plugin-opt=O3 -fuse-ld=lld
 
@@ -18,10 +18,6 @@ libaspawn.a: $(OBJS)
 
 %.o: %.c
 	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
-
-### Specialize rule
-syscall/memory.o: syscall/memory.c syscall/syscall.h
-	$(CC) -fPIC -c $(CFLAGS) -Ofast -fno-builtin -o $@ $<
 
 clean:
 	rm -f $(OBJS)
