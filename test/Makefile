@@ -1,6 +1,6 @@
 CC = clang
 
-CFLAGS := -std=c11 -Wall
+CFLAGS := -std=c11 -Wall -fsanitize=address
 LDFLAGS := -fuse-ld=lld -Wl,--as-needed
 
 ## Objects to build
