@@ -54,6 +54,8 @@ void test_clone()
 
     long result = psys_clone3(&cl_args, sizeof(cl_args), test_clone_fn, (void*) (uintptr_t) 10);
     if (result < 0) {
+        if (-result == EINVAL)
+            errx(1, "You linux kernel does not support CLONE_CLEAR_SIGHAND");
         errno = -result;
         err(1, "%s on line %zu failed", "psys_clone3", (size_t) __LINE__);
     }
