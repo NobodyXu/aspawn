@@ -46,7 +46,7 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *old_sigset, void *us
  * Use of any glibc function or any function that modifies global/thread-local variable is undefined behavior.
  */
 PUBLIC int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
-           aspawn_fn fn, void *arg, void *user_data, size_t user_data_len);
+                  aspawn_fn fn, void *arg, void *user_data, size_t user_data_len);
 
 /**
  * @param cached_stack must be 
