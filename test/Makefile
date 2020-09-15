@@ -18,3 +18,6 @@ clean:
 	rm -f $(OUTS)
 
 .PHONY: test clean
+
+## Dependencies
+test_syscall.o: ../syscall/clone3.c
