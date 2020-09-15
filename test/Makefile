@@ -12,7 +12,7 @@ test: $(OUTS)
 
 %.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.so Makefile
 	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.so -o $@
-	./$@
+	LD_LIBRARY_PATH=../ ./$@
 
 clean:
 	rm -f $(OUTS)
