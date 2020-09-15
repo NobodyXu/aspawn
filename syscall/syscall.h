@@ -146,7 +146,7 @@ PUBLIC int psys_execveat(int dirfd, const char *pathname, char * const argv[], c
  *             case 1:
  *                 result = handle_execve_errexe_err(psys_execve(constructed_path, argv, envp));
  *                 if (result < 0) {
- *                     int errno = -result;
+ *                     int errno_v = -result;
  *                     // executable is found, but it failed to execute
  *                     // *Handle the errors here*
  *                 }
