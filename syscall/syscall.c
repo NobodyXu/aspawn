@@ -91,7 +91,7 @@ void psys_exit(int status)
     INTERNAL_SYSCALL(SYS_exit, 1, status);
 }
 
-int psys_execve(const char *pathname, char * const argv[], char * const envp[])
+int psys_execve(const char *pathname, const char * const argv[], const char * const envp[])
 {
     return INTERNAL_SYSCALL(SYS_execve, 3, pathname, argv, envp);
 }

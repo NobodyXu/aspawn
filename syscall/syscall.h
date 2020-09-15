@@ -106,7 +106,7 @@ PUBLIC int psys_sigprocmask(int how, const void *set, void *oldset);
 
 PUBLIC void psys_exit(int status);
 
-PUBLIC int psys_execve(const char *pathname, char * const argv[], char * const envp[]);
+PUBLIC int psys_execve(const char *pathname, const char * const argv[], const char * const envp[]);
 /**
  * linux-specific call, checks `man 2 execveat` for more info.
  */
