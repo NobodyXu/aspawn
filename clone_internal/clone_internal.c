@@ -37,7 +37,7 @@ int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct s
 
 # ifdef __aarch64__
         .stack = ((uint64_t) stack->addr + 15) & 15,
-        .stack_size = stack->size & 15
+        .stack_size = stack->size & 15,
 # else
         .stack = (uint64_t) stack->addr,
         .stack_size = stack->size,
