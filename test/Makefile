@@ -9,10 +9,10 @@ OUTS := $(SRCS:.c=.out)
 
 ## Build rules
 test: $(OUTS)
+	./run_tests.sh "$(OUTS)"
 
 %.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.so Makefile
 	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.so -o $@
-	LD_LIBRARY_PATH=../ ./$@
 
 clean:
 	rm -f $(OUTS)
