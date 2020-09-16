@@ -35,7 +35,7 @@ void psys_put_impl(int fd, const char *s, size_t len)
 
 int psys_execvep(const char *file, size_t file_len, const char * const argv[], const char *path)
 {
-    const char * const envp[] = {NULL};
+    static const char * const envp[] = {NULL};
 
     char constructed_path[PATH_MAX + 1];
 
@@ -68,7 +68,7 @@ int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_dat
     if (arg != NULL)
         psys_err(1, "arg != NULL");
 
-    const char * const argv[] = {"echo", "-n", NULL};
+    static const char * const argv[] = {"echo", "-n", NULL};
     return psys_execvep(argv[0], 4, argv, user_data);
 }
 int main(int argc, char* argv[])
