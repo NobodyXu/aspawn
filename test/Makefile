@@ -12,6 +12,7 @@ test: $(OUTS)
 	./run_tests.sh "$(OUTS)"
 
 %.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.so Makefile
+	$(MAKE) -C ../
 	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.so -o $@
 
 clean:
