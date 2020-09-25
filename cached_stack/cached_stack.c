@@ -28,7 +28,7 @@ int cleanup_cached_stack_internal(const struct stack_t *cached_stack)
 size_t align(size_t sz, size_t alignment)
 {
     size_t remnant = sz % alignment;
-    return sz + remnant != 0 ? (alignment - remnant) : 0;
+    return sz + ((remnant != 0) ? (alignment - remnant) : 0);
 }
 size_t align_to_page(size_t sz)
 {
