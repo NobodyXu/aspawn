@@ -81,10 +81,10 @@ void* allocate_obj_on_stack(struct stack_t *stack, size_t len)
 
     stack->size -= len;
     if (STACK_GROWS_DOWN) {
-        ret = stack->addr + stack->size;
+        ret = ((char*) stack->addr) + stack->size;
     } else {
         ret = stack->addr;
-        stack->addr += len;
+        stack->addr = ((char*) stack->addr) + len;
     }
     
     return ret;
