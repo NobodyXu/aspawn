@@ -89,11 +89,13 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
 
     int new_pid;
 
-    switch (HAS_CLONE_CLEAR_SIGHAND_INTERNAL) {
+    static int has_clone_clear_sighand_internal = HAS_CLONE_CLEAR_SIGHAND_INTERNAL;
+    switch (has_clone_clear_sighand_internal) {
         case 1:
             new_pid = clone_clear_sighand_internal(aspawn_child, args, &stack);
             if (new_pid != -ENOSYS && new_pid != -EINVAL)
                 break;
+            has_clone_clear_sighand_internal = 0;
 
         case 0:
             new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
