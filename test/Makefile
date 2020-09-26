@@ -21,4 +21,4 @@ clean:
 .PHONY: test clean
 
 ## Dependencies
-test_syscall.o: ../syscall/clone3.c
+test_syscall.out: ../syscall/clone3.c
