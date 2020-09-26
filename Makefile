@@ -9,6 +9,9 @@ LDFLAGS = -s -shared -Wl,-soname,$@ -Wl,-icf=all,--gc-sections -flto -Wl,--plugi
 SRCS := $(shell find . -name '*.c' -a ! -wholename './test/*' -a ! -wholename './benchmark*')
 OBJS := $(SRCS:.c=.o)
 
+## Install prefix
+PREFIX := /usr/local/
+
 ## Build rules
 libaspawn.so: $(OBJS)
 	$(CC) -fPIC $(LDFLAGS) -o $@ $^
@@ -30,7 +33,12 @@ clean:
 	rm -f $(OBJS)
 test: libaspawn.so
 	$(MAKE) -C test
-.PHONY: clean test
+install: libaspawn.so libaspawn.a aspawn.h syscall/syscall.h
+	cp libaspawn.* $(PREFIX)/lib/
+	mkdir -p $(PREFIX)/include/aspawn/syscall
+	cp aspawn.h common.h $(PREFIX)/include/aspawn/
+	cp syscall/syscall.h $(PREFIX)/include/aspawn/syscall/
+.PHONY: clean test install
 
 ## Dependencies
 aspawn.h: common.h
