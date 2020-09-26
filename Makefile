@@ -25,7 +25,9 @@ syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
 
 clean:
 	rm -f $(OBJS)
-.PHONY: clean
+test:
+	$(MAKE) -C test
+.PHONY: clean test
 
 ## Dependencies
 aspawn.h: common.h
