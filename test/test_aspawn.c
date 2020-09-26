@@ -70,7 +70,7 @@ int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_dat
     if (arg != NULL)
         psys_err(1, "arg != NULL");
 
-    static const char * const argv[] = {"echo", NULL};
+    static const char * const argv[] = {"echo", "-e", "\nHello,", "world!", NULL};
     return psys_execvep(argv[0], 4, argv, user_data);
 }
 int main(int argc, char* argv[])
