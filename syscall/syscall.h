@@ -17,6 +17,12 @@
 # define GET_NARGS(...) GET_NARGS_(99, ## __VA_ARGS__, 7, 6, 5, 4, 3, 2, 1, 0)
 
 PUBLIC size_t pstrlen(const char *s);
+/**
+ * Copy exacting n bytes(excluding null byte) from src to dest.
+ * Will append the null byte to dest.
+ */
+PUBLIC void pstrcpy(char *dest, const char *src, size_t n);
+
 ALWAYS_INLINE PUBLIC void pmemset(void *s, int c, size_t n);
 ALWAYS_INLINE PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
 

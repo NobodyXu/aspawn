@@ -6,6 +6,11 @@ size_t pstrlen(const char *s)
     for (; s[len] != '\0'; ++len);
     return len;
 }
+void pstrcpy(char *dest, const char *src, size_t n)
+{
+    pmemcpy(dest, src, n);
+    dest[n] = '\0';
+}
 
 void pmemset(void *s, int c, size_t n)
 {
