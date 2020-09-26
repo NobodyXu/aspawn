@@ -75,7 +75,7 @@ BM_posix_spawn          150883 ns        42476 ns        16474
 ### Throughput benchmark
 
 Since `aspawn` allows user to **do anything** in the vforked child via `aspawn_fn`, it makes no sense
-to benchmark how many processes can `aspawn` created.
+to benchmark how many processes can `aspawn` created as it depends on user provided argument `fn`.
 
 [1]: https://github.com/NobodyXu/aspawn
 [2]: https://github.com/NobodyXu/aspawn/blob/master/syscall/syscall.h
