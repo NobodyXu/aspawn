@@ -23,8 +23,8 @@ PUBLIC size_t pstrlen(const char *s);
  */
 PUBLIC void pstrcpy(char *dest, const char *src, size_t n);
 
-ALWAYS_INLINE PUBLIC void pmemset(void *s, int c, size_t n);
-ALWAYS_INLINE PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
+PUBLIC void pmemset(void *s, int c, size_t n);
+PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
 
 /**
  * All psys_* here returns negative error code on failure and does not modify errno.
