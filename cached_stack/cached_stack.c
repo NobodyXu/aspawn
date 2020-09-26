@@ -34,7 +34,7 @@ size_t align_to_page(size_t sz)
 {
     return align(sz, sysconf(_SC_PAGESIZE));
 }
-ALWAYS_INLINE size_t align_stack_sz(size_t sz)
+size_t align_stack_sz(size_t sz)
 {
     sz = align_to_page(sz);
 #ifdef __aarch64__
