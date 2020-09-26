@@ -17,6 +17,8 @@
 #include <sched.h>
 #include <signal.h>
 
+#include <stdatomic.h>
+
 void init_cached_stack(struct stack_t *cached_stack)
 {
     init_cached_stack_internal(cached_stack);
@@ -89,16 +91,20 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
 
     int new_pid;
 
-    static int has_clone_clear_sighand_internal = HAS_CLONE_CLEAR_SIGHAND_INTERNAL;
-    switch (has_clone_clear_sighand_internal) {
-        case 1:
-            new_pid = clone_clear_sighand_internal(aspawn_child, args, &stack);
-            if (new_pid != -ENOSYS && new_pid != -EINVAL)
-                break;
-            has_clone_clear_sighand_internal = 0;
+    if (!HAS_CLONE_CLEAR_SIGHAND_INTERNAL) {
+        new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
+    } else {
+        static atomic_bool does_not_have_clone_clear_sighand_internal; // Initialized to 0(false)
+        switch ((int) atomic_load(&does_not_have_clone_clear_sighand_internal)) {
+            case 0:
+                new_pid = clone_clear_sighand_internal(aspawn_child, args, &stack);
+                if (new_pid != -ENOSYS && new_pid != -EINVAL)
+                    break;
+                atomic_store(&does_not_have_clone_clear_sighand_internal, 1);
 
-        case 0:
-            new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
+            case 1:
+                new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
+        }
     }
 
     if (new_pid >= 0) {
