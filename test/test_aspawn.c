@@ -43,6 +43,8 @@ int psys_execvep(const char *file, size_t file_len, const char * const argv[], c
         int result;
         switch (find_exe(file, file_len, constructed_path, &path, PATH_MAX)) {
             case 1:
+                psys_put_impl(1, constructed_path, pstrlen(constructed_path));
+                psys_put(1, "\n");
                 result = handle_execve_err(psys_execve(constructed_path, argv, envp), &got_eaccess);
                 if (result < 0) {
                     errno = -result;
