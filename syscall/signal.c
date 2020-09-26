@@ -43,7 +43,7 @@ struct psys_kernel_sigaction {
 # endif
 #else
 /**
- * On other platform, there seems to be no reat time signal support.
+ * On other platform, there seems to be no real time signal support.
  */
 # define PSIGRTMAX 32
 #endif
