@@ -10,6 +10,10 @@
 # include <sys/types.h>
 # include "common.h"
 
+# ifdef __cplusplus
+extern "C" {
+# endif
+
 struct Stack_t {
     void *addr;
     size_t size;
@@ -55,5 +59,9 @@ PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stac
  * To reuse the destroyed stack, call init_cached_stack again.
  */
 PUBLIC int cleanup_stacks(const struct Stack_t *cached_stack);
+
+# ifdef __cplusplus
+}
+# endif
 
 #endif

@@ -16,6 +16,10 @@
  */
 # define GET_NARGS(...) GET_NARGS_(99, ## __VA_ARGS__, 7, 6, 5, 4, 3, 2, 1, 0)
 
+# ifdef __cplusplus
+extern "C" {
+# endif
+
 PUBLIC size_t pstrlen(const char *s);
 /**
  * Copy exacting n bytes(excluding null byte) from src to dest.
@@ -185,5 +189,9 @@ PUBLIC int find_exe(const char *file, size_t file_len, char *constructed_path,
  * Check find_exe for doc.
  */
 PUBLIC int handle_execve_err(int result, int *got_eaccess);
+
+# ifdef __cplusplus
+}
+# endif
 
 #endif
