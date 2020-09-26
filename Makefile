@@ -28,7 +28,7 @@ syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
 
 clean:
 	rm -f $(OBJS)
-test:
+test: libaspawn.so
 	$(MAKE) -C test
 .PHONY: clean test
 
