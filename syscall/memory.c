@@ -1,5 +1,12 @@
 #include "syscall.h"
 
+size_t pstrlen(const char *s)
+{
+    size_t len = 0;
+    for (; s[len] != '\0'; ++len);
+    return len;
+}
+
 void pmemset(void *s, int c, size_t n)
 {
     char *p = s;
