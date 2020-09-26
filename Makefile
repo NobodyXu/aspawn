@@ -6,7 +6,7 @@ CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constan
 LDFLAGS = -s -shared -Wl,-soname,$@ -Wl,-icf=all,--gc-sections -flto -Wl,--plugin-opt=O3 -fuse-ld=lld
 
 ## Objects to build
-SRCS := $(shell find . -name '*.c' -a ! -wholename './test/*')
+SRCS := $(shell find . -name '*.c' -a ! -wholename './test/*' -a ! -wholename './benchmark*')
 OBJS := $(SRCS:.c=.o)
 
 ## Build rules
