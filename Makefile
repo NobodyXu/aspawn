@@ -16,6 +16,9 @@ libaspawn.so: $(OBJS)
 libaspawn.a: $(OBJS)
 	llvm-ar rcsuT $@ $^
 
+%.o: %.c %.h Makefile
+	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
+
 %.o: %.c Makefile
 	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
 
@@ -31,8 +34,6 @@ test:
 
 ## Dependencies
 aspawn.h: common.h
-
-aspawn.o: aspawn.h
 
 syscall/%.o: syscall/make_syscall.h
 syscall/clone3.o: syscall/syscall.h
