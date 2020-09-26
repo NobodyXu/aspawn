@@ -11,7 +11,7 @@ any global/thread local variable at all.
 My `aspawn` has signature:
 
 ```{c}
-struct stack_t {
+struct Stack_t {
     void *addr;
     size_t size;
 };
@@ -29,7 +29,7 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *old_sigset, void *us
  * In the function fn, you can only use syscall declared in syscall/syscall.h
  * Use of any glibc function or any function that modifies global/thread-local variable is undefined behavior.
  */
-int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
+int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
                   aspawn_fn fn, void *arg, void *user_data, size_t user_data_len);
 ```
 
