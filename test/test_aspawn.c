@@ -29,7 +29,7 @@ void psys_put_impl(int fd, const char *s, size_t len)
 #define psys_put(fd, s) psys_put_impl((fd), (s), sizeof(s))
 #define psys_err(exit_status, s) \
     do {                         \
-        psys_put(2, (s));        \
+        psys_put(2, s "\n");   \
         return (exit_status);    \
     } while (0)
 
