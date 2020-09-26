@@ -6,6 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <unistd.h>
+#include <poll.h>
+
 #include <linux/limits.h>
 
 #include <sys/types.h>
@@ -92,6 +95,15 @@ int main(int argc, char* argv[])
             errno = -result;
             err(1, "aspawn failed");
         }
+
+        struct pollfd pfd = {
+            .fd = result,
+            .events = POLLHUP,
+        };
+        if (poll(&pfd, 1, -1) < 0)
+            err(1, "poll failed");
+
+        close(result);
 
         int wstatus;
         ASSERT_SYSCALL((wait(&wstatus)));
