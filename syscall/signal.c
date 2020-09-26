@@ -70,6 +70,11 @@ int psys_sig_clear_handler(int signum)
 
     return INTERNAL_SYSCALL(SYS_rt_sigaction, 4, signum, &act, NULL, NSIG_BYTES);
 }
+void psys_sig_clearall_handler()
+{
+    for (int sig = 1; sig < NSIG; ++sig)
+        psys_sig_clear_handler(sig);
+}
 
 int psys_sigprocmask(int how, const void *set, void *oldset)
 {

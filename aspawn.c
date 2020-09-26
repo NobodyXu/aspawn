@@ -44,8 +44,7 @@ struct aspawn_child_args {
 int aspawn_child(void *arg);
 int aspawn_child_clear_sighand(void *arg)
 {
-    for (int sig = 1; sig < _NSIG; ++sig)
-        psys_sig_clear_handler(sig);
+    psys_sig_clearall_handler();
 
     return aspawn_child(arg);
 }
