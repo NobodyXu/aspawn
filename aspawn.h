@@ -51,6 +51,8 @@ PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stac
 /**
  * @param cached_stack must be 
  * @return 0 on success, (-errno) on failure.
+ *
+ * To reuse the destroyed stack, call init_cached_stack again.
  */
 PUBLIC int cleanup_stacks(const struct Stack_t *cached_stack);
 
