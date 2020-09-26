@@ -8,13 +8,13 @@
 #include <unistd.h>
 #include <errno.h>
 
-void init_cached_stack_internal(struct stack_t *cached_stack)
+void init_cached_stack_internal(struct Stack_t *cached_stack)
 {
     cached_stack->addr = NULL;
     cached_stack->size = 0;
 }
 
-int cleanup_cached_stack_internal(const struct stack_t *cached_stack)
+int cleanup_cached_stack_internal(const struct Stack_t *cached_stack)
 {
     if (cached_stack->addr != NULL && cached_stack->size != 0) {
         int result = munmap(cached_stack->addr, cached_stack->size);
@@ -43,7 +43,7 @@ size_t align_stack_sz(size_t sz)
     return sz;
 }
 
-int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_place_on_stack_len)
+int allocate_stack(struct Stack_t *cached_stack, size_t size, size_t obj_to_place_on_stack_len)
 {
     const int prot = PROT_READ | PROT_WRITE;
     const int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_STACK;
@@ -75,7 +75,7 @@ int allocate_stack(struct stack_t *cached_stack, size_t size, size_t obj_to_plac
     return 0;
 }
 
-void* allocate_obj_on_stack(struct stack_t *stack, size_t len)
+void* allocate_obj_on_stack(struct Stack_t *stack, size_t len)
 {
     void *ret;
 

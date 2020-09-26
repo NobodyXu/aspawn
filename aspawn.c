@@ -19,12 +19,12 @@
 
 #include <stdatomic.h>
 
-void init_cached_stack(struct stack_t *cached_stack)
+void init_cached_stack(struct Stack_t *cached_stack)
 {
     init_cached_stack_internal(cached_stack);
 }
 
-int cleanup_stacks(const struct stack_t *cached_stack)
+int cleanup_stacks(const struct Stack_t *cached_stack)
 {
     return cleanup_cached_stack_internal(cached_stack);
 }
@@ -59,7 +59,7 @@ int aspawn_child(void *arg)
     return args->fn(args->arg, args->pipefd[1], &args->old_sigset, args->user_data, args->user_data_len);
 }
 ALWAYS_INLINE
-int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
+int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
                 aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset)
 {
     int pipefd[2];
@@ -72,7 +72,7 @@ int aspawn_impl(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_
     if (result < 0)
         goto fail;
 
-    struct stack_t stack = *cached_stack;
+    struct Stack_t stack = *cached_stack;
     // the way allocate_obj_on_stack allocates object is similar to how stack is used
     // during normal function execution.
     //
@@ -120,7 +120,7 @@ fail:
 
     return result;
 }
-int aspawn(pid_t *pid, struct stack_t *cached_stack, size_t reserved_stack_sz, 
+int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
            aspawn_fn fn, void *arg, void *user_data, size_t user_data_len)
 {
     int oldstate;

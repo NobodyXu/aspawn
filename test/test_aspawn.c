@@ -75,7 +75,7 @@ int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_dat
 }
 int main(int argc, char* argv[])
 {
-    struct stack_t stack;
+    struct Stack_t stack;
 
     init_cached_stack(&stack);
 

@@ -15,7 +15,7 @@
 
 #define STACK(addr, len) ((addr) + (len) * STACK_GROWS_DOWN)
 
-int clone_internal(int (*fn)(void *arg), void *arg, const struct stack_t *stack)
+int clone_internal(int (*fn)(void *arg), void *arg, const struct Stack_t *stack)
 {
     int new_pid = clone(fn, STACK((char*) stack->addr, stack->size), CLONE_VM | SIGCHLD, arg);
     if (new_pid == -1)
@@ -23,7 +23,7 @@ int clone_internal(int (*fn)(void *arg), void *arg, const struct stack_t *stack)
     return new_pid;
 }
 
-int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct stack_t *stack)
+int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct Stack_t *stack)
 {
 #ifdef SYS_clone3
     struct clone_args cl_args = {
