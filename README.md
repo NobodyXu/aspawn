@@ -77,6 +77,17 @@ BM_posix_spawn          150883 ns        42476 ns        16474
 Since `aspawn` allows user to **do anything** in the vforked child via `aspawn_fn`, it makes no sense
 to benchmark how many processes can `aspawn` created as it depends on user provided argument `fn`.
 
+## Build and Install
+
+Make sure that you have installed `make`, `clang` `lld` and `llvm-ar`.
+
+Then run `make -j $(nproc)` to build the project, `sudo make install` to install project to `/usr/local/`.
+
+## Testing
+
+Make sure you have installed all depedencies listed above for building this project,
+then run `make test -j $(nproc)`
+
 [1]: https://github.com/NobodyXu/aspawn
 [2]: https://github.com/NobodyXu/aspawn/blob/master/syscall/syscall.h
 [3]: https://man7.org/linux/man-pages/man3/posix_spawn.3.html
