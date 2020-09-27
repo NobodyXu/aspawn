@@ -31,7 +31,7 @@ syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
 
 clean:
 	rm -f $(OBJS)
-test: libaspawn.so
+test: libaspawn.a
 	$(MAKE) -C test
 install: libaspawn.so libaspawn.a aspawn.h syscall/syscall.h
 	cp libaspawn.* $(PREFIX)/lib/

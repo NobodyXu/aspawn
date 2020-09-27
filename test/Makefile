@@ -11,9 +11,9 @@ OUTS := $(SRCS:.c=.out)
 test: $(OUTS)
 	./run_tests.sh "$(OUTS)"
 
-%.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.so Makefile
-	$(MAKE) -C ../
-	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.so -o $@
+%.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.a Makefile
+	$(MAKE) -C ../ libaspawn.a
+	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.a -o $@
 
 clean:
 	rm -f $(OUTS)
@@ -21,4 +21,4 @@ clean:
 .PHONY: test clean
 
 ## Dependencies
-test_syscall.out: ../syscall/clone3.c
+test_syscall.out: ../syscall/clone3.h

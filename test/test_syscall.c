@@ -1,7 +1,7 @@
 #define _GNU_SOURCE
 
+#include <sys/syscall.h>
 #include "../syscall/clone3.h"
-#include "../syscall/clone3.c"
 
 #include "utility.h"
 
