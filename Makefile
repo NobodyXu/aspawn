@@ -1,7 +1,10 @@
 CC = clang
+CXX = clang++
 
-CFLAGS := -std=c11 -Ofast -fvisibility=hidden -Wall -flto
+CFLAGS := -Ofast -fvisibility=hidden -Wall -flto
 CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
+
+CXXFLAGS := -fno-exceptions -fno-rtti
 
 LDFLAGS = -s -shared -Wl,-soname,$@ -Wl,-icf=all,--gc-sections -flto -Wl,--plugin-opt=O3 -fuse-ld=lld
 
@@ -14,20 +17,23 @@ PREFIX := /usr/local/
 
 ## Build rules
 libaspawn.so: $(OBJS)
-	$(CC) -fPIC $(LDFLAGS) -o $@ $^
+	$(CC) -std=c11 -fPIC $(LDFLAGS) -o $@ $^
 
 libaspawn.a: $(OBJS)
 	llvm-ar rcsuT $@ $^
 
 %.o: %.c %.h Makefile
-	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
+	$(CC) -std=c11 -fPIC -c $(CFLAGS) -o $@ $<
 
 %.o: %.c Makefile
-	$(CC) -fPIC -c $(CFLAGS) -o $@ $<
+	$(CC) -std=c11 -fPIC -c $(CFLAGS) -o $@ $<
+
+%.o: %.cc Makefile
+	$(CXX) -std=c++17 -fPIC -c $(CXXFLAGS) $(CFLAGS) -o $@ $<
 
 ### Specialize rule
 syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
-	$(CC) -fPIC -c $(CFLAGS) -Ofast -fno-builtin -o $@ $<
+	$(CC) -std=c11 -fPIC -c $(CFLAGS) -Ofast -fno-builtin -o $@ $<
 
 clean:
 	rm -f $(OBJS)
