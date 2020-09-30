@@ -4,7 +4,9 @@
 #include <stdatomic.h>
 
 #include <sys/epoll.h>
+#include <unistd.h>
 
+#include <err.h>
 #include <errno.h>
 
 struct Entry {
@@ -15,7 +17,7 @@ struct Stacks {
     int epfd;
     uint16_t max_entries;
 
-    _Atomic uint16_t free_list;
+    _Atomic uint32_t free_list;
     struct Entry entries[];
 };
 
@@ -42,13 +44,20 @@ int init_stacks(struct Stacks **stacks, uint16_t max_stacks)
     return 0;
 }
 
+#define GET_TIMESTAMP(val) ((val) & (UINT32_MAX - UINT16_MAX))
+#define NEXT(val, old_val) ((val) | (GET_TIMESTAMP(old_val) + UINT16_MAX + 1))
+#define GET_INDEX(val) ((val) & UINT16_MAX)
+
 struct Stack_t* get_stack(struct Stacks *stacks)
 {
-    uint16_t free_list = atomic_load(&stacks->free_list);
+    uint32_t free_list = atomic_load(&stacks->free_list);
+    uint16_t index;
     do {
-        if (free_list == stacks->max_entries)
+        index = GET_INDEX(free_list);
+        if (index == stacks->max_entries)
             return NULL;
-    } while (!atomic_compare_exchange_weak(&stacks->free_list, &free_list, free_list + 1));
+    } while (!atomic_compare_exchange_weak(&stacks->free_list, &free_list, 
+                                           NEXT(stacks->entries[index].next, free_list)));
 
     return &stacks->entries[free_list].stack;
 }
@@ -80,13 +89,16 @@ int recycle_stack(struct Stacks *stacks, struct epoll_event readable_fds[], int 
     int out = 0;
     for (int i = 0; i != nevent; ++i) {
         int fd = readable_fds[i].data.u64 & FD_MASK;
-        size_t j = readable_fds[i].data.u64 >> FD_BITS;
+        size_t entry_index = readable_fds[i].data.u64 >> FD_BITS;
 
         if (readable_fds[i].events & EPOLLHUP) {
-            uint16_t free_list = atomic_load(&stacks->free_list);
+            uint32_t free_list = atomic_load(&stacks->free_list);
+            uint16_t index;
             do {
-                stacks->entries[j].next = free_list;
-            } while (!atomic_compare_exchange_weak(&stacks->free_list, &free_list, j));
+                index = GET_INDEX(free_list);
+                stacks->entries[entry_index].next = index;
+            } while (!atomic_compare_exchange_weak(&stacks->free_list, &free_list, 
+                                                   NEXT(entry_index, free_list)));
 
             if (readable_fds[i].events & EPOLLIN) {
                 if (epoll_ctl(stacks->epfd, EPOLL_CTL_DEL, fd, &dummy_event) < 0)
