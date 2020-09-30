@@ -52,3 +52,16 @@ struct Stack_t* get_stack(struct Stacks *stacks)
 
     return &stacks->entries[free_list].stack;
 }
+
+int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *stack, int fd)
+{
+    struct epoll_event event = {
+        .events = EPOLLIN | EPOLLHUP | EPOLLET,
+        .data = (epoll_data_t){
+            .u64 = ((struct Entry*) stack) - stacks->entries
+        }
+    };
+    if (epoll_ctl(stacks->epfd, EPOLL_CTL_ADD, fd, &event) < 0)
+        return -errno;
+    return 0;
+}

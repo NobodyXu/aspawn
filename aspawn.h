@@ -86,6 +86,14 @@ PUBLIC int init_stacks(struct Stacks **stacks, uint16_t max_stacks);
  */
 PUBLIC struct Stack_t* get_stack(struct Stacks *stacks);
 
+/**
+ * @param fd must be return value of aspawn.
+ * @return 0 on success, (-errno) on failure.
+ *
+ * This function is thread-safe.
+ */
+PUBLIC int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *stack, int fd);
+
 # ifdef __cplusplus
 }
 # endif
