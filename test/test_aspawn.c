@@ -111,7 +111,7 @@ int main(int argc, char* argv[])
         assert(WEXITSTATUS(wstatus) == 0);
     }
 
-    int result = cleanup_stacks(&stack);
+    int result = cleanup_stack(&stack);
     if (result < 0) {
         errno = -result;
         err(1, "cleanup_stacks failed");

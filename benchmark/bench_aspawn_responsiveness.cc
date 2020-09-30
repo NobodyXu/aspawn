@@ -35,7 +35,7 @@ static void wait_for_child()
 }
 static void Cleanup_stacks(const struct Stack_t *stack)
 {
-    int result = cleanup_stacks(stack);
+    int result = cleanup_stack(stack);
     if (result < 0) {
         errno = -result;
         err(1, "cleanup_stacks failed");

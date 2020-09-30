@@ -58,7 +58,7 @@ PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stac
  *
  * To reuse the destroyed stack, call init_cached_stack again.
  */
-PUBLIC int cleanup_stacks(const struct Stack_t *cached_stack);
+PUBLIC int cleanup_stack(const struct Stack_t *cached_stack);
 
 # ifdef __cplusplus
 }

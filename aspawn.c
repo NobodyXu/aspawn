@@ -24,7 +24,7 @@ void init_cached_stack(struct Stack_t *cached_stack)
     init_cached_stack_internal(cached_stack);
 }
 
-int cleanup_stacks(const struct Stack_t *cached_stack)
+int cleanup_stack(const struct Stack_t *cached_stack)
 {
     return cleanup_cached_stack_internal(cached_stack);
 }
