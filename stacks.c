@@ -36,7 +36,7 @@ int init_stacks(struct Stacks **stacks, uint16_t max_stacks)
     for (uint16_t i = 0; i != max_stacks; ++i) {
         p->entries[i].next = i + 1;
     }
-    p->entries[max_stacks - 1].next = -1;
+    p->entries[max_stacks - 1].next = max_stacks;
 
     *stacks = p;
     return 0;
