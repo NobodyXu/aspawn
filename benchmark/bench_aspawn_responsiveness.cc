@@ -88,6 +88,7 @@ static void BM_aspawn(benchmark::State &state)
         close(result);
         state.ResumeTiming();
     }
+    cleanup_stack(&stack);
 }
 BENCHMARK(BM_aspawn)->Threads(1);
 
