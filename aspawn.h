@@ -9,6 +9,7 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <sys/types.h>
+# include <sys/epoll.h>
 # include "common.h"
 
 # ifdef __cplusplus
@@ -93,6 +94,15 @@ PUBLIC struct Stack_t* get_stack(struct Stacks *stacks);
  * This function is thread-safe.
  */
 PUBLIC int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *stack, int fd);
+
+/**
+ * @param readable_fds Upon success, a list of readable fds will be writen in it,
+ *                     with .data.fd equals to the fd.
+ * @return number of readable fds on success, (-errno) on failure.
+ *
+ * This function is thread-safe.
+ */
+PUBLIC int recycle_stack(struct Stacks *stacks, struct epoll_event readable_fds[], int max_nfd, int timeout);
 
 # ifdef __cplusplus
 }
