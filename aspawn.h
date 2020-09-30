@@ -7,6 +7,7 @@
  */
 
 # include <stddef.h>
+# include <stdint.h>
 # include <sys/types.h>
 # include "common.h"
 
@@ -59,6 +60,23 @@ PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stac
  * To reuse the destroyed stack, call init_cached_stack again.
  */
 PUBLIC int cleanup_stack(const struct Stack_t *cached_stack);
+
+/**
+ * Helper functions for reusing stacks
+ */
+
+/**
+ * Forward declaration of Stacks.
+ */
+struct Stacks;
+
+/**
+ * @param stacks On success, *stacks will contain non-NULL value.
+ * @return 0 on success, (-errno) on failure.
+ *
+ * This function is thread-safe.
+ */
+PUBLIC int init_stacks(struct Stacks **stacks, uint16_t max_stacks);
 
 # ifdef __cplusplus
 }
