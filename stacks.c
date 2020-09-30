@@ -41,3 +41,14 @@ int init_stacks(struct Stacks **stacks, uint16_t max_stacks)
     *stacks = p;
     return 0;
 }
+
+struct Stack_t* get_stack(struct Stacks *stacks)
+{
+    uint16_t free_list = atomic_load(&stacks->free_list);
+    do {
+        if (free_list == stacks->max_entries)
+            return NULL;
+    } while (!atomic_compare_exchange_weak(&stacks->free_list, &free_list, free_list + 1));
+
+    return &stacks->entries[free_list].stack;
+}

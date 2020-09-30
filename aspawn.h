@@ -78,6 +78,14 @@ struct Stacks;
  */
 PUBLIC int init_stacks(struct Stacks **stacks, uint16_t max_stacks);
 
+/**
+ * @return If succeeds, *stack will contain the stack.
+ *         If all stacks are currently occupied, NULL is stored into *stack.
+ *
+ * This function is thread-safe.
+ */
+PUBLIC struct Stack_t* get_stack(struct Stacks *stacks);
+
 # ifdef __cplusplus
 }
 # endif
