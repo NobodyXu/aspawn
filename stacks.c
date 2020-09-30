@@ -9,7 +9,7 @@
 
 struct Entry {
     struct Stack_t stack;
-    ptrdiff_t next;
+    size_t next;
 };
 struct Stacks {
     int epfd;
