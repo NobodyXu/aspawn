@@ -1,9 +1,12 @@
 #!/bin/bash
 
+sudo cpupower frequency-set --governor performance
+echo
+
 for each in $1; do
     echo -e '\nRunning' $each ...
-    sudo cpupower frequency-set --governor performance
     LD_LIBRARY_PATH=../ ./$each
-    sudo cpupower frequency-set --governor powersave
     echo
 done
+
+sudo cpupower frequency-set --governor powersave
