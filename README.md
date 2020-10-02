@@ -54,7 +54,14 @@ Compare to [`posix_spawn`][3], `aspawn` has 3 advantages:
 Responsive comparison between `posix_spawn` and `aspawn`, [source code][5]:
 
 ```
-2020-10-02T13:22:24+10:00
+$ ll -h bench_aspawn_responsiveness.out
+-rwxrwxr-x 1 nobodyxu nobodyxu 254K Oct  2 15:02 bench_aspawn_responsiveness.out*
+
+$ uname -a
+Linux pop-os 5.4.0-7642-generic #46~1598628707~20.04~040157c-Ubuntu SMP Fri Aug 28 18:02:16 UTC  x86_64 x86_64 x86_64 GNU/Linux
+
+$ ./a.out
+2020-10-02T15:02:45+10:00
 Running ./bench_aspawn_responsiveness.out
 Run on (12 X 4100 MHz CPU s)
 CPU Caches:
@@ -62,15 +69,15 @@ CPU Caches:
   L1 Instruction 32 KiB (x6)
   L2 Unified 256 KiB (x6)
   L3 Unified 9216 KiB (x1)
-Load Average: 0.49, 0.27, 0.33
+Load Average: 0.31, 0.36, 0.32
 ---------------------------------------------------------------------
 Benchmark                           Time             CPU   Iterations
 ---------------------------------------------------------------------
-BM_aspawn_no_reuse              18267 ns        18221 ns        37791
-BM_aspawn/threads:1             14829 ns        14788 ns        48095
-BM_vfork_with_shared_stack      43800 ns        15067 ns        46404
-BM_fork                         56787 ns        56766 ns        12458
-BM_posix_spawn                 128699 ns        29375 ns        23496
+BM_aspawn_no_reuse              18009 ns        17942 ns        38943
+BM_aspawn/threads:1             14500 ns        14446 ns        48339
+BM_vfork_with_shared_stack      46545 ns        16554 ns        44027
+BM_fork                         54583 ns        54527 ns        12810
+BM_posix_spawn                 125061 ns        29091 ns        24483
 ```
 
 ### Throughput benchmark
