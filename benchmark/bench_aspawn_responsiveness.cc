@@ -42,9 +42,13 @@ static void Cleanup_stacks(const struct Stack_t *stack)
     }
 }
 
+static const char * const argv[] = {"/bin/true", NULL};
+static const char * const envp[] = {NULL};
+
 static int bench_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
 {
-    return 0;
+    psys_execve(argv[0], argv, envp);
+    return 1;
 }
 static void BM_aspawn_no_reuse(benchmark::State &state)
 {
@@ -92,18 +96,16 @@ static void BM_aspawn(benchmark::State &state)
 }
 BENCHMARK(BM_aspawn)->Threads(1);
 
-int vfork_fn(void *arg)
-{
-    return 0;
-}
 static void BM_vfork_with_shared_stack(benchmark::State &state)
 {
     for ([[maybe_unused]] auto _: state) {
         pid_t pid = vfork();
         if (pid < 0)
             err(1, "vfork failed");
-        if (pid == 0)
-            _exit(0);
+        if (pid == 0) {
+            psys_execve(argv[0], argv, envp);
+            _exit(1);
+        }
 
         state.PauseTiming();
         wait_for_child();
@@ -118,8 +120,10 @@ static void BM_fork(benchmark::State &state)
         pid_t pid = fork();
         if (pid < 0)
             err(1, "vfork failed");
-        if (pid == 0)
-            _exit(0);
+        if (pid == 0) {
+            psys_execve(argv[0], argv, envp);
+            _exit(1);
+        }
 
         state.PauseTiming();
         wait_for_child();
