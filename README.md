@@ -103,6 +103,17 @@ Then run `make -j $(nproc)` to build the project, `sudo make install` to install
 Make sure you have installed all depedencies listed above for building this project,
 then run `make test -j $(nproc)`
 
+## Contributing to this project
+
+Any commits on this project will be welcome!
+
+It would be even better if you can help me improve test coverages by adding more unit tests or port this project to other platform (e.g. `arm`, `mips`).
+
+## Contributors
+
+Thank you for people who contributed to this project:
+ - @HappyFacade
+
 [1]: https://github.com/NobodyXu/aspawn
 [2]: https://github.com/NobodyXu/aspawn/blob/master/syscall/syscall.h
 [3]: https://man7.org/linux/man-pages/man3/posix_spawn.3.html
