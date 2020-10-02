@@ -103,16 +103,32 @@ static void BM_aspawn(benchmark::State &state)
 }
 BENCHMARK(BM_aspawn)->Threads(1);
 
+static void sig_blockall(sigset_t *oldset)
+{
+    sigset_t set;
+    sigfillset(&set);
+    sigprocmask(SIG_SETMASK, &set, oldset);
+}
 static void BM_vfork_with_shared_stack(benchmark::State &state)
 {
+    int oldstate;
     for ([[maybe_unused]] auto _: state) {
+        pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
+
+        sigset_t oldset;
+        sig_blockall(&oldset);
+
         pid_t pid = vfork();
         if (pid < 0)
             err(1, "vfork failed");
         if (pid == 0) {
+            psys_sigprocmask(SIG_SETMASK, &oldset, NULL);
             psys_execve(argv[0], argv, envp);
             _exit(1);
         }
+
+        sigprocmask(SIG_SETMASK, &oldset, NULL);
+        pthread_setcancelstate(oldstate, NULL);
     }
 }
 BENCHMARK(BM_vfork_with_shared_stack);
