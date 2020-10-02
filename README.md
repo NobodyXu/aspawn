@@ -85,6 +85,8 @@ BM_fork                         54583 ns        54527 ns        12810
 BM_posix_spawn                 125061 ns        29091 ns        24483
 ```
 
+The column "Time" is measured in terms of system clock, while "CPU" is measured in terms of per-process CPU time.
+
 ### Throughput benchmark
 
 Since `aspawn` allows user to **do anything** in the vforked child via `aspawn_fn`, it makes no sense
