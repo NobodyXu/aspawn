@@ -51,6 +51,7 @@ static void waitfor_stack_reuse(int fd)
 }
 static int bench_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
 {
+    psys_sigprocmask(SIG_SETMASK, old_sigset, NULL);
     psys_execve(argv[0], argv, envp);
     return 1;
 }
