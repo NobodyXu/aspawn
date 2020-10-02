@@ -92,33 +92,40 @@ static void BM_aspawn(benchmark::State &state)
 }
 BENCHMARK(BM_aspawn)->Threads(1);
 
-static void BM_posix_spawn(benchmark::State &state)
+int vfork_fn(void *arg)
 {
-    pid_t pid;
-
-    const char * const argv[] = {"echo", "-n", NULL};
-    const char * const env[] = {NULL};
-
-    posix_spawnattr_t attr;
-    if (posix_spawnattr_init(&attr) != 0)
-        err(1, "posix_spawnattr_init failed");
-    if (posix_spawnattr_setflags(&attr, POSIX_SPAWN_USEVFORK) != 0)
-        err(1, "posix_spawnattr_setflags failed");
-
+    return 0;
+}
+static void BM_vfork_with_shared_stack(benchmark::State &state)
+{
     for ([[maybe_unused]] auto _: state) {
-        int result = posix_spawnp(&pid, argv[0], NULL, &attr, (char *  const *) argv, (char * const *) env);
-        if (result != 0) {
-            errno = result;
-            err(1, "posix_spawnp failed");
-        }
+        pid_t pid = vfork();
+        if (pid < 0)
+            err(1, "vfork failed");
+        if (pid == 0)
+            _exit(0);
 
         state.PauseTiming();
         wait_for_child();
         state.ResumeTiming();
     }
-
-    posix_spawnattr_destroy(&attr);
 }
-BENCHMARK(BM_posix_spawn);
+BENCHMARK(BM_vfork_with_shared_stack);
+
+static void BM_fork(benchmark::State &state)
+{
+    for ([[maybe_unused]] auto _: state) {
+        pid_t pid = fork();
+        if (pid < 0)
+            err(1, "vfork failed");
+        if (pid == 0)
+            _exit(0);
+
+        state.PauseTiming();
+        wait_for_child();
+        state.ResumeTiming();
+    }
+}
+BENCHMARK(BM_fork);
 
 BENCHMARK_MAIN();
