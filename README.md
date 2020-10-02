@@ -46,6 +46,11 @@ Compare to [`posix_spawn`][3], `aspawn` has 3 advantages:
  - `aspawn` allows user to **do anything** in the child process before `exec`.
  - `aspawn` can reuse stack, `posix_spawn` can't;
  - `aspawn` doesn't block the parent thread;
+ 
+### Platform support
+
+Currently, it only supports x86-64 modern linux (>= 4.0), but ports can be easily made by modifing [`syscall/`][7],
+[`create_pipe/create_pipe.c`][8] and [`clone_internal/`][9]
 
 ## Benchmark
 
@@ -102,3 +107,6 @@ then run `make test -j $(nproc)`
 [4]: https://gist.github.com/nicowilliams/a8a07b0fc75df05f684c23c18d7db234
 [5]: https://github.com/NobodyXu/aspawn/blob/master/benchmark/bench_aspawn_responsiveness.cc
 [6]: https://github.com/google/benchmark
+[7]: https://github.com/NobodyXu/aspawn/tree/master/syscall
+[8]: https://github.com/NobodyXu/aspawn/blob/master/create_pipe/create_pipe.c
+[9]: https://github.com/NobodyXu/aspawn/tree/master/clone_internal
