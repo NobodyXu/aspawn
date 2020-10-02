@@ -10,7 +10,7 @@ any global/thread local variable at all.
 
 My `aspawn` has signature:
 
-```{c}
+```c
 struct Stack_t {
     void *addr;
     size_t size;
@@ -53,7 +53,7 @@ Compare to [`posix_spawn`][3], `aspawn` has 3 advantages:
 
 Responsive comparison between `posix_spawn` and `aspawn`, [source code][5]:
 
-```
+```console
 $ ll -h bench_aspawn_responsiveness.out
 -rwxrwxr-x 1 nobodyxu nobodyxu 254K Oct  2 15:02 bench_aspawn_responsiveness.out*
 
