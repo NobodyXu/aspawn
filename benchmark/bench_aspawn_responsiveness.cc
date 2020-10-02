@@ -12,6 +12,8 @@
 #include <string.h>
 
 #include <unistd.h>
+#include <pthread.h>
+#include <poll.h>
 #include <spawn.h>
 
 #include <linux/limits.h>
@@ -26,13 +28,6 @@
 
 #include <benchmark/benchmark.h>
 
-static void wait_for_child()
-{
-    int wstatus;
-    ASSERT_SYSCALL((wait(&wstatus)));
-    assert(!WIFSIGNALED(wstatus));
-    assert(WEXITSTATUS(wstatus) == 0);
-}
 static void Cleanup_stacks(const struct Stack_t *stack)
 {
     int result = cleanup_stack(stack);
@@ -45,6 +40,15 @@ static void Cleanup_stacks(const struct Stack_t *stack)
 static const char * const argv[] = {"/bin/true", NULL};
 static const char * const envp[] = {NULL};
 
+static void waitfor_stack_reuse(int fd)
+{
+    struct pollfd pfd = {
+        .fd = fd,
+        .events = POLLHUP,
+    };
+    if (poll(&pfd, 1, -1) < 0)
+        err(1, "poll failed");
+}
 static int bench_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
 {
     psys_execve(argv[0], argv, envp);
@@ -65,9 +69,11 @@ static void BM_aspawn_no_reuse(benchmark::State &state)
         }
 
         state.PauseTiming();
-        wait_for_child();
+
+        waitfor_stack_reuse(result);
         close(result);
         Cleanup_stacks(&stack);
+
         state.ResumeTiming();
     }
 }
@@ -88,7 +94,7 @@ static void BM_aspawn(benchmark::State &state)
         }
 
         state.PauseTiming();
-        wait_for_child();
+        waitfor_stack_reuse(result);
         close(result);
         state.ResumeTiming();
     }
@@ -106,10 +112,6 @@ static void BM_vfork_with_shared_stack(benchmark::State &state)
             psys_execve(argv[0], argv, envp);
             _exit(1);
         }
-
-        state.PauseTiming();
-        wait_for_child();
-        state.ResumeTiming();
     }
 }
 BENCHMARK(BM_vfork_with_shared_stack);
@@ -124,10 +126,6 @@ static void BM_fork(benchmark::State &state)
             psys_execve(argv[0], argv, envp);
             _exit(1);
         }
-
-        state.PauseTiming();
-        wait_for_child();
-        state.ResumeTiming();
     }
 }
 BENCHMARK(BM_fork);
@@ -148,14 +146,39 @@ static void BM_posix_spawn(benchmark::State &state)
             errno = result;
             err(1, "posix_spawnp failed");
         }
-
-        state.PauseTiming();
-        wait_for_child();
-        state.ResumeTiming();
     }
 
     posix_spawnattr_destroy(&attr);
 }
 BENCHMARK(BM_posix_spawn);
 
-BENCHMARK_MAIN();
+static void* wait_thread(void*)
+{
+    int wstatus;
+    pid_t pid;
+    int exit_status;
+    for (; ;) {
+        pid = wait(&wstatus);
+        if (pid == -1 && errno == ECHILD)
+            continue;
+        if (WIFSIGNALED(wstatus))
+            errx(1, "pid %ld is terminated by signal", (long) pid);
+        exit_status = WEXITSTATUS(wstatus);
+        if (exit_status != 0)
+            errx(1, "pid %ld exited with %d", (long) pid, exit_status);
+    }
+
+    return NULL;
+}
+
+int main(int argc, char** argv) {
+    ::benchmark::Initialize(&argc, argv);
+    if (::benchmark::ReportUnrecognizedArguments(argc, argv))
+        return 1;
+
+    pthread_t thread_id;
+    pthread_create(&thread_id, NULL, wait_thread, NULL);
+
+    ::benchmark::RunSpecifiedBenchmarks();
+    return 0;
+}
