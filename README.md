@@ -42,6 +42,8 @@ the stack, thus user does not have to allocate them separately on heap or mistak
 To use a syscall, you need to include [`syscall/syscall.h`][2], which defines the syscall routine used by the child process including
 `find_exe`, `psys_execve` and `psys_execveat`.
 
+User will be able to reuse stack by `poll`ing the fd returned by `aspawn` and wait for it to hup.
+
 Compare to [`posix_spawn`][3], `aspawn` has 3 advantages:
  - `aspawn` allows user to **do anything** in the child process before `exec`.
  - `aspawn` can reuse stack, `posix_spawn` can't;
