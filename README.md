@@ -51,7 +51,7 @@ Compare to [`posix_spawn`][3], `aspawn` has 3 advantages:
 
 ### Responsive benchmark
 
-Responsive comparison between `posix_spawn` and `aspawn`, [source code][5]:
+Responsive comparison between `posix_spawn` and `aspawn`, [source code][5] (benchmarking is done via [google/benchmark][6]:
 
 ```console
 $ ll -h bench_aspawn_responsiveness.out
@@ -101,3 +101,4 @@ then run `make test -j $(nproc)`
 [3]: https://man7.org/linux/man-pages/man3/posix_spawn.3.html
 [4]: https://gist.github.com/nicowilliams/a8a07b0fc75df05f684c23c18d7db234
 [5]: https://github.com/NobodyXu/aspawn/blob/master/benchmark/bench_aspawn_responsiveness.cc
+[6]: https://github.com/google/benchmark
