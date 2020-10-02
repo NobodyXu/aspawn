@@ -4,6 +4,8 @@ CXX = clang++
 CFLAGS := -Ofast -Wall -flto
 CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
 
+CXXFLAGS := -fno-exceptions -fno-rtti
+
 LDFLAGS := -L /usr/local/lib/ -s -Wl,-icf=all,--gc-sections -flto -Wl,--plugin-opt=O3 -fuse-ld=lld
 LIBS := -lbenchmark -lpthread
 
