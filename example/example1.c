@@ -20,6 +20,7 @@
 #include <poll.h>
 #include <fcntl.h>
 
+#include <sys/sendfile.h>
 #include <sys/wait.h>
 #include <linux/limits.h>
 
@@ -109,6 +110,8 @@ int main(int argc, char* argv[])
         // Now the stack is no longer used by the child process, we can reuse it
     }
 
+    char buffer[4095];
+
     for (size_t i = 0; i != argv_cnt; ++i) {
         int wstatus;
         if (waitpid(pids[i], &wstatus, 0) < 0)
@@ -121,10 +124,16 @@ int main(int argc, char* argv[])
             errx(1, "%ld exited with %d", (long) pids[i], exit_status);
 
         // Check fds[i] for error message
-        int result;
-        for (; (result = splice(fds[i], NULL, 2, NULL, 20000, 0)) != 0; );
-        if (result < 0)
-            err(1, "splice failed");
+        for (ssize_t result; (result = read(fds[i], buffer, sizeof(buffer))) != 0;) {
+            if (result < 0)
+                err(1, "read failed");
+            do {
+                int cnt = write(2, buffer, result);
+                if (cnt < 0)
+                    err(1, "write failed");
+                result -= cnt;
+            } while (result);
+        }
     }
 
     int result = cleanup_stack(&stack);
