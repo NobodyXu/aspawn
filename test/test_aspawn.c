@@ -49,10 +49,8 @@ int psys_execvep(const char *file, size_t file_len, const char * const argv[], c
                 psys_put_impl(1, constructed_path, pstrlen(constructed_path));
                 psys_put(1, "\n");
                 result = handle_execve_err(psys_execve(constructed_path, argv, envp), &got_eaccess);
-                if (result < 0) {
-                    errno = -result;
+                if (result < 0)
                     psys_err(1, "Executable is found, but failed to execute it");
-                }
                 continue;
     
             case -1:
@@ -61,10 +59,8 @@ int psys_execvep(const char *file, size_t file_len, const char * const argv[], c
             case 0:
                 break;
         }
-        if (got_eaccess) {
-            errno = EACCES;
+        if (got_eaccess)
             psys_err(1, "Executable is found but execve failed");
-        }
         psys_err(1, "Executable not found");
     }
 }
