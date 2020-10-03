@@ -29,6 +29,8 @@ static const char * const argv3[] = {"uname", "-a", NULL};
 
 static const char * const * argvs[] = {argv1, argv2, argv3};
 
+#define argv_cnt (sizeof(argvs) / sizeof(argvs[0]))
+
 void psys_put_impl(int fd, const char *s, size_t len)
 {
     size_t i = 0;
@@ -90,9 +92,9 @@ int main(int argc, char* argv[])
         errx(1, "PATH is empty");
     const size_t path_sz = strlen(path) + 1;
 
-    pid_t pids[3];
-    int fds[3];
-    for (size_t i = 0; i != sizeof(argvs) / sizeof(void*); ++i) {
+    pid_t pids[argv_cnt];
+    int fds[argv_cnt];
+    for (size_t i = 0; i != argv_cnt; ++i) {
         fds[i] = aspawn(&pids[i], &stack, PATH_MAX + 1, fn, (void*) argvs[i], path, path_sz);
         if (fds[i] < 0)
             errx(1, "aspawn failed: %s", strerror(-fds[i]));
@@ -107,7 +109,7 @@ int main(int argc, char* argv[])
         // Now the stack is no longer used by the child process, we can reuse it
     }
 
-    for (size_t i = 0; i != 3; ++i) {
+    for (size_t i = 0; i != argv_cnt; ++i) {
         int wstatus;
         if (waitpid(pids[i], &wstatus, 0) < 0)
             err(1, "waitpid failed");
