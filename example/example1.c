@@ -1,6 +1,7 @@
 // cd /path/to/aspawn/repo
 // make -j $(nproc)
 // sudo make install
+// cd example/
 // clang -std=c11 -L /usr/local/lib/ -laspawn example1.c
 // ./a.out
 
