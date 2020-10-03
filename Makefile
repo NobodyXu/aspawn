@@ -9,7 +9,7 @@ CXXFLAGS := -fno-exceptions -fno-rtti
 LDFLAGS = -s -shared -Wl,-soname,$@ -Wl,-icf=all,--gc-sections -flto -Wl,--plugin-opt=O3 -fuse-ld=lld
 
 ## Objects to build
-SRCS := $(shell find . -name '*.c' -a ! -wholename './test/*' -a ! -wholename './benchmark*')
+SRCS := $(shell find . -name '*.c' -a ! -wholename './test/*' -a ! -wholename './benchmark*' -a ! -wholename './example/*')
 OBJS := $(SRCS:.c=.o)
 
 ## Install prefix
