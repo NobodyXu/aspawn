@@ -1,5 +1,8 @@
-// clang -std=c11 -L ../ -laspawn example1.c
-// LD_LIBRARY_PATH=../ ./a.out
+// cd /path/to/aspawn/repo
+// make -j $(nproc)
+// sudo make install
+// clang -std=c11 -L /usr/local/lib/ -laspawn example1.c
+// ./a.out
 
 #define _POSIX_C_SOURCE 200809L
 #define _GNU_SOURCE
