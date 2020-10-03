@@ -48,6 +48,10 @@ Compare to [`posix_spawn`][3], `aspawn` has 3 advantages:
  - `aspawn` allows user to **do anything** in the child process before `exec`.
  - `aspawn` can reuse stack, `posix_spawn` can't;
  - `aspawn` doesn't block the parent thread;
+
+### Example code
+
+Examples can be seen [here][10]
  
 ### Platform support
 
@@ -125,3 +129,4 @@ Thank you for people who contributed to this project:
 [7]: https://github.com/NobodyXu/aspawn/tree/master/syscall
 [8]: https://github.com/NobodyXu/aspawn/blob/master/create_pipe/create_pipe.c
 [9]: https://github.com/NobodyXu/aspawn/tree/master/clone_internal
+[10]: https://github.com/NobodyXu/aspawn/tree/master/example
