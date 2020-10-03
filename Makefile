@@ -16,6 +16,8 @@ OBJS := $(SRCS:.c=.o)
 PREFIX := /usr/local/
 
 ## Build rules
+all: libaspawn.so libaspawn.a
+
 libaspawn.so: $(OBJS)
 	$(CC) -std=c11 -fPIC $(LDFLAGS) -o $@ $^
 
@@ -44,7 +46,7 @@ install: libaspawn.so libaspawn.a aspawn.h syscall/syscall.h
 	mkdir -p $(PREFIX)/include/aspawn/syscall
 	cp aspawn.h common.h $(PREFIX)/include/aspawn/
 	cp syscall/syscall.h $(PREFIX)/include/aspawn/syscall/
-.PHONY: clean test install
+.PHONY: clean test install all
 
 ## Dependencies
 aspawn.h: common.h
