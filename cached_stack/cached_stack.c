@@ -17,11 +17,8 @@ void init_cached_stack_internal(struct Stack_t *cached_stack)
 
 int cleanup_cached_stack_internal(const struct Stack_t *cached_stack)
 {
-    if (cached_stack->addr != NULL && cached_stack->size != 0) {
-        int result = munmap(cached_stack->addr, cached_stack->size);
-        if (result == -1)
-            return -errno;
-    }
+    if (cached_stack->addr != NULL && cached_stack->size != 0)
+        return psys_munmap(cached_stack->addr, cached_stack->size);
 
     return 0;
 }
@@ -60,16 +57,19 @@ int allocate_stack(struct Stack_t *cached_stack, size_t size, size_t obj_to_plac
      * Use mmap + mprotect
      */
 
+    int errno_v;
+
     if (cached_stack->addr != NULL) {
         if (cached_stack->size < stack_size)
-            stack = mremap(cached_stack->addr, cached_stack->size, stack_size, MREMAP_MAYMOVE);
+            stack = psys_mremap(&errno_v, cached_stack->addr, cached_stack->size, stack_size,
+                                MREMAP_MAYMOVE, NULL);
         else
             return 0;
     } else
-        stack = mmap(NULL, stack_size, prot, flags, -1, 0);
+        stack = psys_mmap(&errno_v, NULL, stack_size, prot, flags, -1, 0);
 
     if (stack == MAP_FAILED)
-        return -errno;
+        return -errno_v;
     cached_stack->addr = stack;
     cached_stack->size = stack_size;
 
