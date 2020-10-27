@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -ex
 
 for each in $1; do
     echo -e '\nRunning' $each ...
