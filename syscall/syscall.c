@@ -48,7 +48,12 @@ ssize_t psys_read(int fd, void *buf, size_t count)
     return INTERNAL_SYSCALL(SYS_read, 3, fd, buf, count);
 }
 
-#define MMAP_OFF_LOW_MASK  (4096 - 1)
+size_t psys_get_pagesz()
+{
+    return 4096;
+}
+
+#define MMAP_OFF_LOW_MASK  (psys_get_pagesz() - 1)
 
 void *check_map_error(long result, int *errno_v)
 {
@@ -66,7 +71,8 @@ void *psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int f
     }
 
 #ifdef SYS_mmap2
-    return check_map_error(INTERNAL_SYSCALL(SYS_mmap2, 6, addr, len, prot, flags, fd, off / 4096), errno_v);
+    return check_map_error(INTERNAL_SYSCALL(SYS_mmap2, 6, addr, len, prot, flags, fd, off / psys_get_pagesz()),
+                           errno_v);
 #else
     return check_map_error(INTERNAL_SYSCALL(SYS_mmap, 6, addr, len, prot, flags, fd, off), errno_v);
 #endif

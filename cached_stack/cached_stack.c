@@ -3,6 +3,7 @@
 #include "../aspawn.h"
 #include "cached_stack.h"
 #include "../clone_internal/stack_growth.h"
+#include "../syscall/syscall.h"
 
 #include <sys/mman.h>
 #include <unistd.h>
@@ -30,10 +31,9 @@ size_t align(size_t sz, size_t alignment)
     size_t remnant = sz % alignment;
     return sz + ((remnant != 0) ? (alignment - remnant) : 0);
 }
-const static size_t pagesize = 4096;
 size_t align_to_page(size_t sz)
 {
-    return align(sz, pagesize);
+    return align(sz, psys_get_pagesz());
 }
 size_t align_stack_sz(size_t sz)
 {

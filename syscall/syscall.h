@@ -85,6 +85,8 @@ PUBLIC int psys_fchdir(int fd);
 PUBLIC ssize_t psys_write(int fd, const void *buf, size_t count);
 PUBLIC ssize_t psys_read(int fd, void *buf, size_t count);
 
+PUBLIC size_t psys_get_pagesz();
+
 /**
  * @return MMAP_FAILED on error.
  */
