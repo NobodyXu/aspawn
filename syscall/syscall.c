@@ -78,6 +78,11 @@ void* psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int f
 #endif
 }
 
+int psys_munmap(void *addr, size_t len)
+{
+    return INTERNAL_SYSCALL(SYS_munmap, 2, addr, len);
+}
+
 int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 {
     return INTERNAL_SYSCALL(SYS_setresuid, 3, ruid, euid, suid);
