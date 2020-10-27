@@ -50,6 +50,9 @@ PUBLIC long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, l
 # define pure_syscall2(syscall_number, ...) \
     pure_syscall(GET_syscall_args(syscall_number, ## __VA_ARGS__, 0, 0, 0, 0, 0, 0))
 
+/**
+ * Please use psys_openat
+ */
 PUBLIC int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode);
 /**
  * @return in addition to errors specified in manpage for openat, 
