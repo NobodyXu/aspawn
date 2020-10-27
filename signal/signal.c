@@ -17,7 +17,5 @@ int sig_blockall(void *oldset)
 
 int sig_setmask(const void *set)
 {
-    if (sigprocmask(SIG_SETMASK, set, NULL) < 0)
-        return -errno;
-    return 0;
+    return psys_sigprocmask(SIG_SETMASK, set, NULL);
 }
