@@ -112,10 +112,10 @@ int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_
     } else {
         result = new_pid;
 fail:
-        close(pipefd[0]);
+        psys_close(pipefd[0]);
     }
 
-    close(pipefd[1]);
+    psys_close(pipefd[1]);
 
     return result;
 }
