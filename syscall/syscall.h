@@ -96,6 +96,29 @@ PUBLIC size_t psys_get_pagesz();
 PUBLIC void* psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int fd, off_t off);
 PUBLIC int psys_munmap(void *addr, size_t len);
 
+/**
+ * Please use psys_mremap.
+ */
+PUBLIC void* psys_mremap_impl(int *errno_v, void *old_addr, size_t old_len, size_t new_len, int flags, 
+                              void *new_addr);
+
+# define psys_mremap(errno_v, old_addr, old_len, new_len, flags, ...) \
+    ({                                                                \
+        int ret;                                                      \
+        if (GET_NARGS(__VA_ARGS__) == 0) {                            \
+            if (flags & MREMAP_FIXED)                                 \
+                ret = (-EINVAL);                                      \
+            else                                                      \
+                ret = psys_mremap_impl((errno_v), (old_addr), (old_len), (new_len), (flags), NULL); \
+        } else {                                                      \
+            if (flags & MREMAP_FIXED)                                 \
+                ret = psys_mremap_impl((errno_v), (old_addr), (old_len), (new_len), (flags), __VA_ARGS__); \
+            else                                                      \
+                ret = (-EINVAL);                                      \
+        }                                                             \
+        ret;                                                          \
+     })
+
 PUBLIC int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid);
 PUBLIC int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid);
 PUBLIC int psys_setgroups(size_t size, const gid_t *list);

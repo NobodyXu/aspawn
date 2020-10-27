@@ -83,6 +83,12 @@ int psys_munmap(void *addr, size_t len)
     return INTERNAL_SYSCALL(SYS_munmap, 2, addr, len);
 }
 
+void* psys_mremap_impl(int *errno_v, void *old_addr, size_t old_len, size_t new_len, int flags, void *new_addr)
+{
+    return check_map_error(INTERNAL_SYSCALL(SYS_mremap, 5, old_addr, old_len, new_len, flags, new_addr),
+                           errno_v);
+}
+
 int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 {
     return INTERNAL_SYSCALL(SYS_setresuid, 3, ruid, euid, suid);
