@@ -63,7 +63,7 @@ void *check_map_error(long result, int *errno_v)
     }
     return (void*) result;
 }
-void *psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int fd, size_t off)
+void* psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int fd, size_t off)
 {
     if (off & MMAP_OFF_LOW_MASK) {
         *errno_v = EINVAL;

@@ -90,7 +90,7 @@ PUBLIC size_t psys_get_pagesz();
 /**
  * @return MMAP_FAILED on error.
  */
-PUBLIC void *psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int fd, size_t off);
+PUBLIC void* psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int fd, size_t off);
 
 PUBLIC int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid);
 PUBLIC int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid);
