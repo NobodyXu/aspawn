@@ -11,7 +11,7 @@ long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg
     return INTERNAL_SYSCALL(syscall_number, 6, arg1, arg2, arg3, arg4, arg5, arg6);
 }
 
-int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode)
+int psys_openat(int dirfd, const char *pathname, int flags, mode_t mode)
 {
     return INTERNAL_SYSCALL(SYS_openat, 4, dirfd, pathname, flags, mode);
 }

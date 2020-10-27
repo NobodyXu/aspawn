@@ -51,30 +51,9 @@ PUBLIC long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, l
     pure_syscall(GET_syscall_args(syscall_number, ## __VA_ARGS__, 0, 0, 0, 0, 0, 0))
 
 /**
- * Please use psys_openat
+ * @param mode please set it to 0 when O_CREAT isn't specified in flags.
  */
-PUBLIC int psys_openat_impl(int dirfd, const char *pathname, int flags, mode_t mode);
-/**
- * @return in addition to errors specified in manpage for openat, 
- *         openat would return EINVAL when the presence of mode doesn't match the presence of 
- *         O_CREAT in flags.
- */
-#define psys_openat(dirfd, pathname, flags, ... /* mode */) \
-    ({                                           \
-        int ret;                                 \
-        if (GET_NARGS(__VA_ARGS__) == 0) {       \
-            if ((flags & O_CREAT) != 0)          \
-                ret = (-EINVAL);                 \
-            else                                 \
-                ret = psys_openat_impl((dirfd), (pathname), (flags), 0); \
-        } else {                                 \
-            if ((flags & O_CREAT) == 0)          \
-                ret = (-EINVAL);                 \
-            else                                 \
-                ret = psys_openat_impl((dirfd), (pathname), (flags), __VA_ARGS__); \
-        }                                        \
-        ret;                                     \
-     })
+PUBLIC int psys_openat(int dirfd, const char *pathname, int flags, mode_t mode);
 
 PUBLIC int psys_close(int fd);
 
