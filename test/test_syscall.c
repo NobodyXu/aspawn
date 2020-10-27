@@ -128,4 +128,5 @@ void test_psys_pipe2()
 int main(int argc, char* argv[])
 {
     test_clone();
+    test_psys_pipe2();
 }
