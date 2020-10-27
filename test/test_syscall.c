@@ -37,7 +37,7 @@ void test_clone()
 
     ASSERT_SYSCALL((sigaction(SIGURG, &act, &oldact)));
 
-    struct clone_args cl_args = {
+    struct psys_clone_args cl_args = {
         .flags = CLONE_CLEAR_SIGHAND,
 
         .pidfd = (uint64_t) NULL,

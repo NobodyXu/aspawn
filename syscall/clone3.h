@@ -5,7 +5,7 @@
 # include <stddef.h>
 # include <linux/types.h>
 
-struct clone_args {
+struct psys_clone_args {
     __aligned_u64 flags;        /* Flags bit mask */
     __aligned_u64 pidfd;        /* Where to store PID file descriptor (pid_t *) */
     __aligned_u64 child_tid;    /* Where to store child TID, in child's memory (pid_t *) */
@@ -20,6 +20,6 @@ struct clone_args {
 
 # define CLONE_CLEAR_SIGHAND 0x100000000ULL /* Clear any signal handler and reset to SIG_DFL. */
 
-ALWAYS_INLINE long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg);
+ALWAYS_INLINE long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg);
 
 #endif

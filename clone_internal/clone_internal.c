@@ -26,7 +26,7 @@ int clone_internal(int (*fn)(void *arg), void *arg, const struct Stack_t *stack)
 int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct Stack_t *stack)
 {
 #ifdef SYS_clone3
-    struct clone_args cl_args = {
+    struct psys_clone_args cl_args = {
         .flags = CLONE_VM | CLONE_CLEAR_SIGHAND,
 
         .pidfd = (uint64_t) NULL,

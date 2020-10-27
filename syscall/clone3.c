@@ -4,7 +4,7 @@
 
 #include <sys/syscall.h>
 
-long psys_clone3(struct clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg)
+long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg)
 {
     typedef int (*fn_t)(void *arg);
 
