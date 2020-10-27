@@ -58,7 +58,6 @@ int aspawn_child(void *arg)
 
     return args->fn(args->arg, args->pipefd[1], &args->old_sigset, args->user_data, args->user_data_len);
 }
-ALWAYS_INLINE
 int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
                 aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset)
 {
