@@ -30,9 +30,10 @@ size_t align(size_t sz, size_t alignment)
     size_t remnant = sz % alignment;
     return sz + ((remnant != 0) ? (alignment - remnant) : 0);
 }
+const static size_t pagesize = 4096;
 size_t align_to_page(size_t sz)
 {
-    return align(sz, sysconf(_SC_PAGESIZE));
+    return align(sz, pagesize);
 }
 size_t align_stack_sz(size_t sz)
 {
@@ -86,6 +87,6 @@ void* allocate_obj_on_stack(struct Stack_t *stack, size_t len)
         ret = stack->addr;
         stack->addr = ((char*) stack->addr) + len;
     }
-    
+
     return ret;
 }
