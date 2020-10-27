@@ -8,6 +8,7 @@
 # include "../common.h"
 # include <sys/types.h>
 # include <fcntl.h>
+# include <stddef.h>
 
 # define GET_ARG_N(_null, _0, _1, _2, _3, _4, _5, _6, _7, ...) _7
 # define GET_NARGS_(...) GET_ARG_N(__VA_ARGS__)
@@ -83,6 +84,11 @@ PUBLIC int psys_fchdir(int fd);
 
 PUBLIC ssize_t psys_write(int fd, const void *buf, size_t count);
 PUBLIC ssize_t psys_read(int fd, void *buf, size_t count);
+
+/**
+ * @return MMAP_FAILED on error.
+ */
+PUBLIC void *psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int fd, size_t off);
 
 PUBLIC int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid);
 PUBLIC int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid);

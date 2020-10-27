@@ -48,6 +48,30 @@ ssize_t psys_read(int fd, void *buf, size_t count)
     return INTERNAL_SYSCALL(SYS_read, 3, fd, buf, count);
 }
 
+#define MMAP_OFF_LOW_MASK  (4096 - 1)
+
+void *check_map_error(long result, int *errno_v)
+{
+    if (result > -4096UL) {
+        *errno_v = -result;
+        return (void*) -1;
+    }
+    return (void*) result;
+}
+void *psys_mmap(int *errno_v, void *addr, size_t len, int prot, int flags, int fd, size_t off)
+{
+    if (off & MMAP_OFF_LOW_MASK) {
+        *errno_v = EINVAL;
+        return (void*) -1;
+    }
+
+#ifdef SYS_mmap2
+    return check_map_error(INTERNAL_SYSCALL(SYS_mmap2, 6, addr, len, prot, flags, fd, off / 4096), errno_v);
+#else
+    return check_map_error(INTERNAL_SYSCALL(SYS_mmap, 6, addr, len, prot, flags, fd, off), errno_v);
+#endif
+}
+
 int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 {
     return INTERNAL_SYSCALL(SYS_setresuid, 3, ruid, euid, suid);
