@@ -76,6 +76,8 @@ PUBLIC int psys_close(int fd);
 
 PUBLIC int psys_dup3(int oldfd, int newfd, int flags);
 
+PUBLIC int psys_pipe2(int pipefd[2], int flag);
+
 PUBLIC int psys_chdir(const char *path);
 PUBLIC int psys_fchdir(int fd);
 

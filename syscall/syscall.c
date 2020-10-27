@@ -24,6 +24,11 @@ int psys_dup3(int oldfd, int newfd, int flags)
     return INTERNAL_SYSCALL(SYS_dup3, 3, oldfd, newfd, flags);
 }
 
+int psys_pipe2(int pipefd[2], int flag)
+{
+    return INTERNAL_SYSCALL(SYS_pipe2, 2, pipefd, flag);
+}
+
 int psys_chdir(const char *path)
 {
     return INTERNAL_SYSCALL(SYS_chdir, 1, path);
