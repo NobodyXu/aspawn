@@ -100,9 +100,42 @@ void test_psys_pipe2()
     }
 }
 
+/**
+ * test psys_m*ap.
+ */
+void test_psys_maps()
+{
+    for (int i = 0; i != 10; ++i) {
+        int errno_v;
+        char *addr = psys_mmap(&errno_v, NULL, 4096, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        if (addr == MAP_FAILED) {
+            errno = errno_v;
+            err(1, "psys_mmap failed");
+        }
+        for (size_t j = 0; j != 4096; ++j) {
+            assert(addr[j] == 0);
+            addr[j] = -1;
+            assert(addr[j] == -1);
+        }
+        addr = psys_mremap(&errno_v, addr, 4096, 4096 * 2, MREMAP_MAYMOVE, NULL);
+        for (size_t j = 0; j != 4096; ++j)
+            assert(addr[j] == -1);
+        for (size_t j = 4096; j != 4096 * 2; ++j) {
+            assert(addr[j] == 0);
+            addr[j] = -1;
+            assert(addr[j] == -1);
+        }
+        errno_v = psys_munmap(addr, 4096 * 2);
+        if (errno_v < 0) {
+            errno = errno_v;
+            err(1, "psys_munmap failed");
+        }
+    }
+}
 
 int main(int argc, char* argv[])
 {
     test_clone();
     test_psys_pipe2();
+    test_psys_maps();
 }
