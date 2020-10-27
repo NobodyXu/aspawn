@@ -85,8 +85,8 @@ int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_
     args->arg = arg;
     args->user_data_len = user_data_len;
 
-    memcpy(&args->old_sigset, old_sigset, sizeof(sigset_t));
-    memcpy(args->user_data, user_data, user_data_len);
+    pmemcpy(&args->old_sigset, old_sigset, sizeof(sigset_t));
+    pmemcpy(args->user_data, user_data, user_data_len);
 
     int new_pid;
 
