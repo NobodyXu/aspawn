@@ -1,6 +1,8 @@
 #define _GNU_SOURCE
 
 #include <sys/syscall.h>
+#include <sys/mman.h>
+
 #include "../syscall/clone3.h"
 #include "../syscall/syscall.h"
 
@@ -15,6 +17,8 @@
 
 #include <sys/types.h>
 #include <sys/wait.h>
+
+#include <unistd.h>
 
 int test_clone_fn(void *arg)
 {
@@ -87,43 +91,15 @@ void test_psys_pipe2()
             err(1, "psys_pipe2 failed");
         }
 
-        char path[sizeof("/proc/self/fdinfo/") + 20];
-        for (int j = 0; j != 2; ++j) {
-            int ret = snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pipefd[j]);
-            if (ret < 0)
-                err(1, "snprintf failed");
-            if (ret >= sizeof(path))
-                errx(1, "snprintf buffer not enough");
-
-            FILE *f = fopen(path, "r");
-            if (f == NULL)
-                err(1, "fopen(%s, \"r\") failed", path);
-
-            // pos:    0
-            // flags:  02000001
-
-            size_t pos;
-            switch (fscanf(f, "pos: %zu", &pos)) {
-                case EOF:
-                    err(1, "fscanf failed");
-                case 0:
-                    errx(1, "fscanf is unable to parse %s of %s", "first line", path);
-            }
-            assert(pos == 0);
-
-            size_t flags;
-            switch (fscanf(f, "flags: %zu", &flags)) {
-                case EOF:
-                    err(1, "fscanf failed");
-                case 0:
-                    errx(1, "fscanf is unable to parse %s of %s", "second line", path);
-            }
-            assert(flags == 02000001L);
-
-            fclose(f);
-        }
+        if (write(pipefd[1], "hello", sizeof("hello")) < 0)
+            err(1, "write(%d) failed", pipefd[1]);
+        char buffer[sizeof("hello")];
+        if (read(pipefd[0], buffer, sizeof(buffer)) < 0)
+            err(1, "read(%d) failed", pipefd[0]);
+        assert(strcmp(buffer, "hello") == 0);
     }
 }
+
 
 int main(int argc, char* argv[])
 {
