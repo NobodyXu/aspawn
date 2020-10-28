@@ -41,7 +41,7 @@ clean:
 	rm -f $(OBJS)
 test: libaspawn.a
 	$(MAKE) -C test
-install: libaspawn.so libaspawn.a aspawn.h syscall/syscall.h
+install: libaspawn.so libaspawn.a aspawn.h common.h syscall/syscall.h
 	cp libaspawn.* $(PREFIX)/lib/
 	mkdir -p $(PREFIX)/include/aspawn/syscall
 	cp aspawn.h common.h $(PREFIX)/include/aspawn/
