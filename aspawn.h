@@ -55,6 +55,14 @@ PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stac
                   aspawn_fn fn, void *arg, void *user_data, size_t user_data_len);
 
 /**
+ * recursive version of aspawn that can be called inside aspawn_fn.
+ *
+ * @param old_sigset should be old_sigset from aspawn_fn.
+ */
+PUBLIC int aspawn_rec(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
+                      aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset);
+
+/**
  * @param cached_stack must be 
  * @return 0 on success, (-errno) on failure.
  *

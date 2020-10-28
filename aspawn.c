@@ -137,3 +137,8 @@ int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz,
 
     return result;
 }
+int aspawn_rec(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
+               aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset)
+{
+    return aspawn_impl(pid, cached_stack, reserved_stack_sz, fn, arg, user_data, user_data_len, old_sigset);
+}
