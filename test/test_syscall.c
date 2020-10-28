@@ -22,6 +22,7 @@
 
 int test_psys_clone3_fn(void *arg)
 {
+    assert(arg == NULL);
     ASSERT_SYSCALL(raise(SIGURG));
 
     return 0;
@@ -58,7 +59,7 @@ void test_psys_clone3()
         .set_tid_size = 0,
     };
 
-    long result = psys_clone3(&cl_args, sizeof(cl_args), test_psys_clone3_fn, (void*) (uintptr_t) 10);
+    long result = psys_clone3(&cl_args, sizeof(cl_args), test_psys_clone3_fn, NULL);
     if (result < 0) {
         if (-result == EINVAL) {
             warnx("In test_clone: You linux kernel does not support CLONE_CLEAR_SIGHAND");
