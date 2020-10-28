@@ -105,8 +105,9 @@ void test_psys_pipe2()
  */
 void test_psys_maps()
 {
+    int errno_v;
+
     for (int i = 0; i != 10; ++i) {
-        int errno_v;
         char *addr = psys_mmap(&errno_v, NULL, 4096, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
         if (addr == MAP_FAILED) {
             errno = errno_v;
@@ -118,6 +119,10 @@ void test_psys_maps()
             assert(addr[j] == -1);
         }
         addr = psys_mremap(&errno_v, addr, 4096, 4096 * 2, MREMAP_MAYMOVE, NULL);
+        if (addr == MAP_FAILED) {
+            errno = errno_v;
+            err(1, "psys_mremap failed");
+        }
         for (size_t j = 0; j != 4096; ++j)
             assert(addr[j] == -1);
         for (size_t j = 4096; j != 4096 * 2; ++j) {
