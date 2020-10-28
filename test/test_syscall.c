@@ -20,24 +20,24 @@
 
 #include <unistd.h>
 
-int test_clone_fn(void *arg)
+int test_psys_clone3_fn(void *arg)
 {
     ASSERT_SYSCALL(raise(SIGURG));
 
     return 0;
 }
-void test_clone_sa_handler(int signum)
+void test_psys_clone3_sa_handler(int signum)
 {
     errx(1, "received signal SIGURG in child.");
 }
-void test_clone()
+void test_psys_clone3()
 {
 #ifdef SYS_clone3
     struct sigaction act;
     struct sigaction oldact;
 
     memset(&act, 0, sizeof(act));
-    act.sa_handler = test_clone_sa_handler;
+    act.sa_handler = test_psys_clone3_sa_handler;
 
     ASSERT_SYSCALL((sigaction(SIGURG, &act, &oldact)));
 
@@ -58,7 +58,7 @@ void test_clone()
         .set_tid_size = 0,
     };
 
-    long result = psys_clone3(&cl_args, sizeof(cl_args), test_clone_fn, (void*) (uintptr_t) 10);
+    long result = psys_clone3(&cl_args, sizeof(cl_args), test_psys_clone3_fn, (void*) (uintptr_t) 10);
     if (result < 0) {
         if (-result == EINVAL) {
             warnx("In test_clone: You linux kernel does not support CLONE_CLEAR_SIGHAND");
@@ -140,7 +140,7 @@ void test_psys_maps()
 
 int main(int argc, char* argv[])
 {
-    test_clone();
+    test_psys_clone3();
     test_psys_pipe2();
     test_psys_maps();
 }
