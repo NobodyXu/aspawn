@@ -1,9 +1,12 @@
 #define _GNU_SOURCE
 
 #include "../aspawn.h"
+
 #include "clone_internal.h"
 #include "stack_growth.h"
+
 #include "../syscall/clone3.h"
+#include "../syscall/clone.h"
 #include <sys/syscall.h>
 
 #include <stdint.h>
@@ -17,10 +20,8 @@
 
 int clone_internal(int (*fn)(void *arg), void *arg, const struct Stack_t *stack)
 {
-    int new_pid = clone(fn, STACK((char*) stack->addr, stack->size), CLONE_VM | SIGCHLD, arg);
-    if (new_pid == -1)
-        return (-errno);
-    return new_pid;
+    return psys_clone(fn, STACK((char*) stack->addr, stack->size), CLONE_VM | SIGCHLD, arg,
+                      /* optional args */ NULL, NULL, NULL);
 }
 
 int clone_clear_sighand_internal(int (*fn)(void *arg), void *arg, const struct Stack_t *stack)
