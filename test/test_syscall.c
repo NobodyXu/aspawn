@@ -4,6 +4,7 @@
 #include <sys/mman.h>
 
 #include "../syscall/clone3.h"
+#include "../syscall/clone.h"
 #include "../syscall/syscall.h"
 
 #include "utility.h"
@@ -82,6 +83,28 @@ void test_psys_clone3()
 #endif
 }
 
+int test_psys_clone_fn(void *arg)
+{
+    assert(arg == NULL);
+    return 0;
+}
+void test_psys_clone()
+{
+    int result = psys_clone(test_psys_clone_fn, NULL, SIGCHLD, NULL, /* optional args */ NULL, NULL, NULL);
+    if (result < 0) {
+        errno = -result;
+        err(1, "%s on line %zu failed", "psys_clone", (size_t) __LINE__);
+    }
+
+    int wstatus;
+    pid_t pid;
+    ASSERT_SYSCALL((pid = wait(&wstatus)));
+
+    assert(pid == result);
+    assert(!WIFSIGNALED(wstatus));
+    assert(WEXITSTATUS(wstatus) == 0);
+}
+
 void test_psys_pipe2()
 {
     for (int i = 0; i != 10; ++i) {
@@ -142,6 +165,7 @@ void test_psys_maps()
 int main(int argc, char* argv[])
 {
     test_psys_clone3();
+    test_psys_clone();
     test_psys_pipe2();
     test_psys_maps();
 }
