@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
     assert(path != NULL);
     assert(path[0] != '\0');
 
-    pid_t pids[2];
+    pid_t pids[3];
     for (size_t i = 0; i != 3; ++i) {
         int result = aspawn(&pids[i], &stack, PATH_MAX + 1, test_aspawn_fn, NULL, path, path_sz);
         if (result < 0) {
