@@ -12,4 +12,6 @@
         result;                                                         \
      })
 
+int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len);
+
 #endif
