@@ -3,15 +3,7 @@
 # include "../aspawn.h"
 # include "../syscall/syscall.h"
 
-# include <stdlib.h>
-# include <string.h>
-
-# include <unistd.h>
-
 # include <linux/limits.h>
-
-# include <sys/types.h>
-# include <sys/wait.h>
 
 void psys_put_impl(int fd, const char *s, size_t len)
 {
