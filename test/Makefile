@@ -4,19 +4,22 @@ CFLAGS := -std=c11 -Wall -g -fsanitize=address
 LDFLAGS := -fuse-ld=lld -Wl,--as-needed
 
 ## Objects to build
-SRCS := $(wildcard *.c)
+SRCS := $(shell find -name '*.c' ! -name 'utility.c')
 OUTS := $(SRCS:.c=.out)
 
 ## Build rules
 test: $(OUTS)
 	./run_tests.sh "$(OUTS)"
 
-%.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.a Makefile
+utility.o: utility.c utility.h
+	$(CC) $(CFLAGS) $< -c -o $@
+
+%.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.a Makefile utility.o
 	$(MAKE) -C ../ libaspawn.a
-	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.a -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.a utility.o -o $@
 
 clean:
-	rm -f $(OUTS)
+	rm -f $(OUTS) utility.o
 
 .PHONY: test clean
 
