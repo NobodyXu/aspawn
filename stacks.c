@@ -45,7 +45,7 @@ int init_stacks(struct Stacks **stacks, uint16_t max_stacks)
 }
 
 #define GET_TIMESTAMP(val) ((val) & (UINT32_MAX - UINT16_MAX))
-#define NEXT(val, old_val) ((val) | (GET_TIMESTAMP(old_val) + UINT16_MAX + 1))
+#define NEXT(val, old_val) ((val) | (GET_TIMESTAMP(old_val) + (UINT16_MAX + 1)))
 #define GET_INDEX(val) ((val) & UINT16_MAX)
 
 struct Stack_t* get_stack(struct Stacks *stacks)
