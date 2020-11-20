@@ -3,8 +3,6 @@
 
 # include <assert.h>
 # include <stddef.h>
-# include <errno.h>
-# include <err.h>
 
 # define ASSERT_SYSCALL(expr)                                           \
     ({                                                                  \
@@ -14,13 +12,15 @@
         result;                                                         \
      })
 
+void assert_aspawnf_internal(int result, const char *msg);
+
 # define ASSERT_ASPAWNF(expr)        \
     ({                               \
         int result = (expr);         \
-        if (result < 0) {            \
-            errno = -result;         \
-            err(1, # expr "failed"); \
-        }                            \
+        assert_aspawnf_internal(     \
+            result,                  \
+            # expr "failed"          \
+        );                           \
         result;                      \
      })
 

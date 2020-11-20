@@ -1,9 +1,12 @@
 #include "utility.h"
 
-# include "../aspawn.h"
-# include "../syscall/syscall.h"
+#include "../aspawn.h"
+#include "../syscall/syscall.h"
 
-# include <linux/limits.h>
+#include <err.h>
+#include <errno.h>
+
+#include <linux/limits.h>
 
 void psys_put_impl(int fd, const char *s, size_t len)
 {
@@ -57,4 +60,12 @@ int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_dat
 
     static const char * const argv[] = {"echo", "-e", "\nHello,", "world!", NULL};
     return psys_execvep(argv[0], 4, argv, user_data);
+}
+
+void assert_aspawnf_internal(int result, const char *msg)
+{
+    if (result < 0) {
+        errno = -result;
+        err(1, "%s", msg);
+    }
 }
