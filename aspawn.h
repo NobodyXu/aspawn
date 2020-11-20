@@ -112,6 +112,13 @@ PUBLIC int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack
  */
 PUBLIC int recycle_stack(struct Stacks *stacks, struct epoll_event readable_fds[], int max_nfd, int timeout);
 
+/**
+ * @return 0 if succeeds, otherwise error code.
+ *
+ * This function is thread-safe, but not safe to be called inside vfork-ed process.
+ */
+PUBLIC int free_stacks(struct Stacks *stacks);
+
 # ifdef __cplusplus
 }
 # endif
