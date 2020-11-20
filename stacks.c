@@ -1,5 +1,7 @@
 #include "aspawn.h"
 
+#include "syscall/syscall.h"
+
 #include <stdlib.h>
 #include <stdatomic.h>
 
@@ -114,4 +116,13 @@ int recycle_stack(struct Stacks *stacks, struct epoll_event readable_fds[], int 
         }
     }
     return out;
+}
+
+int free_stacks(struct Stacks *stacks)
+{
+    int result = psys_close(stacks->epfd);
+    if (result < 0)
+        return result;
+    free(stacks);
+    return 0;
 }
