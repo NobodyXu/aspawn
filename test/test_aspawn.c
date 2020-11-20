@@ -15,10 +15,7 @@
 #include <sys/wait.h>
 
 #include <assert.h>
-
 #include <err.h>
-#include <errno.h>
-
 
 int main(int argc, char* argv[])
 {
@@ -34,11 +31,7 @@ int main(int argc, char* argv[])
 
     pid_t pids[3];
     for (size_t i = 0; i != 3; ++i) {
-        int result = aspawn(&pids[i], &stack, PATH_MAX + 1, test_aspawn_fn, NULL, path, path_sz);
-        if (result < 0) {
-            errno = -result;
-            err(1, "aspawn failed");
-        }
+        int result = ASSERT_ASPAWNF(aspawn(&pids[i], &stack, PATH_MAX + 1, test_aspawn_fn, NULL, path, path_sz));
 
         struct pollfd pfd = {
             .fd = result,
@@ -55,11 +48,7 @@ int main(int argc, char* argv[])
         assert(WEXITSTATUS(wstatus) == 0);
     }
 
-    int result = cleanup_stack(&stack);
-    if (result < 0) {
-        errno = -result;
-        err(1, "cleanup_stacks failed");
-    }
+    ASSERT_ASPAWNF(cleanup_stack(&stack));
 
     return 0;
 }
