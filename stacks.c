@@ -59,7 +59,7 @@ struct Stack_t* get_stack(struct Stacks *stacks)
     } while (!atomic_compare_exchange_weak(&stacks->free_list, &free_list, 
                                            NEXT(stacks->entries[index].next, free_list)));
 
-    return &stacks->entries[free_list].stack;
+    return &stacks->entries[index].stack;
 }
 
 #define FD_BITS (sizeof(int) * 8)
