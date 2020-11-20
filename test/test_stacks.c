@@ -18,22 +18,14 @@
 void check_for_recycling_stacks(struct Stacks *stacks)
 {
     struct epoll_event fds[10];
-    int errno_v = recycle_stack(stacks, fds, sizeof(fds) / sizeof(struct epoll_event), 0);
-    if (errno_v < 0) {
-        errno = -errno_v;
-        err(1, "recycle_stack failed");
-    }
+    ASSERT_ASPAWNF(recycle_stack(stacks, fds, sizeof(fds) / sizeof(struct epoll_event), 0));
 }
 
 int main(int argc, char* argv[])
 {
     struct Stacks *stacks;
 
-    int errno_v = init_stacks(&stacks, 200);
-    if (errno_v != 0) {
-        errno = errno_v;
-        err(1, "init_stacks failed");
-    }
+    ASSERT_ASPAWNF(init_stacks(&stacks, 200));
 
     char *path = getenv("PATH");
     const size_t path_sz = strlen(path) + 1;
@@ -50,24 +42,12 @@ int main(int argc, char* argv[])
         } while (stack == NULL);
 
         pid_t pid;
-        int fd = aspawn(&pid, stack, PATH_MAX + 1, test_aspawn_fn, NULL, path, path_sz);
-        if (fd < 0) {
-            errno = -errno_v;
-            err(1, "aspawn failed");
-        }
+        int fd = ASSERT_ASPAWNF(aspawn(&pid, stack, PATH_MAX + 1, test_aspawn_fn, NULL, path, path_sz));
 
-        errno_v = add_stack_to_waitlist(stacks, stack, fd);
-        if (errno_v < 0) {
-            errno = -errno_v;
-            err(1, "add_stack_to_waitlist failed");
-        }
+        ASSERT_ASPAWNF(add_stack_to_waitlist(stacks, stack, fd));
     }
 
-    errno_v = free_stacks(stacks);
-    if (errno_v < 0) {
-        errno = -errno_v;
-        err(1, "free_stacks failed");
-    }
+    ASSERT_ASPAWNF(free_stacks(stacks));
 
     return 0;
 }
