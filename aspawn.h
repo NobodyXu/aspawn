@@ -83,15 +83,15 @@ struct Stacks;
  * @param stacks On success, *stacks will contain non-NULL value.
  * @return 0 on success, (-errno) on failure.
  *
- * This function is thread-safe.
+ * This function is thread-safe but not safe to be called inside vforked-process.
  */
 PUBLIC int init_stacks(struct Stacks **stacks, uint16_t max_stacks);
 
 /**
  * @return If succeeds, *stack will contain the stack.
- *         If all stacks are currently occupied, NULL is stored into *stack.
+ *         If all stacks are currently occupied, NULL is stored into *stack
  *
- * This function is thread-safe.
+ * This function is thread-safe and is safe to be called inside vforked-process.
  */
 PUBLIC struct Stack_t* get_stack(struct Stacks *stacks);
 
@@ -106,9 +106,8 @@ PUBLIC int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack
 /**
  * @param completed_fds Upon success, a list of completed fds will be writen in it,
  *                     with .data.fd equals to the fd;
- * @return number of completed fds on success, (-errno) on failure.
- *
- * This function is thread-safe.
+ * @return number of completed fds on success, (-errno) on failure
+ * This function is thread-safe but not safe to be called inside vfork-ed process.
  */
 PUBLIC int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int max_nfd, int timeout);
 
