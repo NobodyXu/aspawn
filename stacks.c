@@ -70,7 +70,7 @@ struct Stack_t* get_stack(struct Stacks *stacks)
 int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *stack, int fd)
 {
     struct epoll_event event = {
-        .events = EPOLLIN | EPOLLHUP | EPOLLET,
+        .events = EPOLLET,
         .data = (epoll_data_t){
             .u64 = ( (((struct Entry*) stack) - stacks->entries) << FD_BITS) | fd
         }
@@ -80,20 +80,17 @@ int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *sta
     return 0;
 }
 
-int recycle_stack(struct Stacks *stacks, struct epoll_event readable_fds[], int max_nfd, int timeout)
+int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int max_nfd, int timeout)
 {
-    int nevent = epoll_wait(stacks->epfd, readable_fds, max_nfd, timeout);
+    int nevent = epoll_wait(stacks->epfd, completed_fds, max_nfd, timeout);
     if (nevent < 0)
         return -errno;
 
-    struct epoll_event dummy_event;
-
-    int out = 0;
     for (int i = 0; i != nevent; ++i) {
-        int fd = readable_fds[i].data.u64 & FD_MASK;
-        size_t entry_index = readable_fds[i].data.u64 >> FD_BITS;
+        int fd = completed_fds[i].data.u64 & FD_MASK;
+        size_t entry_index = completed_fds[i].data.u64 >> FD_BITS;
 
-        if (readable_fds[i].events & EPOLLHUP) {
+        if (completed_fds[i].events & EPOLLHUP) {
             uint32_t free_list = atomic_load(&stacks->free_list);
             uint16_t index;
             do {
@@ -101,21 +98,17 @@ int recycle_stack(struct Stacks *stacks, struct epoll_event readable_fds[], int 
                 stacks->entries[entry_index].next = index;
             } while (!atomic_compare_exchange_weak(&stacks->free_list, &free_list, 
                                                    NEXT(entry_index, free_list)));
+            completed_fds[i].data.fd = fd;
+        } else {
+            // Unexpected Error!
+            // Might be that user passed in a fd other than return value of aspawn,
+            // or a internal bug somewhere in aspawn, glibc or linux kernel.
+            ;
+        }
 
-            if (readable_fds[i].events & EPOLLIN) {
-                if (epoll_ctl(stacks->epfd, EPOLL_CTL_DEL, fd, &dummy_event) < 0)
-                    err(1, "Bug: epoll_ctl in recycle_stack failed on %d", fd);
-            } else {
-                close(fd);
-            }
-        }
-        if ((readable_fds[i].events & EPOLLIN)) {
-            if (out != i)
-                readable_fds[out] = readable_fds[i];
-            readable_fds[out++].data.fd = fd;
-        }
+        ;
     }
-    return out;
+    return nevent;
 }
 
 int free_stacks(struct Stacks *stacks)

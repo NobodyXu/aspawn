@@ -104,13 +104,13 @@ PUBLIC struct Stack_t* get_stack(struct Stacks *stacks);
 PUBLIC int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *stack, int fd);
 
 /**
- * @param readable_fds Upon success, a list of readable fds will be writen in it,
- *                     with .data.fd equals to the fd.
- * @return number of readable fds on success, (-errno) on failure.
+ * @param completed_fds Upon success, a list of completed fds will be writen in it,
+ *                     with .data.fd equals to the fd;
+ * @return number of completed fds on success, (-errno) on failure.
  *
  * This function is thread-safe.
  */
-PUBLIC int recycle_stack(struct Stacks *stacks, struct epoll_event readable_fds[], int max_nfd, int timeout);
+PUBLIC int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int max_nfd, int timeout);
 
 /**
  * @return 0 if succeeds, otherwise error code.
