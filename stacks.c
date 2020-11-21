@@ -76,9 +76,7 @@ int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *sta
             .u64 = ( (((struct Entry*) stack) - stacks->entries) << FD_BITS) | fd
         }
     };
-    if (epoll_ctl(stacks->epfd, EPOLL_CTL_ADD, fd, &event) < 0)
-        return -errno;
-    return 0;
+    return psys_epoll_ctl(stacks->epfd, EPOLL_CTL_ADD, fd, &event);
 }
 
 int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int max_nfd, int timeout)

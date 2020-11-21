@@ -99,7 +99,7 @@ PUBLIC struct Stack_t* get_stack(struct Stacks *stacks);
  * @param fd must be return value of aspawn.
  * @return 0 on success, (-errno) on failure.
  *
- * This function is thread-safe.
+ * This function is thread-safe and is safe to be called inside vforked-process.
  */
 PUBLIC int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *stack, int fd);
 
