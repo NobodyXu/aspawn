@@ -18,7 +18,9 @@
 void check_for_recycling_stacks(struct Stacks *stacks)
 {
     struct epoll_event fds[10];
-    ASSERT_ASPAWNF(recycle_stack(stacks, fds, sizeof(fds) / sizeof(struct epoll_event), 0));
+    int cnt = ASSERT_ASPAWNF(recycle_stack(stacks, fds, sizeof(fds) / sizeof(struct epoll_event), 0));
+    for (int i = 0; i != cnt; ++i)
+        close(fds[i].data.fd);
 }
 
 int main(int argc, char* argv[])
