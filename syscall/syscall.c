@@ -33,6 +33,10 @@ int psys_epoll_create1(int flags)
 {
     return INTERNAL_SYSCALL(SYS_epoll_create1, 1, flags);
 }
+int psys_epoll_ctl(int epfd, int op, int fd, void *event)
+{
+    return INTERNAL_SYSCALL(SYS_epoll_ctl, 4, epfd, op, fd, event);
+}
 
 int psys_chdir(const char *path)
 {
