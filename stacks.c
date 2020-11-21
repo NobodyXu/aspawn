@@ -103,10 +103,8 @@ int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int
             // Unexpected Error!
             // Might be that user passed in a fd other than return value of aspawn,
             // or a internal bug somewhere in aspawn, glibc or linux kernel.
-            ;
+            return -EBADF;
         }
-
-        ;
     }
     return nevent;
 }
