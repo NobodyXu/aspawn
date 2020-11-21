@@ -30,11 +30,12 @@ int init_stacks(struct Stacks **stacks, uint16_t max_stacks)
     if (p == NULL)
         return -ENOMEM;
 
-    p->epfd = epoll_create1(EPOLL_CLOEXEC);
-    if (p->epfd == -1) {
+    int epfd = psys_epoll_create1(EPOLL_CLOEXEC);
+    if (epfd < 0) {
         free(p);
-        return -errno;
+        return epfd;
     }
+    p->epfd = epfd;
 
     p->max_entries = max_stacks;
     for (uint16_t i = 0; i != max_stacks; ++i) {
