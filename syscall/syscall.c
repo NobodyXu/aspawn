@@ -29,6 +29,11 @@ int psys_pipe2(int pipefd[2], int flag)
     return INTERNAL_SYSCALL(SYS_pipe2, 2, pipefd, flag);
 }
 
+int psys_epoll_create1(int flags)
+{
+    return INTERNAL_SYSCALL(SYS_epoll_create1, 1, flags);
+}
+
 int psys_chdir(const char *path)
 {
     return INTERNAL_SYSCALL(SYS_chdir, 1, path);
