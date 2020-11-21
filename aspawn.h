@@ -107,7 +107,7 @@ PUBLIC int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack
  * @param completed_fds Upon success, a list of completed fds will be writen in it,
  *                     with .data.fd equals to the fd;
  * @return number of completed fds on success, (-errno) on failure
- * This function is thread-safe but not safe to be called inside vfork-ed process.
+ * This function is thread-safe and is safe to be called inside vfork-ed process.
  */
 PUBLIC int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int max_nfd, int timeout);
 

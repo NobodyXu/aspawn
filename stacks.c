@@ -81,9 +81,9 @@ int add_stack_to_waitlist(const struct Stacks *stacks, const struct Stack_t *sta
 
 int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int max_nfd, int timeout)
 {
-    int nevent = epoll_wait(stacks->epfd, completed_fds, max_nfd, timeout);
+    int nevent = psys_epoll_pwait(stacks->epfd, completed_fds, max_nfd, timeout, NULL);
     if (nevent < 0)
-        return -errno;
+        return nevent;
 
     for (int i = 0; i != nevent; ++i) {
         int fd = completed_fds[i].data.u64 & FD_MASK;
