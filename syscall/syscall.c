@@ -37,6 +37,10 @@ int psys_epoll_ctl(int epfd, int op, int fd, void *event)
 {
     return INTERNAL_SYSCALL(SYS_epoll_ctl, 4, epfd, op, fd, event);
 }
+int psys_epoll_pwait(int epfd, void *events, int maxevents, int timeout, const void *sigmask)
+{
+    return INTERNAL_SYSCALL(SYS_epoll_pwait, 5, epfd, events, maxevents, timeout, sigmask);
+}
 
 int psys_chdir(const char *path)
 {

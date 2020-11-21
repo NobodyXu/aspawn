@@ -63,6 +63,7 @@ PUBLIC int psys_pipe2(int pipefd[2], int flag);
 
 PUBLIC int psys_epoll_create1(int flags);
 PUBLIC int psys_epoll_ctl(int epfd, int op, int fd, void *event);
+PUBLIC int psys_epoll_pwait(int epfd, void *events, int maxevents, int timeout, const void *sigmask);
 
 PUBLIC int psys_chdir(const char *path);
 PUBLIC int psys_fchdir(int fd);
