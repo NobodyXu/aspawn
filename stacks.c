@@ -85,6 +85,7 @@ int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int
     if (nevent < 0)
         return nevent;
 
+    int ret = nevent;
     for (int i = 0; i != nevent; ++i) {
         int fd = completed_fds[i].data.u64 & FD_MASK;
         size_t entry_index = completed_fds[i].data.u64 >> FD_BITS;
@@ -102,10 +103,10 @@ int recycle_stack(struct Stacks *stacks, struct epoll_event completed_fds[], int
             // Unexpected Error!
             // Might be that user passed in a fd other than return value of aspawn,
             // or a internal bug somewhere in aspawn, glibc or linux kernel.
-            return -EBADF;
+            ret = -EBADF;
         }
     }
-    return nevent;
+    return ret;
 }
 
 int free_stacks(struct Stacks *stacks)
