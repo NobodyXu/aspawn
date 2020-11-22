@@ -38,7 +38,7 @@ syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
 	$(CC) -std=c11 -fPIC -c $(CFLAGS) -Ofast -fno-builtin -o $@ $<
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) libaspawn.so libaspawn.a
 test: libaspawn.a
 	$(MAKE) -C test
 install: libaspawn.so libaspawn.a aspawn.h common.h syscall/syscall.h
