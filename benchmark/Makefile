@@ -14,12 +14,13 @@ C_SRCS   := $(wildcard *.c)
 CXX_SRCS := $(wildcard *.cc)
 OUTS := $(C_SRCS:.c=.out) $(CXX_SRCS:.cc=.out)
 
-prebuild_result := $(shell $(MAKE) -C ../ >/dev/null)
-
 benchmark: pre-build $(OUTS)
 	./run_benchmark.sh "$(OUTS)"
 
 pre-build: 
+	$(MAKE) -C ../
+
+../libaspawn.so:
 	$(MAKE) -C ../
 
 %.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.so Makefile
