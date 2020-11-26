@@ -13,9 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Echo environment
-      run: uname -a && clang --version && which echo
     - name: install dependencies
       run: sudo apt-get update && sudo apt-get install -y llvm clang lld
+    - name: Echo environment
+      run: uname -a && clang --version && which echo
     - name: make test
       run: make test -j $(nproc)
