@@ -3,6 +3,7 @@
 #include "syscall.h"
 
 #include <sys/syscall.h>
+#include <errno.h>
 
 long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *arg), void *arg)
 {
