@@ -38,6 +38,6 @@ long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *a
 
     return result;
 #else
-    returnn -ENOSYS;
+    return -ENOSYS;
 #endif
 }
