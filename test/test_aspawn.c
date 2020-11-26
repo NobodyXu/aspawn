@@ -31,6 +31,7 @@ int main(int argc, char* argv[])
     assert(path[0] != '\0');
 
     printf("$PATH = %s\n", path);
+    fflush(stdout);
 
     pid_t pids[3];
     for (size_t i = 0; i != 3; ++i) {
