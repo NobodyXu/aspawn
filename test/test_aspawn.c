@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     assert(path != NULL);
     assert(path[0] != '\0');
 
-    printf("$PATH = %s\n", path);
+    printf("$PATH = %s\nsizeof PATH = %zu\n", path, path_sz);
     fflush(stdout);
 
     pid_t pids[3];
