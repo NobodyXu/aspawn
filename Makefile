@@ -2,7 +2,7 @@ CC = clang
 CXX = clang++
 
 CFLAGS := -Ofast -fvisibility=hidden -Wall -flto
-CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
+CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants -fuse-ld=lld
 
 CXXFLAGS := -fno-exceptions -fno-rtti
 
