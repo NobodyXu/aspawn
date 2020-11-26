@@ -13,5 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: install dependencies
+      run: apt update && apt upgrade -y && apt install -y llvm llvm-tools
     - name: make test
       run: make test -j $(nproc)
