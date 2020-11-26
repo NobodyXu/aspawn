@@ -62,6 +62,7 @@ int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_dat
 
     // Print out $PATH
     psys_put_impl(1, user_data, user_data_len);
+    psys_put(1, "\n");
 
     return psys_execvep(argv[0], 4, argv, user_data);
 }
