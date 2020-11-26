@@ -7,14 +7,15 @@ LDFLAGS := -fuse-ld=lld -Wl,--as-needed
 SRCS := $(shell find -name '*.c' ! -name 'utility.c')
 OUTS := $(SRCS:.c=.out)
 
-prebuild_result := $(shell $(MAKE) -C ../ >/dev/null)
-
 ## Build rules
 test: $(OUTS)
 	./run_tests.sh "$(OUTS)"
 
 utility.o: utility.c utility.h
 	$(CC) $(CFLAGS) $< -c -o $@
+
+../libaspawn.a:
+	$(MAKE) -C ../
 
 %.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.a Makefile utility.o
 	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.a utility.o -o $@
