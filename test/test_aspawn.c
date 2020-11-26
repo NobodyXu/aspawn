@@ -3,6 +3,7 @@
 
 #include "utility.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -28,6 +29,8 @@ int main(int argc, char* argv[])
 
     assert(path != NULL);
     assert(path[0] != '\0');
+
+    printf("$PATH = %s\n", path);
 
     pid_t pids[3];
     for (size_t i = 0; i != 3; ++i) {
