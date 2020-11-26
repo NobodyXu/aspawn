@@ -18,7 +18,6 @@ utility.o: utility.c utility.h
 	$(MAKE) -C ../
 
 %.out: %.c ../aspawn.h ../syscall/syscall.h ../libaspawn.a Makefile utility.o
-	#$(CC) $(CFLAGS) $(LDFLAGS) ../libaspawn.a $< ../libaspawn.a utility.o ../libaspawn.a -o $@
 	$(CC) $(CFLAGS) $(LDFLAGS) $< ../libaspawn.a utility.o -o $@
 
 clean:
