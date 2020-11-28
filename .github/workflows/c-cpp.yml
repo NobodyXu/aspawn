@@ -10,6 +10,12 @@ jobs:
   build:
 
     runs-on: ubuntu-20.04
+    # Below is adapted from: https://github.community/t/create-matrix-with-multiple-os-and-env-for-each-one/16895
+    strategy:
+        matrix:
+          include:
+            - os: ubuntu-18.04
+            - os: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
