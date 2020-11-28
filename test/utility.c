@@ -61,9 +61,11 @@ int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_dat
 {
     static const char * const argv[] = {"echo", "-e", "\nHello,", "world!", NULL};
 
-    // Print out arg
-    psys_put_impl(1, arg, pstrlen(arg));
-    psys_put(1, "\n");
+    if (arg != NULL) {
+        // Print out arg
+        psys_put_impl(1, arg, pstrlen(arg));
+        psys_put(1, "\n");
+    }
 
     // Print out $PATH
     psys_put_impl(1, user_data, user_data_len);
