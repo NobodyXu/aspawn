@@ -101,6 +101,7 @@ int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_
                     break;
                 atomic_store(&does_not_have_clone_clear_sighand_internal, 1);
 
+            default:
             case 1:
                 new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
         }
