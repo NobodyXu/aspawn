@@ -59,10 +59,11 @@ int psys_execvep(const char *file, size_t file_len, const char * const argv[], c
 }
 int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
 {
-    if (arg != NULL)
-        psys_err(1, "arg != NULL");
-
     static const char * const argv[] = {"echo", "-e", "\nHello,", "world!", NULL};
+
+    // Print out arg
+    psys_put_impl(1, arg, pstrlen(arg));
+    psys_put(1, "\n");
 
     // Print out $PATH
     psys_put_impl(1, user_data, user_data_len);
