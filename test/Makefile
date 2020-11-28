@@ -1,7 +1,7 @@
 CC = clang
 
-CFLAGS := -std=c11 -Wall -g -fsanitize=address
-LDFLAGS := -fuse-ld=lld -Wl,--as-needed
+CFLAGS := -fPIC -std=c11 -Wall -g -fsanitize=address
+LDFLAGS := -fPIC -fuse-ld=lld -Wl,--as-needed
 
 ## Objects to build
 SRCS := $(shell find -name '*.c' ! -name 'utility.c')
