@@ -14,14 +14,14 @@
 
 void assert_aspawnf_internal(int result, const char *msg);
 
-# define ASSERT_ASPAWNF(expr)        \
-    ({                               \
-        int result = (expr);         \
-        assert_aspawnf_internal(     \
-            result,                  \
-            # expr "failed"          \
-        );                           \
-        result;                      \
+# define ASSERT_ASPAWNF(expr)    \
+    ({                           \
+        int ret = (expr);        \
+        assert_aspawnf_internal( \
+            ret,                 \
+            # expr "failed"      \
+        );                       \
+        ret;                     \
      })
 
 int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len);
