@@ -148,6 +148,8 @@ int psys_prlimit(int resource, const void *new_limit, void *old_limit)
 void psys_exit(int status)
 {
     INTERNAL_SYSCALL(SYS_exit, 1, status);
+
+    __builtin_unreachable();
 }
 
 int psys_execve(const char *pathname, const char * const argv[], const char * const envp[])
