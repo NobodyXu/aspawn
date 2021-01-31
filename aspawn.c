@@ -59,7 +59,8 @@ int aspawn_child(void *arg)
     return args->fn(args->arg, args->pipefd[1], &args->old_sigset, args->user_data, args->user_data_len);
 }
 int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
-                aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset)
+                aspawn_fn fn, void *arg, const void *user_data, size_t user_data_len,
+                const void *old_sigset)
 {
     int pipefd[2];
     int result = create_cloexec_pipe(pipefd);
@@ -121,7 +122,7 @@ fail:
     return result;
 }
 int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
-           aspawn_fn fn, void *arg, void *user_data, size_t user_data_len)
+           aspawn_fn fn, void *arg, const void *user_data, size_t user_data_len)
 {
     int oldstate;
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
@@ -139,7 +140,8 @@ int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz,
     return result;
 }
 int aspawn_rec(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
-               aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset)
+               aspawn_fn fn, void *arg, const void *user_data, size_t user_data_len,
+               const void *old_sigset)
 {
     return aspawn_impl(pid, cached_stack, reserved_stack_sz, fn, arg, user_data, user_data_len, old_sigset);
 }

@@ -52,7 +52,7 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *old_sigset, void *us
  * Use of any glibc function or any function that modifies global/thread-local variable is undefined behavior.
  */
 PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
-                  aspawn_fn fn, void *arg, void *user_data, size_t user_data_len);
+                  aspawn_fn fn, void *arg, const void *user_data, size_t user_data_len);
 
 /**
  * recursive version of aspawn that can be called inside aspawn_fn.
@@ -60,7 +60,8 @@ PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stac
  * @param old_sigset should be old_sigset from aspawn_fn.
  */
 PUBLIC int aspawn_rec(pid_t *pid, struct Stack_t *cached_stack, size_t reserved_stack_sz, 
-                      aspawn_fn fn, void *arg, void *user_data, size_t user_data_len, const void *old_sigset);
+                      aspawn_fn fn, void *arg, const void *user_data, size_t user_data_len,
+                      const void *old_sigset);
 
 /**
  * @param cached_stack must be 
