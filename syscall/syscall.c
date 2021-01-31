@@ -142,6 +142,11 @@ int psys_setgroups(size_t size, const gid_t *list)
     return INTERNAL_SYSCALL(SYS_setgroups, 2, size, list);
 }
 
+pid_t psys_getpid()
+{
+    return INTERNAL_SYSCALL(SYS_getpid, 0);
+}
+
 int psys_sched_setparam(pid_t pid, const void *param)
 {
     return INTERNAL_SYSCALL(SYS_sched_setparam, 2, pid, param);

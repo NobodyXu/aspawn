@@ -105,6 +105,8 @@ PUBLIC int psys_setresuid(uid_t ruid, uid_t euid, uid_t suid);
 PUBLIC int psys_setresgid(gid_t rgid, gid_t egid, gid_t sgid);
 PUBLIC int psys_setgroups(size_t size, const gid_t *list);
 
+PUBLIC pid_t psys_getpid();
+
 PUBLIC int psys_sched_setparam(pid_t pid, const void *param);
 PUBLIC int psys_sched_getparam(pid_t pid, void *param);
 PUBLIC int psys_sched_setscheduler(pid_t pid, int policy, const void *param);
