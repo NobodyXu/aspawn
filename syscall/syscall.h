@@ -32,7 +32,7 @@ PUBLIC void pmemset(void *s, int c, size_t n);
 PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
 
 /**
- * @param errno_v Returns error message for the errno;
+ * @param errno_v Returns error message for the errno (positive);
  *                If it is an invalid errno number, returns "Invalid errno";
  *                If there is no error message for this errno number, returns "Unknown errno".
  */

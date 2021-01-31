@@ -9,10 +9,10 @@
 
 const char* pstrerror(int errno_v)
 {
-    if (errno_v < 0 || errno >= errno_msgs_sz)
+    if (errno_v <= 0 || errno_v > errno_msgs_sz)
         return "Invalid errno";
     else
-        return errno_msgs[errno_v];
+        return errno_msgs[errno_v - 1];
 }
 
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)

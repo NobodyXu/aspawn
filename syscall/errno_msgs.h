@@ -3,7 +3,6 @@
 typedef const char* cstr;
 static const cstr errno_msgs[] =
 {
-    "Unknown errno",
     "Operation not permitted",          //   1   EPERM
     "No such file or directory",        //   2   ENOENT
     "No such process",                  //   3   ESRCH
@@ -138,4 +137,4 @@ static const cstr errno_msgs[] =
     "Operation not possible due to RF-kill", // 132   ERFKILL
     "Memory page has hardware error",   // 133   EHWPOISON 
 };
-static const size_t errno_msgs_sz = sizeof(errno_msgs) / sizeof(cstr); // 134
+static const size_t errno_msgs_sz = sizeof(errno_msgs) / sizeof(cstr); // 133
