@@ -1,10 +1,19 @@
 #include "syscall.h"
 #include "make_syscall.h"
+#include "errno_msgs.h"
 
 #include <sys/syscall.h>
 #include <errno.h>
 
 #include <stddef.h>
+
+const char* pstrerror(int errno_v)
+{
+    if (errno_v < 0 || errno >= errno_msgs_sz)
+        return "Invalid errno";
+    else
+        return errno_msgs[errno_v];
+}
 
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
 {
