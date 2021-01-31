@@ -55,16 +55,10 @@ int aspawn_child(void *arg)
     struct aspawn_child_args *args = arg;
 
     int ret = psys_close(args->pipefd[0]);
-    if (ret < 0)
-    {
-        const char *error_msg = pstrerror(-ret);
-
 # ifndef NDEBUG
-        psys_write(2, error_msg, pstrlen(error_msg));
-        psys_exit(1);
-        __builtin_unreachable();
+    if (ret < 0)
+        perr(1, -ret, "psys_close in aspawn_child failed");
 # endif
-    }
 
     return args->fn(args->arg, args->pipefd[1], &args->old_sigset, args->user_data, args->user_data_len);
 }
