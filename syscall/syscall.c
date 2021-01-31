@@ -1,3 +1,4 @@
+#define _GNU_SOURCE // for program_invocation_name
 #include "syscall.h"
 #include "make_syscall.h"
 #include "errno_msgs.h"
@@ -13,6 +14,24 @@ const char* pstrerror(int errno_v)
         return "Invalid errno";
     else
         return errno_msgs[errno_v - 1];
+}
+
+noreturn void perr(int exit_status, int errno_v, const char *msg)
+{
+    const char *err_msg = pstrerror(errno_v);
+
+    // format: "{program_invocation_short_name}: {msg}: {errno err msg}"
+
+    psys_write(2, program_invocation_short_name, pstrlen(program_invocation_short_name));
+    psys_write(2, ": ", 2);
+
+    psys_write(2, msg, pstrlen(msg));
+    psys_write(2, ": ", 2);
+
+    psys_write(2, err_msg, pstrlen(err_msg));
+
+    psys_exit(1);
+    __builtin_unreachable();
 }
 
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)

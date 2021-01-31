@@ -9,6 +9,7 @@
 # include <sys/types.h>
 # include <fcntl.h>
 # include <stddef.h>
+# include <stdnoreturn.h>
 
 # define GET_ARG_N(_null, _0, _1, _2, _3, _4, _5, _6, _7, ...) _7
 # define GET_NARGS_(...) GET_ARG_N(__VA_ARGS__)
@@ -37,6 +38,14 @@ PUBLIC void pmemcpy(void *dest, const void *src, size_t n);
  *                If there is no error message for this errno number, returns "Unknown errno".
  */
 PUBLIC const char* pstrerror(int errno_v);
+
+/**
+ * @param msg a zero-terminated string (not format string).
+ * @param errno_v errno. Must be positive.
+ *
+ * It will output "{program_invocation_short_name}: {msg}: {errno err msg}"
+ */
+PUBLIC noreturn void perr(int exit_status, int errno_v, const char *msg);
 
 /**
  * All psys_* here returns negative error code on failure and does not modify errno.
