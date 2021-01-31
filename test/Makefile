@@ -23,7 +23,7 @@ utility.o: utility.c utility.h
 clean:
 	rm -f $(OUTS) utility.o
 
-.PHONY: test clean
+.PHONY: test clean ../libaspawn.a
 
 ## Dependencies
 test_syscall.out: ../syscall/clone3.h
