@@ -35,12 +35,6 @@ int psys_execvep(const char *file, size_t file_len, const char * const argv[], c
         int result;
         switch (find_exe(file, file_len, constructed_path, &path, PATH_MAX)) {
             case 1:
-                // Print out $PATH
-                psys_put_impl(1, path, pstrlen(path));
-                psys_put(1, "\n");
-
-                psys_put_impl(1, constructed_path, pstrlen(constructed_path));
-                psys_put(1, "\n");
                 result = handle_execve_err(psys_execve(constructed_path, argv, envp), &got_eaccess);
                 if (result < 0)
                     psys_err(1, "Executable is found, but failed to execute it");
@@ -60,16 +54,6 @@ int psys_execvep(const char *file, size_t file_len, const char * const argv[], c
 int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
 {
     static const char * const argv[] = {"echo", "-e", "\nHello,", "world!", NULL};
-
-    if (arg != NULL) {
-        // Print out arg
-        psys_put_impl(1, arg, pstrlen(arg));
-        psys_put(1, "\n");
-    }
-
-    // Print out $PATH
-    psys_put_impl(1, user_data, user_data_len);
-    psys_put(1, "\n");
 
     return psys_execvep(argv[0], 4, argv, user_data);
 }
