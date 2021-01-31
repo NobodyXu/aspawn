@@ -31,9 +31,6 @@ int main(int argc, char* argv[])
 
     assert(path[0] != '\0');
 
-    printf("$PATH = %s\nsizeof PATH = %zu\n", path, path_sz);
-    fflush(stdout);
-
     pid_t pids[3];
     for (size_t i = 0; i != 3; ++i) {
         int result = ASSERT_ASPAWNF(
