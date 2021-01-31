@@ -31,7 +31,6 @@ noreturn void perr(int exit_status, int errno_v, const char *msg)
     psys_write(2, err_msg, pstrlen(err_msg));
 
     psys_exit(1);
-    __builtin_unreachable();
 }
 
 long pure_syscall(long syscall_number, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6)
@@ -173,7 +172,7 @@ int psys_prlimit(int resource, const void *new_limit, void *old_limit)
     return INTERNAL_SYSCALL(SYS_prlimit64, 4, 0, resource, new_limit, old_limit);
 }
 
-void psys_exit(int status)
+noreturn void psys_exit(int status)
 {
     INTERNAL_SYSCALL(SYS_exit, 1, status);
 

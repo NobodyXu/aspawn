@@ -134,7 +134,7 @@ ALWAYS_INLINE PUBLIC void pure_sigfillset(void *set);
  */
 PUBLIC int psys_sigprocmask(int how, const void *set, void *oldset);
 
-PUBLIC void psys_exit(int status);
+PUBLIC noreturn void psys_exit(int status);
 
 PUBLIC int psys_execve(const char *pathname, const char * const argv[], const char * const envp[]);
 /**
