@@ -36,7 +36,9 @@ int main(int argc, char* argv[])
 
     pid_t pids[3];
     for (size_t i = 0; i != 3; ++i) {
-        int result = ASSERT_ASPAWNF(aspawn(&pids[i], &stack, PATH_MAX + 1, test_aspawn_fn, path, path, path_sz));
+        int result = ASSERT_ASPAWNF(
+            aspawn(&pids[i], &stack, PATH_MAX + 1, test_aspawn_fn, NULL, path, path_sz)
+        );
 
         struct pollfd pfd = {
             .fd = result,
