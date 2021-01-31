@@ -61,8 +61,6 @@ int psys_clone(int (*fn)(void *arg), void *stack, int flags, void *arg,
 
     // invoke_syscall is always inline, thus no need of worring about the affect of switching to a new stack,
     // since no function return (req + pop) will be performed, and the return value is in the register.
-    //
-    // The compiler probably won't spoil the return value from the register to the stack.
     result = INTERNAL_SYSCALL(SYS_clone, 5, flags, stack, parent_tid, child_tid, tls);
 
     // If this is the child
