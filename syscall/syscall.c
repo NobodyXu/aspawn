@@ -20,7 +20,7 @@ noreturn void perr(int exit_status, int errno_v, const char *msg)
 {
     const char *err_msg = pstrerror(errno_v);
 
-    // format: "{program_invocation_short_name}: {msg}: {errno err msg}"
+    // format: "{program_invocation_short_name}: {msg}: {errno err msg}\n"
 
     psys_write(2, program_invocation_short_name, pstrlen(program_invocation_short_name));
     psys_write(2, ": ", 2);
@@ -29,6 +29,7 @@ noreturn void perr(int exit_status, int errno_v, const char *msg)
     psys_write(2, ": ", 2);
 
     psys_write(2, err_msg, pstrlen(err_msg));
+    psys_write(2, "\n", 1);
 
     psys_exit(1);
 }

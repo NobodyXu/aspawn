@@ -43,7 +43,7 @@ PUBLIC const char* pstrerror(int errno_v);
  * @param msg a zero-terminated string (not format string).
  * @param errno_v errno. Must be positive.
  *
- * It will output "{program_invocation_short_name}: {msg}: {errno err msg}"
+ * It will output "{program_invocation_short_name}: {msg}: {errno err msg}\n"
  */
 PUBLIC noreturn void perr(int exit_status, int errno_v, const char *msg);
 
