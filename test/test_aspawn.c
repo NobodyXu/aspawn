@@ -24,10 +24,11 @@ int main(int argc, char* argv[])
 
     init_cached_stack(&stack);
 
-    char *path = getenv("PATH");
+    const char *path = getenv("PATH");
+    assert(path != NULL);
+
     const size_t path_sz = strlen(path) + 1;
 
-    assert(path != NULL);
     assert(path[0] != '\0');
 
     printf("$PATH = %s\nsizeof PATH = %zu\n", path, path_sz);
