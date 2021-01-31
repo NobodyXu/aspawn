@@ -52,6 +52,7 @@ int psys_clone(int (*fn)(void *arg), void *stack, int flags, void *arg,
 
     register fn_t fn_reg __asm__ ("r13");
     register void *arg_reg __asm__ ("r12");
+    register int result __asm__ ("rax");
 
     fn_reg = fn;
     arg_reg = arg;
@@ -62,7 +63,7 @@ int psys_clone(int (*fn)(void *arg), void *stack, int flags, void *arg,
     // since no function return (req + pop) will be performed, and the return value is in the register.
     //
     // The compiler probably won't spoil the return value from the register to the stack.
-    int result = INTERNAL_SYSCALL(SYS_clone, 5, flags, stack, parent_tid, child_tid, tls);
+    result = INTERNAL_SYSCALL(SYS_clone, 5, flags, stack, parent_tid, child_tid, tls);
 
     // If this is the child
     if (result == 0) {
@@ -77,6 +78,7 @@ int psys_clone(int (*fn)(void *arg), void *stack, int flags, void *arg,
 
         int exit_status = fn_reg(arg_reg);
         psys_exit(exit_status);
+        __builtin_unreachable();
     }
 
     return result;
