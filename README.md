@@ -1,5 +1,7 @@
 # aspawn
 
+![C/C++ CI](https://github.com/NobodyXu/aspawn/workflows/C/C++%20CI/badge.svg)
+
 Asynchronous and more versatile replacement of posix_spawn
 
 ## Intro
