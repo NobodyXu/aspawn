@@ -20,10 +20,7 @@
 
 int main(int argc, char* argv[])
 {
-    struct Stack_t stack;
-
-    init_cached_stack(&stack);
-
+    /* Get path */
     const char *path = getenv("PATH");
     assert(path != NULL);
 
@@ -31,10 +28,20 @@ int main(int argc, char* argv[])
 
     assert(path[0] != '\0');
 
+    /* Setup stack */
+    struct Stack_t stack;
+
+    init_cached_stack(&stack);
+
     pid_t pids[3];
     for (size_t i = 0; i != 3; ++i) {
+        reserve_stack(&stack, PATH_MAX + 1, path_sz);
+
+        void *new_path = allocate_obj_on_stack(&stack, path_sz);
+        memcpy(new_path, path, path_sz);
+
         int result = ASSERT_ASPAWNF(
-            aspawn(&pids[i], &stack, PATH_MAX + 1, test_aspawn_fn, NULL, path, path_sz)
+            aspawn(&pids[i], &stack, test_aspawn_fn, new_path)
         );
 
         struct pollfd pfd = {

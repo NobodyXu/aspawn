@@ -24,6 +24,6 @@ void assert_aspawnf_internal(int result, const char *msg);
         ret;                     \
      })
 
-int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len);
+int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset);
 
 #endif

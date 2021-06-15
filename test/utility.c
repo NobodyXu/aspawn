@@ -51,11 +51,11 @@ int psys_execvep(const char *file, size_t file_len, const char * const argv[], c
         psys_err(1, "Executable not found");
     }
 }
-int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
+int test_aspawn_fn(void *arg, int write_end_fd, void *old_sigset)
 {
     static const char * const argv[] = {"echo", "-e", "\nHello,", "world!", NULL};
 
-    return psys_execvep(argv[0], 4, argv, user_data);
+    return psys_execvep(argv[0], 4, argv, arg);
 }
 
 void assert_aspawnf_internal(int result, const char *msg)
