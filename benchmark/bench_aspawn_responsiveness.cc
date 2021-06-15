@@ -49,7 +49,7 @@ static void waitfor_stack_reuse(int fd)
     if (poll(&pfd, 1, -1) < 0)
         err(1, "poll failed");
 }
-static int bench_aspawn_fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
+static int bench_aspawn_fn(void *arg, int write_end_fd, void *old_sigset)
 {
     psys_sigprocmask(SIG_SETMASK, old_sigset, NULL);
     psys_execve(argv[0], argv, envp);
@@ -60,10 +60,11 @@ static void BM_aspawn_no_reuse(benchmark::State &state)
     for ([[maybe_unused]] auto _: state) {
         struct Stack_t stack;
 
-        pid_t pid;
-
         init_cached_stack(&stack);
-        int result = aspawn(&pid, &stack, 0, bench_aspawn_fn, NULL, NULL, 0);
+        reserve_stack(&stack, 0, 0);
+
+        pid_t pid;
+        int result = aspawn(&pid, &stack, bench_aspawn_fn, NULL);
         if (result < 0) {
             errno = -result;
             err(1, "aspawn failed");
@@ -84,11 +85,12 @@ static void BM_aspawn(benchmark::State &state)
 {
     struct Stack_t stack;
     init_cached_stack(&stack);
+    reserve_stack(&stack, 0, 0);
 
     for ([[maybe_unused]] auto _: state) {
         pid_t pid;
 
-        int result = aspawn(&pid, &stack, 0, bench_aspawn_fn, NULL, NULL, 0);
+        int result = aspawn(&pid, &stack, bench_aspawn_fn, NULL);
         if (result < 0) {
             errno = -result;
             err(1, "aspawn failed");
