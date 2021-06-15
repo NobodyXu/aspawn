@@ -46,8 +46,8 @@ PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *
 By returning the write end of the `CLOEXEC` pipefd, user of this library is able to receive error message/check whether
 the child process has done using `cached_stack` so that `aspawn` can reuse `cached_stack`.
 
-It also allows user to pass arbitary data in the stack via `user_data` and `user_data_len`, which get copies onto top of
-the stack, thus user does not have to allocate them separately on heap or mistakenly overwriten an object used in child process.
+It also allows user to pass arbitary data in the stack via `allocate_obj_on_stack`, 
+thus user does not have to allocate them separately on heap.
 
 To use a syscall, you need to include [`syscall/syscall.h`][2], which defines the syscall routine used by the child process including
 `find_exe`, `psys_execve` and `psys_execveat`.
