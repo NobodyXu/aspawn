@@ -1,9 +1,12 @@
-// cd /path/to/aspawn/repo
-// make -j $(nproc)
-// sudo make install
-// cd example/
-// clang -std=c11 -L /usr/local/lib/ -laspawn example1.c
-// ./a.out
+/* cd /path/to/aspawn/repo
+ * make -j $(nproc)
+ * sudo make install
+ * cd example/
+ * clang -std=c11 -L /usr/local/lib/ -laspawn example1.c
+ * ./a.out
+ *
+ * If you prefer static link, then be sure to use `-fuse-ld=lld`
+ */
 
 #define _POSIX_C_SOURCE 200809L
 #define _GNU_SOURCE
@@ -49,12 +52,19 @@ void psys_put_impl(int fd, const char *s, size_t len)
         return (exit_status);    \
     } while (0)
 
-static int fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, size_t user_data_len)
+struct Args {
+    const char * const * argv;
+    char path[];
+};
+
+static int fn(void *arg, int write_end_fd, void *old_sigset)
 {
     static const char * const envp[] = {NULL};
 
-    const char * const * argv = arg;
-    const char *path_env = user_data;
+    struct Args *args = arg;
+
+    const char * const * argv = args->argv;
+    const char *path_env = args->path;
     size_t file_len = pstrlen(argv[0]);
 
     psys_sigprocmask(SIG_SETMASK, old_sigset, NULL);
@@ -83,9 +93,7 @@ static int fn(void *arg, int write_end_fd, void *old_sigset, void *user_data, si
 }
 int main(int argc, char* argv[])
 {
-    struct Stack_t stack;
-    init_cached_stack(&stack);
-
+    /* Get path */
     char *path = getenv("PATH");
     if (path == NULL)
         errx(1, "PATH not found");
@@ -93,10 +101,20 @@ int main(int argc, char* argv[])
         errx(1, "PATH is empty");
     const size_t path_sz = strlen(path) + 1;
 
+    struct Stack_t stack;
+    init_cached_stack(&stack);
+
     pid_t pids[argv_cnt];
     int fds[argv_cnt];
     for (size_t i = 0; i != argv_cnt; ++i) {
-        fds[i] = aspawn(&pids[i], &stack, PATH_MAX + 1, fn, (void*) argvs[i], path, path_sz);
+        reserve_stack(&stack, PATH_MAX + 1, path_sz);
+
+        struct Args *args = allocate_obj_on_stack(&stack, sizeof(struct Args) + path_sz);
+        memcpy(args->path, path, path_sz);
+
+        args->argv = argvs[i];
+
+        fds[i] = aspawn(&pids[i], &stack, fn, args);
         if (fds[i] < 0)
             errx(1, "aspawn failed: %s", strerror(-fds[i]));
 
