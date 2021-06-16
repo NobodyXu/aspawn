@@ -1,7 +1,9 @@
 #include <stddef.h>
 
+#include "../common.h"
+
 typedef const char* cstr;
-static const cstr errno_msgs[] =
+PUBLIC const cstr errno_msgs[] =
 {
     "Operation not permitted",          //   1   EPERM
     "No such file or directory",        //   2   ENOENT
@@ -137,4 +139,4 @@ static const cstr errno_msgs[] =
     "Operation not possible due to RF-kill", // 132   ERFKILL
     "Memory page has hardware error",   // 133   EHWPOISON 
 };
-static const size_t errno_msgs_sz = sizeof(errno_msgs) / sizeof(cstr); // 133
+PUBLIC const size_t errno_msgs_sz = sizeof(errno_msgs) / sizeof(cstr); // 133
