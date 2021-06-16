@@ -69,15 +69,15 @@ typedef int (*aspawn_fn)(void *arg, int wirte_end_fd, void *old_sigset);
  * In the function fn, you can only use syscall declared in syscall/syscall.h
  * Use of any glibc function or any function that modifies global/thread-local variable is undefined behavior.
  */
-PUBLIC int aspawn(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *arg);
+PUBLIC int aspawn(pid_t *pid, const struct Stack_t *cached_stack, aspawn_fn fn, void *arg);
 
 /**
  * recursive version of aspawn that can be called inside aspawn_fn.
  *
  * @param old_sigset should be old_sigset from aspawn_fn.
  */
-PUBLIC int aspawn_rec(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *arg, 
-                      const void *old_sigset);
+PUBLIC int aspawn_rec(pid_t *pid, const struct Stack_t *cached_stack,
+                      aspawn_fn fn, void *arg, const void *old_sigset);
 
 /**
  * @param cached_stack must be 

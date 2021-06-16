@@ -78,7 +78,7 @@ int aspawn_child(void *arg)
 
     return args->fn(args->arg, args->pipefd[1], &args->old_sigset);
 }
-int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *arg, 
+int aspawn_impl(pid_t *pid, const struct Stack_t *cached_stack, aspawn_fn fn, void *arg, 
                 const void *old_sigset)
 {
     int pipefd[2];
@@ -131,7 +131,7 @@ int aspawn_impl(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *ar
 
     return result;
 }
-int aspawn(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *arg)
+int aspawn(pid_t *pid, const struct Stack_t *cached_stack, aspawn_fn fn, void *arg)
 {
     int oldstate;
     pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);
@@ -148,7 +148,7 @@ int aspawn(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *arg)
 
     return result;
 }
-int aspawn_rec(pid_t *pid, struct Stack_t *cached_stack, aspawn_fn fn, void *arg, 
+int aspawn_rec(pid_t *pid, const struct Stack_t *cached_stack, aspawn_fn fn, void *arg, 
                const void *old_sigset)
 {
     return aspawn_impl(pid, cached_stack, fn, arg, old_sigset);
