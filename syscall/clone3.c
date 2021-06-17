@@ -10,6 +10,8 @@ long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *a
 #ifdef SYS_clone3
     typedef int (*fn_t)(void *arg);
 
+    // TODO: Remove manual register allocation as compiler knows exactly
+    // which register needs to spoil for the syscall
     register fn_t fn_reg __asm__ ("r13");
     register void *arg_reg __asm__ ("r12");
     register int result __asm__ ("rax");
