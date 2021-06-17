@@ -12,6 +12,7 @@ long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *a
 
     register fn_t fn_reg __asm__ ("r13");
     register void *arg_reg __asm__ ("r12");
+    register int result __asm__ ("rax");
 
     fn_reg = fn;
     arg_reg = arg;
@@ -20,7 +21,7 @@ long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *a
     // since no function return (req + pop) will be performed, and the return value is in the register.
     //
     // The compiler probably won't spoil the return value from the register to the stack.
-    int result = INTERNAL_SYSCALL(SYS_clone3, 2, cl_args, size);
+    result = INTERNAL_SYSCALL(SYS_clone3, 2, cl_args, size);
 
     // If this is the child
     if (result == 0) {
@@ -35,6 +36,7 @@ long psys_clone3(struct psys_clone_args *cl_args, size_t size, int (*fn)(void *a
 
         int exit_status = fn_reg(arg_reg);
         psys_exit(exit_status);
+        __builtin_unreachable();
     }
 
     return result;
