@@ -1,8 +1,12 @@
 CC = clang
 CXX = clang++
 
+ifeq ($(DEBUG), true)
+CFLAGS := -Og -g -Wall -fsanitize=address
+else
 CFLAGS := -Ofast -fvisibility=hidden -Wall -flto
 CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
+endif
 
 CXXFLAGS := -fno-exceptions -fno-rtti
 
