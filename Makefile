@@ -2,7 +2,12 @@ CC = clang
 CXX = clang++
 
 ifeq ($(DEBUG), true)
-CFLAGS := -Og -g -Wall -fsanitize=address
+CFLAGS := -Og -g -Wall
+
+ifneq ($(NO_SANITIZER), true)
+CFLAGS += -fsanitize=address
+endif
+
 else
 CFLAGS := -Ofast -fvisibility=hidden -Wall -flto
 CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
