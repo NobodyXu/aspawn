@@ -14,8 +14,8 @@ jobs:
     strategy:
         matrix:
           include:
-            - os: ubuntu-18.04
-            - os: ubuntu-20.04
+            - os: ubuntu-18.04 # Use linux kernel 5.4, which doesn't have clone3
+            - os: ubuntu-20.04 # Use linux kernel that have clone3
 
     steps:
     - uses: actions/checkout@v2
