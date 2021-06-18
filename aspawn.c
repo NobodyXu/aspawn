@@ -99,28 +99,25 @@ int aspawn_impl(pid_t *pid, const struct Stack_t *cached_stack, aspawn_fn fn, vo
 
     int new_pid;
 
-    // TODO: Reimpl psys_clone3 as it is possibly buggy
-    new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
+    if (!HAS_CLONE_CLEAR_SIGHAND_INTERNAL) {
+        new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
+    } else {
+        /* Initialized to 0(false) */
+        static atomic_bool does_not_have_clone_clear_sighand_internal;
+        switch ((int) atomic_load(&does_not_have_clone_clear_sighand_internal)) {
+            case 0:
+                new_pid = clone_clear_sighand_internal(aspawn_child, args, &stack);
+                if (new_pid != -ENOSYS && new_pid != -EINVAL)
+                    /* The clone3 syscall exists but fail */
+                    break;
+                /* The clone3 syscall doesn't exist, now fallback to clone */
+                atomic_store(&does_not_have_clone_clear_sighand_internal, 1);
 
-    //if (!HAS_CLONE_CLEAR_SIGHAND_INTERNAL) {
-    //    new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
-    //} else {
-    //    /* Initialized to 0(false) */
-    //    static atomic_bool does_not_have_clone_clear_sighand_internal;
-    //    switch ((int) atomic_load(&does_not_have_clone_clear_sighand_internal)) {
-    //        case 0:
-    //            new_pid = clone_clear_sighand_internal(aspawn_child, args, &stack);
-    //            if (new_pid != -ENOSYS && new_pid != -EINVAL)
-    //                /* The clone3 syscall exists but fail */
-    //                break;
-    //            /* The clone3 syscall doesn't exist, now fallback to clone */
-    //            atomic_store(&does_not_have_clone_clear_sighand_internal, 1);
-
-    //        default:
-    //        case 1:
-    //            new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
-    //    }
-    //}
+            default:
+            case 1:
+                new_pid = clone_internal(aspawn_child_clear_sighand, args, &stack);
+        }
+    }
 
     if (new_pid >= 0) {
         *pid = new_pid;
