@@ -23,5 +23,5 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y llvm clang lld
     - name: Echo environment
       run: uname -a && clang --version && which echo
-    - name: DEBUG=true make test
+    - name: DEBUG=true USE_SANITIZER=true make test
       run: make test -j $(nproc)

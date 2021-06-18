@@ -4,7 +4,7 @@ CXX = clang++
 ifeq ($(DEBUG), true)
 CFLAGS := -Og -g -Wall
 
-ifneq ($(NO_SANITIZER), true)
+ifeq ($(USE_SANITIZER), true)
 CFLAGS += -fsanitize=address
 endif
 
