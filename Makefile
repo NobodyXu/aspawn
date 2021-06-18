@@ -32,10 +32,21 @@ OBJS := $(addprefix $(BUILD_DIR)/, $(SRCS:.c=.o))
 
 TARGETS := $(BUILD_DIR)/libaspawn.so $(BUILD_DIR)/libaspawn.a
 
-## Build rules
-all: $(TARGETS)
+.DEFAULT_GOAL := all
 
+## Automatic dependency building
+DEPFLAGS = -MT $@ -MMD -MP -MF $(BUILD_DIR)/$*.Td
+DEPFILES := $(OBJS:%.o=%.d)
+
+## Dummy target for $(DEPFILES) when they are not present.
+$(DEPFILES):
+## Use wildcard so that nonexisitent dep files are ignored.
+include $(wildcard $(DEPFILES))
+
+## Build rules
 .SECONDEXPANSION:
+
+all: $(TARGETS)
 
 $(BUILD_DIR)/libaspawn.so: $(OBJS)
 	$(CC) -std=c11 -fPIC $(LDFLAGS) -o $@ $^
@@ -44,14 +55,16 @@ $(BUILD_DIR)/libaspawn.a: $(OBJS)
 	llvm-ar rcsuT $@ $^
 
 $(BUILD_DIR)/%.o: %.c $$(wildcard %.h)  Makefile
-	$(CC) -std=c11 -fPIC -c $(CFLAGS) -o $@ $<
+	$(CC) -std=c11 -fPIC -c $(CFLAGS) $(DEPFLAGS) -o $@ $<
+	mv -f $(BUILD_DIR)/$*.Td $(BUILD_DIR)/$*.d && touch $@
 
 $(BUILD_DIR)/%.o: %.cc $$(wildcard %.h) $$(wildcard %.hpp) Makefile
-	$(CXX) -std=c++17 -fPIC -c $(CXXFLAGS) $(CFLAGS) -o $@ $<
+	$(CXX) -std=c++17 -fPIC -c $(CXXFLAGS) $(CFLAGS) $(DEPFLAGS) -o $@ $<
+	mv -f $(BUILD_DIR)/$*.Td $(BUILD_DIR)/$*.d && touch $@
 
 ### Specialize rule
 $(BUILD_DIR)/syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
-	$(CC) -std=c11 -fPIC -c $(CFLAGS) -Ofast -fno-builtin -o $@ $<
+	$(CC) -std=c11 -fPIC -c $(CFLAGS) $(DEPFLAGS) -Ofast -fno-builtin -o $@ $<
 
 clean:
 	rm -f $(OBJS) $(TARGETS)
@@ -65,16 +78,3 @@ install: $(TARGETS) aspawn.h common.h syscall/syscall.h
 	cp aspawn.h common.h $(PREFIX)/include/aspawn/
 	cp syscall/syscall.h $(PREFIX)/include/aspawn/syscall/
 .PHONY: clean test install all
-
-## Dependencies
-aspawn.h: common.h
-
-$(BUILD_DIR)/syscall/%.o: syscall/make_syscall.h
-$(BUILD_DIR)/syscall/clone3.o: syscall/syscall.h
-syscall/syscall.h: common.h
-
-$(BUILD_DIR)/signal/signal.o: syscall/syscall.h
-
-$(BUILD_DIR)/clone_internal/clone_internal.o: clone_internal/stack_growth.h aspawn.h syscall/clone3.h
-
-$(BUILD_DIR)/cached_stack/cached_stack.o: aspawn.h clone_internal/stack_growth.h
