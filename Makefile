@@ -67,7 +67,7 @@ $(BUILD_DIR)/syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
 	$(CC) -std=c11 -fPIC -c $(CFLAGS) $(DEPFLAGS) -Ofast -fno-builtin -o $@ $<
 
 clean:
-	rm -f $(OBJS) $(TARGETS)
+	rm -f $(OBJS) $(TARGETS) $(DEPFILES)
 
 test: $(BUILD_DIR)/libaspawn.a
 	$(MAKE) -C test
