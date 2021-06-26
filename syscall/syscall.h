@@ -148,7 +148,8 @@ PUBLIC noreturn void psys_exit(int status);
 
 PUBLIC int psys_execve(const char *pathname, const char * const argv[], const char * const envp[]);
 /**
- * linux-specific call, checks `man 2 execveat` for more info.
+ * This syscall is native to linux, but is emulated on any other target
+ * Checks `man 2 execveat` for more info.
  */
 PUBLIC int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * const envp[], int flags);
 
