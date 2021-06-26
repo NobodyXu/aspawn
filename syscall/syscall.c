@@ -193,7 +193,13 @@ int psys_execve(const char *pathname, const char * const argv[], const char * co
 {
     return INTERNAL_SYSCALL(SYS_execve, 3, pathname, argv, envp);
 }
-int psys_execveat(int dirfd, const char *pathname, char * const argv[], char * const envp[], int flags)
+int psys_execveat(
+    int dirfd,
+    const char *pathname,
+    const char * const argv[],
+    const char * const envp[],
+    int flags
+)
 {
     return INTERNAL_SYSCALL(SYS_execveat, 5, dirfd, pathname, argv, envp, flags);
 }
