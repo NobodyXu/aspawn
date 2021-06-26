@@ -173,7 +173,11 @@ int psys_setpriority(int which, long who, int unice)
     return INTERNAL_SYSCALL(SYS_setpriority, 3, which, who, unice);
 }
 
-int psys_prlimit(int resource, const void *new_limit, void *old_limit)
+int psys_prlimit(
+    int resource,
+    const struct rlimit64 *new_limit,
+    struct rlimit64 *old_limit
+)
 {
     return INTERNAL_SYSCALL(SYS_prlimit64, 4, 0, resource, new_limit, old_limit);
 }

@@ -7,6 +7,7 @@
 
 # include "../common.h"
 # include <sys/types.h>
+# include <sys/resource.h>
 # include <fcntl.h>
 # include <stddef.h>
 # include <stdnoreturn.h>
@@ -114,8 +115,15 @@ PUBLIC int psys_sched_getscheduler(pid_t pid);
 
 /**
  * param pid is removed from this function to improve portability to os other than linux.
+ *
+ * @param new_limit should be of type struct rlimit64
+ * @param old_limit should be of type struct rlimit64
  */
-PUBLIC int psys_prlimit(int resource, const void *new_limit, void *old_limit);
+PUBLIC int psys_prlimit(
+    int resource,
+    const struct rlimit64 *new_limit,
+    struct rlimit64 *old_limit
+);
 
 /**
  * @return nice value in the range [40, 1], corresponding to commonly used [-20, 19].
