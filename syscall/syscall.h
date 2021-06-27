@@ -191,7 +191,7 @@ PUBLIC int psys_execveat(
  *         int result;
  *         switch (find_exe(file, file_len, constructed_path, &path, PATH_MAX)) {
  *             case 1:
- *                 result = handle_execve_errexe_err(psys_execve(constructed_path, argv, envp), &got_eaccess);
+ *                 result = handle_execve_err(psys_execve(constructed_path, argv, envp), &got_eaccess);
  *                 if (result < 0) {
  *                     int errno_v = -result;
  *                     // executable is found, but it failed to execute
