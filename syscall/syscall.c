@@ -47,6 +47,11 @@ int psys_close(int fd)
 {
     return INTERNAL_SYSCALL(SYS_close, 1, fd);
 }
+
+int psys_dup(int oldfd)
+{
+    return INTERNAL_SYSCALL(SYS_dup, 1, oldfd);
+}
 int psys_dup3(int oldfd, int newfd, int flags)
 {
     return INTERNAL_SYSCALL(SYS_dup3, 3, oldfd, newfd, flags);

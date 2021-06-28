@@ -74,6 +74,7 @@ PUBLIC int psys_openat(int dirfd, const char *pathname, int flags, mode_t mode);
 
 PUBLIC int psys_close(int fd);
 
+PUBLIC int psys_dup(int oldfd);
 PUBLIC int psys_dup3(int oldfd, int newfd, int flags);
 
 PUBLIC int psys_pipe2(int pipefd[2], int flag);
