@@ -65,6 +65,7 @@ $(BUILD_DIR)/%.o: %.cc $$(wildcard %.h) $$(wildcard %.hpp) Makefile
 ### Specialize rule
 $(BUILD_DIR)/syscall/memory.o: syscall/memory.c syscall/syscall.h Makefile
 	$(CC) -std=c11 -fPIC -c $(CFLAGS) $(DEPFLAGS) -Ofast -fno-builtin -o $@ $<
+	mv -f $(BUILD_DIR)/$*.Td $(BUILD_DIR)/$*.d && touch $@
 
 clean:
 	rm -f $(OBJS) $(TARGETS) $(DEPFILES)
