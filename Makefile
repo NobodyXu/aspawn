@@ -18,7 +18,7 @@ CFLAGS += -fsanitize=address
 endif
 
 else
-CFLAGS := -Ofast -fvisibility=hidden -Wall -flto
+CFLAGS := -O2 -fvisibility=hidden -Wall -flto
 CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables -fmerge-all-constants
 endif
 
