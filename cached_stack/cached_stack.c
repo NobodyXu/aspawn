@@ -35,9 +35,6 @@ size_t align_to_page(size_t sz)
 size_t align_stack_sz(size_t sz)
 {
     sz = align_to_page(sz);
-#ifdef __aarch64__
-    sz = align(align(sz, 15), 16);
-#endif
     return sz;
 }
 
