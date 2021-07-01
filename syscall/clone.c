@@ -67,14 +67,7 @@ int psys_clone(int (*fn)(void *arg), void *stack, int flags, void *arg,
 
     // If this is the child
     if (result == 0) {
-        __asm__ __volatile__ (
-	        // Clear the frame pointer.
-            // This is suggested by the API to be done to mark the outermost frame.
-            "xorl %%ebp, %%ebp"
-            :
-            :
-            : "ebp"
-        );
+        RESET_EBP();
 
         int exit_status = fn_reg(arg_reg);
         psys_exit(exit_status);

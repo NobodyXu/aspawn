@@ -2,6 +2,20 @@
 # ifdef __x86_64__
 
 /**
+ * Clear the frame pointer %rbp, push it and copy %rsp into %rbp
+ *
+ * This is suggested by the API to be done to mark the outermost frame.
+ */
+#  define RESET_EBP()       \
+    __asm__ __volatile__ (  \
+        "pushq $0x0\n\t"    \
+        "movq %%rsp, %%rbp" \
+        :                   \
+        :                   \
+        : "rbp"             \
+    )
+
+/**
  * The code below is copied from glibc
  */
 
